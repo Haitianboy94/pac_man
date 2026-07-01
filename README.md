@@ -1,2 +1,2 @@
-# pam_man
+# pac_man
 pac_man game
