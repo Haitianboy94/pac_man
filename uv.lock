@@ -13,16 +13,16 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "mazegenerator", path = "mazegenerator-00001-py3-none-any.whl" },
+    { name = "mazegenerator", path = "mazegenerator-2.0.2-py3-none-any.whl" },
     { name = "pygame", specifier = ">=2.6.1" },
 ]
 
 [[package]]
 name = "mazegenerator"
 version = "2.0.2"
-source = { path = "mazegenerator-00001-py3-none-any.whl" }
+source = { path = "mazegenerator-2.0.2-py3-none-any.whl" }
 wheels = [
-    { filename = "mazegenerator-1-py3-none-any.whl", hash = "sha256:88b5b212ae1a90faa8aa6f8518abe6968a30be071cddbdd02f8c52c6936c209e" },
+    { filename = "mazegenerator-2.0.2-py3-none-any.whl", hash = "sha256:88b5b212ae1a90faa8aa6f8518abe6968a30be071cddbdd02f8c52c6936c209e" },
 ]
 
 [[package]]
