@@ -97,7 +97,7 @@ class Chimp(pg.sprite.Sprite):
 pg.init()
 screen = pg.display.set_mode((1280, 480), pg.SCALED)
 pg.display.set_caption("Monkey Fever")
-pg.mouse.set_visible(False)
+# pg.mouse.set_visible(False)
 
 ## background
 background = pg.Surface(screen.get_size())
@@ -126,26 +126,26 @@ while going:
     clock.tick(60)
 
 
-#input
-for event in pg.event.get():
-    if event.type == pg.QUIT:
-        going = False
-    elif event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
-        going = False
-    elif event.type == pg.MOUSEBUTTONDOWN:
-        if fist.punch(chimp):
-            chimp.punched()
-    elif event.type == pg.MOUSEBUTTONUP:
-        fist.unpunch()
+    #input
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
+            going = False
+        elif event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
+            going = False
+        elif event.type == pg.MOUSEBUTTONDOWN:
+            if fist.punch(chimp):
+                chimp.punched()
+        elif event.type == pg.MOUSEBUTTONUP:
+            fist.unpunch()
 
 
-allsprites.update()
+    allsprites.update()
 
 
 
-screen.blit(background, (0, 0))
-allsprites.draw(screen)
-pg.display.flip()
+    screen.blit(background, (0, 0))
+    allsprites.draw(screen)
+    pg.display.flip()
 
 
 pg.quit()
