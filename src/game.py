@@ -1,3 +1,4 @@
+from src.scenes.game import GameScene
 import src.scenes.game
 from src.scenes.main_menu import MainMenu
 from src.scenes.scene_id import SceneId
@@ -39,6 +40,6 @@ class Game:
     def _create_scene(self, scene_id: SceneId) -> Scene:
         match scene_id:
             case SceneId.MAIN_MENU: return MainMenu(self.screen)
-            case SceneId.GAME: return src.scenes.game.Game(self.screen)
+            case SceneId.GAME: return GameScene(self.screen)
         raise Exception("Unknown scene id")
 

@@ -2,7 +2,7 @@ from src.ui.maze import Maze, Dir
 from src.scenes.scene import Scene
 import pygame as pg
 
-class Game(Scene):
+class GameScene(Scene):
     def __init__(self, screen: pg.Surface):
         Scene.__init__(self)
         self.screen: pg.Surface = screen

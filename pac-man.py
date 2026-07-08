@@ -15,8 +15,8 @@ if __name__ == "__main__":
     pg.display.set_caption("Pac-Man")
 
 
-    scene = MainMenu(screen)
-    game = Game(screen, scene)
+    initial_scene = MainMenu(screen)
+    game = Game(screen, initial_scene)
 
     try:
         game.loop()
