@@ -72,7 +72,7 @@ Legend: **[S]** small, **[M]** medium, **[L]** large · Dependencies in *(depend
 ## 6. User Interface (Graphics Library — pygame/MLX/etc.)
 
 - [ ] **6.1** [M] Rendering setup: window init, game loop/render loop, frame timing
-- [ ] **6.2** [M] Maze rendering (walls, corridors) from internal maze representation
+- [x] **6.2** [M] Maze rendering (walls, corridors) from internal maze representation
 - [ ] **6.3** [S] Player sprite/rendering + animation (optional: mouth open/close)
 - [ ] **6.4** [S] Ghost sprite/rendering (normal vs. edible visual state)
 - [ ] **6.5** [S] Pacgum / super-pacgum rendering

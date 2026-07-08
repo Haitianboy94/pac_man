@@ -1,28 +1,40 @@
-if __name__ == "__main__":
-    import sys, pygame
-    pygame.init()
+from src.ui.maze import MazeCell, Maze, Dir
 
-    size = width, height = 320, 240
+if __name__ == "__main__":
+    import sys, pygame as pg
+    pg.init()
+
+    size = width, height = 800, 600
     speed = [2, 2]
     black = 0, 0, 0
-    clock = pygame.time.Clock()
+    clock = pg.time.Clock()
 
-    screen = pygame.display.set_mode(size)
+    screen = pg.display.set_mode(size)
 
-    ball = pygame.image.load("intro_ball.gif")
-    ballrect = ball.get_rect()
 
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT: sys.exit()
+    maze = Maze([
+        [
+            Dir.NORTH | Dir.EAST | Dir.SOUTH,
+            Dir.NORTH | Dir.WEST,
+            Dir.NORTH | Dir.EAST | Dir.WEST
+        ],
+        [
+            Dir.NORTH | Dir.EAST | Dir.SOUTH,
+            Dir.NORTH | Dir.WEST,
+            Dir.NORTH | Dir.EAST | Dir.WEST
+        ]
+    ])
 
-        ballrect = ballrect.move(speed)
-        if ballrect.left < 0 or ballrect.right > width:
-            speed[0] = -speed[0]
-        if ballrect.top < 0 or ballrect.bottom > height:
-            speed[1] = -speed[1]
+    try:
+        while True:
+            for event in pg.event.get():
+                if event.type == pg.QUIT: sys.exit()
 
-        screen.fill(black)
-        screen.blit(ball, ballrect)
-        pygame.display.flip()
-        clock.tick(60)  # limits FPS to 60
+            screen.fill(black)
+
+            maze.draw(screen)
+
+            # pg.display.flip()
+            clock.tick(60)  # limits FPS to 60
+    except KeyboardInterrupt:
+        sys.exit()
