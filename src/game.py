@@ -15,18 +15,16 @@ class Game:
         clock = pg.time.Clock()
         while True:
             # delta time, the time between the last frame and the current
-            dt = clock.tick(60)  # limits FPS to 60
-            for event in pg.event.get():
+            dt: float = clock.tick(60)  # limits FPS to 60
+            events: list[pg.event.Event] = pg.event.get()
+            for event in events:
                 if event.type == pg.QUIT: sys.exit()
                 self.active_scene.handle_event(event)
-
             if self._scene_transition():
                 continue
 
-            self.active_scene.update(dt)
-
+            self.active_scene.update(events, dt)
             self.screen.fill("black")
-
             self.active_scene.draw(self.screen)
             pg.display.flip()
 
@@ -35,7 +33,8 @@ class Game:
         if next_id is not None:
             self.active_scene.next_scene_id = None
             self.active_scene = self._create_scene(next_id)
-        pass
+            return True
+        return False
     
     def _create_scene(self, scene_id: SceneId) -> Scene:
         match scene_id:

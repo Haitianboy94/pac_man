@@ -23,7 +23,7 @@ class GameScene(Scene):
     def handle_event(self, event: pg.event.Event) -> None:
         pass
 
-    def update(self, dt: float) -> None:
+    def update(self, events: list[pg.event.Event], dt: float) -> None:
         pass
 
     def draw(self, screen: pg.Surface) -> None:

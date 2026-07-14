@@ -5,6 +5,7 @@ import pygame as pg
 
 class Scene(ABC):
     def __init__(self):
+        # next_scene_id is polled by the game process to switch to another scene.
         self.next_scene_id: Optional[SceneId] = None
 
     @abstractmethod
@@ -12,7 +13,7 @@ class Scene(ABC):
         pass
 
     @abstractmethod
-    def update(self, dt: float) -> None:
+    def update(self, events: list[pg.event.Event], dt: float) -> None:
         pass
 
     @abstractmethod
