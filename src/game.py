@@ -1,5 +1,4 @@
-from src.scenes.game import GameScene
-import src.scenes.game
+from src.scenes.game_scene import GameScene
 from src.scenes.main_menu import MainMenu
 from src.scenes.scene_id import SceneId
 import sys
