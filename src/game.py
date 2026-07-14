@@ -18,9 +18,9 @@ class Game:
             dt: float = clock.tick(60)  # limits FPS to 60
             events: list[pg.event.Event] = pg.event.get()
             for event in events:
-                if event.type == pg.QUIT: sys.exit()
+                if event.type == pg.QUIT: self._quit()
                 self.active_scene.handle_event(event)
-            if self._scene_transition():
+            if self._maybe_scene_transition():
                 continue
 
             self.active_scene.update(events, dt)
@@ -28,7 +28,7 @@ class Game:
             self.active_scene.draw(self.screen)
             pg.display.flip()
 
-    def _scene_transition(self):
+    def _maybe_scene_transition(self):
         next_id = self.active_scene.next_scene_id
         if next_id is not None:
             self.active_scene.next_scene_id = None
@@ -41,4 +41,7 @@ class Game:
             case SceneId.MAIN_MENU: return MainMenu(self.screen)
             case SceneId.GAME: return GameScene(self.screen)
         raise Exception("Unknown scene id")
+
+    def _quit(self) -> None:
+        sys.exit()
 

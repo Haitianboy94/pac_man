@@ -68,7 +68,7 @@ class MainMenu(Scene):
                 "Exit",
                 pg.Color('white'), 
                 pg.Color('blue'),
-                lambda: sys.exit()
+                lambda: pg.event.post(pg.event.Event(pg.QUIT))
                 )
         exit_button.set_pos((center, 350))
         self.sprites.add(exit_button)
