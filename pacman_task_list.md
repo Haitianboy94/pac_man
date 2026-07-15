@@ -78,7 +78,7 @@ Legend: **[S]** small, **[M]** medium, **[L]** large · Dependencies in *(depend
 - [x] **6.5** [S] Pacgum / super-pacgum rendering
 - [x] **6.6** [M] Main Menu screen: Start Game, View Highscores, Instructions, Exit
 - [ ] **6.7** [M] In-game HUD: score, lives, level, remaining time (always visible)
-- [ ] **6.8** [M] Pause Menu: Resume, Return to Main Menu
+- [x] **6.8** [M] Pause Menu: Resume, Return to Main Menu
 - [ ] **6.9** [M] Game Over screen: final score + name entry for highscore
 - [ ] **6.10** [M] Victory screen: final score + congratulatory message + name entry
 - [ ] **6.11** [S] Instructions screen (controls/rules)

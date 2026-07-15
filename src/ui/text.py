@@ -1,4 +1,3 @@
-from typing import Callable
 import pygame as pg
 
 class Text(pg.sprite.Sprite):

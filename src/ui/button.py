@@ -2,7 +2,8 @@ from typing import Callable
 import pygame as pg
 
 class Button(pg.sprite.Sprite):
-    def __init__(self, font: pg.font.Font, text: str, color: pg.Color, hover_color: pg.Color, onclick: Callable):
+    def __init__(self, font: pg.font.Font, text: str, color: pg.Color, hover_color: pg.Color,
+                 onclick: Callable) -> None:
         pg.sprite.Sprite.__init__(self)
         self.onclick: Callable = onclick
         
@@ -11,7 +12,7 @@ class Button(pg.sprite.Sprite):
         self.image: pg.Surface = self.text
         self.rect: pg.Rect = self.image.get_rect()
 
-    def update(self, events: list[pg.event.Event]):
+    def update(self, events: list[pg.event.Event]) -> None:
         pos: tuple[int, int] = pg.mouse.get_pos()
         if self.rect.collidepoint(pos):
             self.image = self.hover_text
@@ -21,7 +22,7 @@ class Button(pg.sprite.Sprite):
         else:
             self.image = self.text
 
-    def set_pos(self, pos: tuple[int, int]):
+    def set_pos(self, pos: tuple[int, int]) -> None:
         x, y = pos
         self.rect = self.image.get_rect(centerx=x, y=y)
 
