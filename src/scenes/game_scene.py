@@ -36,7 +36,8 @@ class GameScene(Scene):
             return
 
     def draw(self, screen: pg.Surface) -> None:
-        self.maze.draw(screen)
+        self.maze.walls.draw(screen)
+        self.maze.pacgums.draw(screen)
 
         if self.is_paused:
             self.pause_group.draw(screen)
