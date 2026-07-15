@@ -1,28 +1,24 @@
-if __name__ == "__main__":
-    import sys, pygame
-    pygame.init()
+from src.game import Game
+from src.scenes.main_menu import MainMenu
+from src.ui.maze import MazeCell, Maze, Dir
 
-    size = width, height = 320, 240
+if __name__ == "__main__":
+    import sys, pygame as pg
+    pg.init()
+
+    size = width, height = 800, 600
     speed = [2, 2]
     black = 0, 0, 0
-    clock = pygame.time.Clock()
 
-    screen = pygame.display.set_mode(size)
+    screen = pg.display.set_mode(size)
 
-    ball = pygame.image.load("intro_ball.gif")
-    ballrect = ball.get_rect()
+    pg.display.set_caption("Pac-Man")
 
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT: sys.exit()
 
-        ballrect = ballrect.move(speed)
-        if ballrect.left < 0 or ballrect.right > width:
-            speed[0] = -speed[0]
-        if ballrect.top < 0 or ballrect.bottom > height:
-            speed[1] = -speed[1]
+    initial_scene = MainMenu(screen)
+    game = Game(screen, initial_scene)
 
-        screen.fill(black)
-        screen.blit(ball, ballrect)
-        pygame.display.flip()
-        clock.tick(60)  # limits FPS to 60
+    try:
+        game.loop()
+    except KeyboardInterrupt:
+        sys.exit()
