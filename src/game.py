@@ -1,14 +1,18 @@
 from src.scenes.game_scene import GameScene
 from src.scenes.main_menu import MainMenu
 from src.scenes.scene_id import SceneId
+from src.config import Config
 import sys
 from src.scenes.scene import Scene
 import pygame as pg
 
+
 class Game:
-    def __init__(self, screen: pg.Surface, scene: Scene):
+    def __init__(self, screen: pg.Surface, scene: Scene, config: Config):
         self.screen = screen
         self.active_scene: Scene = scene
+        self.config = config
+        self.current_level: int = 1
 
     def loop(self):
         clock = pg.time.Clock()
@@ -38,8 +42,7 @@ class Game:
     def _create_scene(self, scene_id: SceneId) -> Scene:
         match scene_id:
             case SceneId.MAIN_MENU: return MainMenu(self.screen)
-            case SceneId.GAME: return GameScene(self.screen)
-        raise Exception("Unknown scene id")
+            case SceneId.GAME: return GameScene(self.screen, self.config, self.current_level)
 
     def _quit(self) -> None:
         sys.exit()

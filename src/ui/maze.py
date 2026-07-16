@@ -16,7 +16,7 @@ class Dir(enum.IntFlag):
     WEST = 8
 
 class Maze(pg.sprite.Group):
-    SIZE = 32
+    SIZE = 16
     def __init__(self, grid: list[list[Dir]]):
         pg.sprite.Group.__init__(self)
 
