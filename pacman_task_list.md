@@ -73,7 +73,8 @@ Legend: **[S]** small, **[M]** medium, **[L]** large · Dependencies in *(depend
 
 - [x] **6.1** [M] Rendering setup: window init, game loop/render loop, frame timing
 - [x] **6.2** [M] Maze rendering (walls, corridors) from internal maze representation
-- [ ] **6.3** [S] Player sprite/rendering + animation (optional: mouth open/close)
+- [x] **6.3** [S] Player sprite/rendering + animation (optional: mouth open/close)
+
 - [ ] **6.4** [S] Ghost sprite/rendering (normal vs. edible visual state)
 - [x] **6.5** [S] Pacgum / super-pacgum rendering
 - [x] **6.6** [M] Main Menu screen: Start Game, View Highscores, Instructions, Exit
@@ -83,7 +84,7 @@ Legend: **[S]** small, **[M]** medium, **[L]** large · Dependencies in *(depend
 - [ ] **6.10** [M] Victory screen: final score + congratulatory message + name entry
 - [ ] **6.11** [S] Instructions screen (controls/rules)
 - [ ] **6.12** [S] Highscore display screen/panel (top 10, names + scores)
-- [ ] **6.13** [S] Input handling glue: keyboard events → menu navigation / pause toggle
+- [x] **6.13** [S] Input handling glue: keyboard events → menu navigation / pause toggle
 
 ---
 

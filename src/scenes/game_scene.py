@@ -1,3 +1,4 @@
+from src.entities.player import Player
 from src.scenes.scene_id import SceneId
 from src.ui.panel import Panel
 from pygame.locals import Color
@@ -13,15 +14,19 @@ class GameScene(Scene):
         self.screen: pg.Surface = screen
         self.maze: Maze = Maze([
             [
-                Dir.NORTH | Dir.EAST | Dir.SOUTH,
-                Dir.NORTH | Dir.WEST,
-                Dir.NORTH | Dir.EAST | Dir.WEST
+                Dir.NORTH | Dir.EAST | Dir.SOUTH | Dir.WEST,
                 ] * 10
             ] * 10)
         self.is_paused: bool = False
 
         self.pause_group: pg.sprite.Group = pg.sprite.Group()
         self._init_pause_menu(screen)
+
+        self.entities_group: pg.sprite.Group = pg.sprite.Group()
+        player = Player()
+        player.rect.move_ip(self.maze.cell_position(9, 9))
+        self.entities_group.add(player)
+
 
     def handle_event(self, event: pg.event.Event) -> None:
         if event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
@@ -36,6 +41,7 @@ class GameScene(Scene):
     def draw(self, screen: pg.Surface) -> None:
         self.maze.walls.draw(screen)
         self.maze.pacgums.draw(screen)
+        self.entities_group.draw(screen)
 
         if self.is_paused:
             self.pause_group.draw(screen)
