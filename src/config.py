@@ -1,9 +1,10 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+
 
 @dataclass
 class Config():
     highscore_filename: str = "highscore.json"
-    level: list[int] = [1,2,3,4,5,6,7,8,9,10]
+    level: list[int] = field(default_factory=lambda: [1,2,3,4,5,6,7,8,9,10])
     width: int = 50
     height: int = 50
     lives: int = 3
