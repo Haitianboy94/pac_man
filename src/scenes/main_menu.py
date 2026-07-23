@@ -27,13 +27,13 @@ class MainMenu(Scene):
     def _create_ui(self):
         center: int = int(self.screen.get_width() / 2)
 
-        title = Text(self.title_font, "Pac-Man", pg.Color("white"))
+        title: Text = Text(self.title_font, "Pac-Man", pg.Color("white"))
         title.set_pos((center, 100))
         self.sprites.add(title)
         text_color: pg.Color = pg.Color('white')
         hover_color: pg.Color = pg.Color('blue')
 
-        start_game_button = Button(
+        start_game_button: Button = Button(
                 self.button_font,
                 "Start game",
                 text_color, 
@@ -43,7 +43,7 @@ class MainMenu(Scene):
         start_game_button.set_pos((center, 200))
         self.sprites.add(start_game_button)
 
-        highscores_button = Button(
+        highscores_button: Button = Button(
                 self.button_font,
                 "Highscores",
                 pg.Color('white'), 
@@ -53,7 +53,7 @@ class MainMenu(Scene):
         highscores_button.set_pos((center, 250))
         self.sprites.add(highscores_button)
 
-        instructions_button = Button(
+        instructions_button: Button = Button(
                 self.button_font,
                 "Instructions",
                 pg.Color('white'), 
@@ -63,7 +63,7 @@ class MainMenu(Scene):
         instructions_button.set_pos((center, 300))
         self.sprites.add(instructions_button)
 
-        exit_button = Button(
+        exit_button: Button = Button(
                 self.button_font,
                 "Exit",
                 pg.Color('white'), 
