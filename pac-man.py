@@ -1,7 +1,8 @@
+from src.config.config_parser import ConfigParser, InvalidConfigError
 from src.game import Game
 from src.scenes.main_menu import MainMenu
 from src.ui.maze import MazeCell, Maze, Dir
-from src.config import Config
+from src.config.config import Config
 import sys
 
 # This to solve the recursive call in the provided mazegenerator
@@ -12,10 +13,27 @@ import sys
 sys.setrecursionlimit(10_000)
 
 if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("usage: uv run pac-man.py [config file]")
+        sys.exit(1)
+
+    try:
+        with open(sys.argv[1]) as file:
+            parser = ConfigParser(file.read())
+            config = parser.parse()
+    except InvalidConfigError as e:
+        print(f"Config file is invalid: {e.args[0]}")
+        exit(1)
+    except FileNotFoundError as e:
+        print(f"Config file at {e.filename} does not exist")
+        exit(1)
+    except Exception:
+        print("Unknown exception when parsing config file")
+        exit(1)
+
     import sys, pygame as pg
     pg.init()
 
-    config = Config()
     size = width, height = config.width * Maze.CELL_SIZE, config.height * Maze.CELL_SIZE
 
     screen = pg.display.set_mode(size)

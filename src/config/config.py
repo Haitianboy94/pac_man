@@ -1,9 +1,10 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+
 
 @dataclass
 class Config():
     highscore_filename: str = "highscore.json"
-    level: list[int] = [1,2,3,4,5,6,7,8,9,10]
+    level: list[int] = field(default_factory=lambda: [1,2,3,4,5,6,7,8,9,10])
     width: int = 50
     height: int = 50
     lives: int = 3
@@ -11,7 +12,6 @@ class Config():
     points_per_pacgum: int = 10
     points_per_super_pacgum: int = 50
     points_per_ghost: int = 200
-    seed: str = "42"
+    seed: int = 42
     level_max_time: int = 90
-
 

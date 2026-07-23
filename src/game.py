@@ -1,7 +1,7 @@
 from src.scenes.game_scene import GameScene
 from src.scenes.main_menu import MainMenu
 from src.scenes.scene_id import SceneId
-from src.config import Config
+from src.config.config import Config
 import sys
 from src.scenes.scene import Scene
 import pygame as pg

@@ -7,7 +7,7 @@ from src.ui.text import Text
 from src.ui.maze import Maze, Dir
 from src.scenes.scene import Scene
 from src.maze_generator import load_maze, seed_for_level, MazeGenerationError
-from src.config import Config
+from src.config.config import Config
 import pygame as pg
 
 FALLBACK_MAZE: list[list[Dir]] = [
