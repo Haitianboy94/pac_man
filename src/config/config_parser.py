@@ -13,8 +13,8 @@ class ConfigParser:
         try:
             kv = json.loads(self.contents)
             config = Config()
-            config.width = self.clamp_int("width", kv["width"], 5, 20, 10)
-            config.height = self.clamp_int("height", kv["height"], 5, 20, 10)
+            config.width = self.clamp_int("width", kv["width"], 5, 40, 10)
+            config.height = self.clamp_int("height", kv["height"], 5, 40, 10)
             config.lives = self.clamp_int("lives", kv["lives"], 1, 10, 3)
             cells: int = config.width * config.height
             config.pacgum = self.clamp_int("pacgum", kv["pacgum"], 0, cells, 10)

@@ -9,5 +9,10 @@ dependencies = [
     "pygame>=2.6.1",
 ]
 
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+]
+
 [tool.uv.sources]
 mazegenerator = { path = "mazegenerator-2.0.2-py3-none-any.whl" }
