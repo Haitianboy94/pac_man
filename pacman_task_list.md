@@ -14,16 +14,16 @@ Legend: **[S]** small, **[M]** medium, **[L]** large · Dependencies in *(depend
 - [x] **1.2** [S] Write `Makefile` with `install`, `run`, `debug`, `clean`, `lint`, `lint-strict`
 - [x] **1.3** [S] Configure flake8 + mypy (strict-compatible config files)
 - [x] **1.4** [M] Set up base package structure (modules for config, game, entities, UI, highscore)
-- [ ] **1.5** [S] Set up pytest/unittest skeleton (not graded, but useful for both devs)
+- [x] **1.5** [S] Set up pytest/unittest skeleton (not graded, but useful for both devs)
 
 ---
 
 ## 2. Configuration System
 
-- [ ] **2.1** [M] JSON-with-comments parser (strip `#` lines, optionally `//` and `/* */`)
+- [x] **2.1** [M] JSON-with-comments parser (strip `#` lines, optionally `//` and `/* */`)
 - [x] **2.2** [M] Config schema/dataclass or Pydantic-style model with defaults for all keys (`highscore_filename`, `level`, `width`, `height`, `lives`, `pacgum`, `points_per_pacgum`, `points_per_super_pacgum`, `points_per_ghost`, `seed`, `level_max_time`)
-- [ ] **2.3** [M] Validation & clamping logic: invalid/missing values → safe defaults + log message, unknown keys ignored, never crash
-- [ ] **2.4** [S] CLI entrypoint: `python3 pac-man.py config.json`, exactly one arg, clean error on missing/invalid file (no traceback)
+- [x] **2.3** [M] Validation & clamping logic: invalid/missing values → safe defaults + log message, unknown keys ignored, never crash
+- [x] **2.4** [S] CLI entrypoint: `python3 pac-man.py config.json`, exactly one arg, clean error on missing/invalid file (no traceback)
 - [ ] **2.5** [S] Unit tests for config parsing edge cases (missing keys, bad types, malformed JSON, comments)
 
 ---
