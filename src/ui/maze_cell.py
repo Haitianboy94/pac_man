@@ -25,12 +25,12 @@ class MazeCell(pg.sprite.Sprite):
             self.image.blit(horizontal, [0,0])
             self.rect.union(pg.Rect(self.position, [self.WALL_SIZE, self.size]))
         if (self.walls & Dir.EAST):
-            self.image.blit(vertical, [0, 0])
+            self.image.blit(vertical, [self.size - self.WALL_SIZE, 0])
             self.rect.union(pg.Rect(self.position, [self.WALL_SIZE, self.size]))
         if (self.walls & Dir.SOUTH):
             self.image.blit(horizontal, [0, self.size - self.WALL_SIZE])
             self.rect.union(pg.Rect(self.position, [self.WALL_SIZE, self.size]))
         if (self.walls & Dir.WEST):
-            self.image.blit(vertical, [self.size - self.WALL_SIZE, 0])
+            self.image.blit(vertical, [0, 0])
             self.rect.union(pg.Rect(self.position, [self.WALL_SIZE, self.size]))
 
