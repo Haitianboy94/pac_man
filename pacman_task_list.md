@@ -62,8 +62,8 @@ Legend: **[S]** small, **[M]** medium, **[L]** large · Dependencies in *(depend
 
 - [ ] **5.1** [M] Persistent storage design (JSON file), load-on-start / save-on-end
 - [ ] **5.2** [S] File error handling: missing file, corrupted/invalid format → safe fallback, no crash
-- [ ] **5.3** [S] Name validation: max 10 chars, alphanumeric + spaces only
-- [ ] **5.4** [S] Score validation: non-negative integers
+- [x] **5.3** [S] Name validation: max 10 chars, alphanumeric + spaces only
+- [x] **5.4** [S] Score validation: non-negative integers
 - [ ] **5.5** [S] Maintain top 10 list, sorted, insert new scores correctly
 - [ ] **5.6** [S] Expose data for main menu display and name-entry flow
 
