@@ -30,11 +30,11 @@ Legend: **[S]** small, **[M]** medium, **[L]** large · Dependencies in *(depend
 
 ## 3. Maze Generator Integration
 
-- [ ] **3.1** [M] Study assigned "A-Maze-ing" package's public interface/API
-- [ ] **3.2** [M] Build adapter/loader that converts their maze output into your internal maze representation (walls/corridors grid)
-- [ ] **3.3** [S] Call generator with `PERFECT=False`, fixed `seed` for level 1, random seed for subsequent levels
-- [ ] **3.4** [S] Error handling if generator raises/fails — clean fallback or message, no crash
-- [ ] **3.5** [S] Unit test / manual test harness that renders raw generator output before UI exists (helps unblock rendering work early)
+- [x] **3.1** [M] Study assigned "A-Maze-ing" package's public interface/API
+- [x] **3.2** [M] Build adapter/loader that converts their maze output into your internal maze representation (walls/corridors grid)
+- [x] **3.3** [S] Call generator with `PERFECT=False`, fixed `seed` for level 1, random seed for subsequent levels
+- [x] **3.4** [S] Error handling if generator raises/fails — clean fallback or message, no crash
+- [x] **3.5** [S] Unit test / manual test harness that renders raw generator output before UI exists (helps unblock rendering work early)
 
 ---
 
@@ -60,12 +60,12 @@ Legend: **[S]** small, **[M]** medium, **[L]** large · Dependencies in *(depend
 
 ## 5. Highscore System
 
-- [ ] **5.1** [M] Persistent storage design (JSON file), load-on-start / save-on-end
-- [ ] **5.2** [S] File error handling: missing file, corrupted/invalid format → safe fallback, no crash
+- [x] **5.1** [M] Persistent storage design (JSON file), load-on-start / save-on-end
+- [x] **5.2** [S] File error handling: missing file, corrupted/invalid format → safe fallback, no crash
 - [x] **5.3** [S] Name validation: max 10 chars, alphanumeric + spaces only
 - [x] **5.4** [S] Score validation: non-negative integers
-- [ ] **5.5** [S] Maintain top 10 list, sorted, insert new scores correctly
-- [ ] **5.6** [S] Expose data for main menu display and name-entry flow
+- [x] **5.5** [S] Maintain top 10 list, sorted, insert new scores correctly
+- [x] **5.6** [S] Expose data for main menu display and name-entry flow
 
 ---
 

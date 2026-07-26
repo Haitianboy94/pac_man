@@ -69,7 +69,7 @@ class GameScene(Scene):
         if self.is_paused:
             self.pause_group.update(events)
             return
-        self.entities_group.update(events)
+        self.entities_group.update(events, dt)
 
     def draw(self, screen: pg.Surface) -> None:
         self.maze.walls.draw(screen)

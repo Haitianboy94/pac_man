@@ -33,7 +33,10 @@ if __name__ == "__main__":
     import pygame as pg
     pg.init()
 
-    size = config.width * Maze.CELL_SIZE, config.height * Maze.CELL_SIZE
+    size = (
+            config.width * Maze.CELL_SIZE + 100,
+            config.height * Maze.CELL_SIZE + 100
+            )
 
     screen = pg.display.set_mode(size)
 
