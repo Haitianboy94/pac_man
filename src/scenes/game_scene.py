@@ -51,7 +51,7 @@ class GameScene(Scene):
 
         self.entities_group: pg.sprite.Group = pg.sprite.Group()
         player = Player()
-        player.rect.move_ip(self.maze.cell_position(9, 9))
+        player.rect.move_ip(self.maze.cell_position(0, 0))
         self.entities_group.add(player)
 
 

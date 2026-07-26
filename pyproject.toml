@@ -15,7 +15,7 @@ dev = [
 ]
 
 [tool.uv.sources]
-mazegenerator = { path = "mazegenerator-2.0.2-py3-none-any.whl" }
+mazegenerator = { path = "vendor/mazegenerator-2.0.2-py3-none-any.whl" }
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
