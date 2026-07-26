@@ -1,5 +1,7 @@
 import heapq
 import json
+
+
 class InvalidHighscoreError(Exception):
     """Raised when highscore data does not meet the required format."""
 
@@ -36,9 +38,11 @@ class Highscore:
         """Commits the internal highscore values to the JSON file."""
         try:
             with open(self.filename, 'w') as file:
-                score_dict: dict[str, int] = {name: score for score, name in self.scores}
+                score_dict: dict[str, int] = {
+                        name: score for score, name in self.scores
+                        }
                 file.write(json.dumps(score_dict))
-        except:
+        except Exception:
             print('Failed to write highscore')
 
     def add(self, name: str, score: int) -> None:

@@ -3,9 +3,11 @@ from typing import Optional
 from abc import ABC, abstractmethod
 import pygame as pg
 
+
 class Scene(ABC):
+
     def __init__(self):
-        # next_scene_id is polled by the game process to switch to another scene.
+        # next_scene_id is polled by the game to switch to another scene.
         self.next_scene_id: Optional[SceneId] = None
         self.quit: bool = False
 

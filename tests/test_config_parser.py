@@ -144,6 +144,7 @@ def test_hash_comment_lines_are_ignored() -> None:
     assert config.width == 15
     assert config.level == [10, 20, 30]
 
+
 def test_double_slash_comment_lines_are_ignored() -> None:
     """Full comment lines, including indented ones, should be ignored."""
     contents = json.dumps(valid_config(), indent=2)

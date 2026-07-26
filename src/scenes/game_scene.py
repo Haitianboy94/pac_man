@@ -30,7 +30,7 @@ class GameScene(Scene):
         self.screen: pg.Surface = screen
         seed = seed_for_level(current_level, int(config.seed))
         try:
-            dir_grid, entry, exit_, shortest_path = load_maze(
+            dir_grid, _, _, _ = load_maze(
                 width=config.width,
                 height=config.height,
                 perfect=False,
@@ -39,9 +39,11 @@ class GameScene(Scene):
                 seed=seed,
             )
         except MazeGenerationError as e:
-            print(f"[GameScene] Maze generation failed, using fallback maze: {e}")
+            print(
+                    "[GameScene] Maze generation failed" +
+                    f", using fallback maze: {e}"
+                    )
             dir_grid = FALLBACK_MAZE   # small hardcoded safe grid
-            entry, exit_, shortest_path = (0, 0), (0, 0), ''
 
         self.maze: Maze = Maze(dir_grid)
         self.is_paused: bool = False
@@ -53,7 +55,6 @@ class GameScene(Scene):
         player = Player()
         player.rect.move_ip(self.maze.cell_position(0, 0))
         self.entities_group.add(player)
-
 
     def handle_event(self, event: pg.event.Event) -> None:
         if event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
@@ -100,4 +101,3 @@ class GameScene(Scene):
                 )
         button.set_pos((int(screen.get_width() / 2), 410))
         self.pause_group.add(button)
-

@@ -6,7 +6,12 @@ import pygame as pg
 
 class Maze():
     CELL_SIZE = 36
-    def __init__(self, grid: list[list[Dir]], position: tuple[int, int] = (0, 0)):
+
+    def __init__(
+            self,
+            grid: list[list[Dir]],
+            position: tuple[int, int] = (0, 0)
+            ):
         self.walls: pg.sprite.Group = pg.sprite.Group()
         self.pacgums: pg.sprite.Group = pg.sprite.Group()
 
@@ -17,7 +22,7 @@ class Maze():
                 self.walls.add(MazeCell(
                     col,
                     self.CELL_SIZE,
-                    [x,y]
+                    [x, y]
                     ))
                 self.pacgums.add(Pacgum(
                     PacGumType.PACGUM,
@@ -33,4 +38,3 @@ class Maze():
             x * self.CELL_SIZE - x * MazeCell.WALL_SIZE,
             y * self.CELL_SIZE - y * MazeCell.WALL_SIZE
         )
-

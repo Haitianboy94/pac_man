@@ -1,9 +1,10 @@
 from src.ui.maze import Maze
-from typing import Callable
 import pygame as pg
+
 
 class Player(pg.sprite.Sprite):
     SIZE = 32
+
     def __init__(self):
         pg.sprite.Sprite.__init__(self)
 

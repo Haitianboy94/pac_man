@@ -145,7 +145,9 @@ def test_add_keeps_only_the_top_ten_scores_in_descending_order(
 def test_load_keeps_only_the_top_ten_scores(tmp_path: Path) -> None:
     """Loading scores should apply the same top-ten rule as insertion."""
     filename = tmp_path / "scores.json"
-    filename.write_text(json.dumps({f"P{score}": score for score in range(11)}))
+    filename.write_text(json.dumps(
+        {f"P{score}": score for score in range(11)}
+        ))
     highscore = Highscore(str(filename))
 
     highscore.load()

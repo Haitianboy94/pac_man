@@ -1,6 +1,7 @@
 from typing import TypeIs, Any
 import enum
 
+
 class Dir(enum.IntFlag):
     """Wall directions using bit flags for efficient set operations.
 
@@ -14,6 +15,7 @@ class Dir(enum.IntFlag):
     SOUTH = 4
     WEST = 8
 
+
 class PacGumType(enum.IntEnum):
     """
     Enum for the different Pacgum types.
@@ -21,6 +23,7 @@ class PacGumType(enum.IntEnum):
     NONE = 0
     PACGUM = 1
     SUPER_PACGUM = 2
+
 
 def is_nonempty_int_list(value: Any) -> TypeIs[list[int]]:
     """

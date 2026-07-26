@@ -8,6 +8,7 @@ import pygame as pg
 
 
 class Game:
+
     def __init__(self, screen: pg.Surface, scene: Scene, config: Config):
         self.screen = screen
         self.active_scene: Scene = scene
@@ -21,7 +22,8 @@ class Game:
             dt: float = clock.tick(60)  # limits FPS to 60
             events: list[pg.event.Event] = pg.event.get()
             for event in events:
-                if event.type == pg.QUIT: self._quit()
+                if event.type == pg.QUIT:
+                    self._quit()
                 self.active_scene.handle_event(event)
             if self._maybe_scene_transition():
                 continue
@@ -38,12 +40,13 @@ class Game:
             self.active_scene = self._create_scene(next_id)
             return True
         return False
-    
+
     def _create_scene(self, scene_id: SceneId) -> Scene:
         match scene_id:
-            case SceneId.MAIN_MENU: return MainMenu(self.screen)
-            case SceneId.GAME: return GameScene(self.screen, self.config, self.current_level)
+            case SceneId.MAIN_MENU:
+                return MainMenu(self.screen)
+            case SceneId.GAME:
+                return GameScene(self.screen, self.config, self.current_level)
 
     def _quit(self) -> None:
         sys.exit()
-

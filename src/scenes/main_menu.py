@@ -2,10 +2,11 @@ from src.ui.text import Text
 from src.ui.button import Button
 from src.scenes.scene_id import SceneId
 from src.scenes.scene import Scene
-import sys
 import pygame as pg
 
+
 class MainMenu(Scene):
+
     def __init__(self, screen: pg.Surface):
         Scene.__init__(self)
         self.screen: pg.Surface = screen
@@ -13,7 +14,6 @@ class MainMenu(Scene):
         self.button_font: pg.font.Font = pg.font.Font(None, 32)
         self.sprites: pg.sprite.Group = pg.sprite.Group()
         self._create_ui()
-
 
     def handle_event(self, event: pg.event.Event) -> None:
         pass
@@ -36,7 +36,7 @@ class MainMenu(Scene):
         start_game_button: Button = Button(
                 self.button_font,
                 "Start game",
-                text_color, 
+                text_color,
                 hover_color,
                 lambda: setattr(self, "next_scene_id", SceneId.GAME)
                 )
@@ -46,7 +46,7 @@ class MainMenu(Scene):
         highscores_button: Button = Button(
                 self.button_font,
                 "Highscores",
-                pg.Color('white'), 
+                pg.Color('white'),
                 pg.Color('blue'),
                 lambda: None
                 )
@@ -56,7 +56,7 @@ class MainMenu(Scene):
         instructions_button: Button = Button(
                 self.button_font,
                 "Instructions",
-                pg.Color('white'), 
+                pg.Color('white'),
                 pg.Color('blue'),
                 lambda: None
                 )
@@ -66,10 +66,9 @@ class MainMenu(Scene):
         exit_button: Button = Button(
                 self.button_font,
                 "Exit",
-                pg.Color('white'), 
+                pg.Color('white'),
                 pg.Color('blue'),
                 lambda: pg.event.post(pg.event.Event(pg.QUIT))
                 )
         exit_button.set_pos((center, 350))
         self.sprites.add(exit_button)
-

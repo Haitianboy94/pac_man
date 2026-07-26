@@ -25,7 +25,12 @@ def load_maze(width, height, perfect, entry, exit_, seed, max_retries=3):
             continue
 
         dir_grid = [[Dir(cell) for cell in row] for row in generator.maze]
-        return dir_grid, generator.maze_entry, generator.maze_exit, generator.shortest_path
+        return (
+                dir_grid,
+                generator.maze_entry,
+                generator.maze_exit,
+                generator.shortest_path
+                )
 
     print(f"Maze generation failed after {max_retries} attempts: {last_error}")
 
