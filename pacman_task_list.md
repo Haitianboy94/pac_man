@@ -150,21 +150,13 @@ Legend: **[S]** small, **[M]** medium, **[L]** large · Dependencies in *(depend
 
 The natural fault line is **game engine/logic** vs. **presentation/infra**, since they can be developed in parallel against a shared interface (e.g. agree early on the `Maze`, `GameState`, and `Config` data shapes).
 
-**Person A — Core Gameplay & Systems**
+**Ruthler — Core Gameplay & Systems**
 - Sections 3 (Maze integration), 4 (Core entities/logic), 7 (Cheat mode), part of 11 (gameplay testing)
 
-**Person B — Interface, Config & Delivery**
+**Robbin — Interface, Config & Delivery**
 - Sections 2 (Config), 5 (Highscore), 6 (UI/menus/HUD), 8 (Packaging), part of 11 (robustness testing)
 
 **Shared / either person, ideally together early on:**
 - Section 1 (project setup) — do this first, together, to agree on structure
 - Section 9 (README) — split by section based on who built what
 - Section 10 (Project management docs) — ongoing, shared responsibility throughout
-
-**Suggested sequencing:**
-1. Both: agree on data models (Config, Maze representation, GameState) — a short design session before splitting off
-2. Parallel work on Sections 2–3 (Person B / Person A) since these unblock everything else
-3. Parallel work on Section 4 (Person A) and Section 6 skeleton (Person B) once data models are stable
-4. Integrate early and often — the ghost/player/maze logic (A) and the renderer (B) need to sync on coordinate systems and timing
-5. Sections 5, 7, 8 can slot in once the core loop works
-6. Documentation (9, 10) throughout, not just at the end
