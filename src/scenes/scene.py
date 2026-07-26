@@ -5,18 +5,25 @@ import pygame as pg
 
 
 class Scene(ABC):
+    """
+    A scene is a single 'screen' in the game. It is used to separate different
+    parts of the game from each other. It has its own methods for drawing 
+    sprites to the screen, and for handling events. The update method is
+    called each frame by the `Game` class.
+
+    self.next_scene_id can be set from within the scene, to signal the `Game`
+    class to transition the scene.
+    """
 
     def __init__(self) -> None:
-        # next_scene_id is polled by the game to switch to another scene.
         self.next_scene_id: Optional[SceneId] = None
-        self.quit: bool = False
 
     @abstractmethod
     def handle_event(self, event: pg.event.Event) -> None:
         pass
 
     @abstractmethod
-    def update(self, events: list[pg.event.Event], dt: float) -> None:
+    def update(self, events: list[pg.event.Event], dt: int) -> None:
         pass
 
     @abstractmethod

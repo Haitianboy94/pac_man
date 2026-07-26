@@ -8,6 +8,11 @@ import pygame as pg
 
 
 class Game:
+    """
+    This class represents the main game process. It runs the game loop
+    and owns the config and pygame screen. It also contains the active scene
+    and handles scene transisitons.
+    """
 
     def __init__(self, screen: pg.Surface, scene: Scene, config: Config):
         self.screen = screen
@@ -16,17 +21,25 @@ class Game:
         self.current_level: int = 1
 
     def loop(self) -> None:
+        """
+        The main game loop. The main steps are:
+
+        - Handling scene transitions
+        - FPS limiting via clock.tick()
+        - Retrieving all events from the last frame and passing them to
+          the active scene, as well as calling the update method
+        - Rendering the active scene to the screen
+        """
         clock = pg.time.Clock()
         while True:
-            # delta time, the time between the last frame and the current
-            dt: float = clock.tick(60)  # limits FPS to 60
+            if self._maybe_scene_transition():
+                continue
+            dt: int = clock.tick(60)  # limits FPS to 60
             events: list[pg.event.Event] = pg.event.get()
             for event in events:
                 if event.type == pg.QUIT:
                     self._quit()
                 self.active_scene.handle_event(event)
-            if self._maybe_scene_transition():
-                continue
 
             self.active_scene.update(events, dt)
             self.screen.fill("black")
@@ -34,6 +47,7 @@ class Game:
             pg.display.flip()
 
     def _maybe_scene_transition(self) -> bool:
+        "Polling method which handles scene transitions"
         next_id = self.active_scene.next_scene_id
         if next_id is not None:
             self.active_scene.next_scene_id = None
@@ -42,6 +56,7 @@ class Game:
         return False
 
     def _create_scene(self, scene_id: SceneId) -> Scene:
+        "Factory method which constructs new scenes"
         match scene_id:
             case SceneId.MAIN_MENU:
                 return MainMenu(self.screen)
@@ -49,4 +64,5 @@ class Game:
                 return GameScene(self.screen, self.config, self.current_level)
 
     def _quit(self) -> None:
+        "Exits the game"
         sys.exit()

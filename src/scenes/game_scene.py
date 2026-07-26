@@ -25,6 +25,10 @@ FALLBACK_MAZE: list[list[Dir]] = [
 
 
 class GameScene(Scene):
+    """
+    The game scene where pacman actually takes place.
+    Calls `MazeGenerator` to create the level.
+    """
     def __init__(self, screen: pg.Surface, config: Config, current_level: int):
         Scene.__init__(self)
         self.screen: pg.Surface = screen
@@ -61,10 +65,11 @@ class GameScene(Scene):
             self.is_paused = not self.is_paused
         pass
 
-    def update(self, events: list[pg.event.Event], dt: float) -> None:
+    def update(self, events: list[pg.event.Event], dt: int) -> None:
         if self.is_paused:
             self.pause_group.update(events)
             return
+        self.entities_group.update(events)
 
     def draw(self, screen: pg.Surface) -> None:
         self.maze.walls.draw(screen)

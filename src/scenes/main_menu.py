@@ -6,6 +6,7 @@ import pygame as pg
 
 
 class MainMenu(Scene):
+    "Main menu scene"
 
     def __init__(self, screen: pg.Surface):
         Scene.__init__(self)
@@ -18,13 +19,14 @@ class MainMenu(Scene):
     def handle_event(self, event: pg.event.Event) -> None:
         pass
 
-    def update(self, events: list[pg.event.Event], dt: float) -> None:
+    def update(self, events: list[pg.event.Event], dt: int) -> None:
         self.sprites.update(events)
 
     def draw(self, screen: pg.Surface) -> None:
         self.sprites.draw(screen)
 
     def _create_ui(self) -> None:
+        "Sets up all ui elements for the main menu"
         center: int = int(self.screen.get_width() / 2)
 
         title: Text = Text(self.title_font, "Pac-Man", pg.Color("white"))

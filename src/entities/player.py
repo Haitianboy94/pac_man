@@ -1,22 +1,28 @@
+from src.entities.entity import Entity
 from src.ui.maze import Maze
 import pygame as pg
 
 
-class Player(pg.sprite.Sprite):
+class Player(Entity):
+    """
+    The pacman player entity
+    """
     SIZE = 32
 
     def __init__(self) -> None:
         pg.sprite.Sprite.__init__(self)
 
-        self.image: pg.Surface = pg.Surface((self.SIZE, self.SIZE))
-        self.rect: pg.Rect = pg.draw.circle(
+        self.image = pg.Surface((self.SIZE, self.SIZE))
+        self.rect = pg.draw.circle(
                 self.image,
                 pg.Color("yellow"),
                 (int(self.SIZE / 2), int(self.SIZE / 2)),
                 int(self.SIZE / 2)
         )
-        offset: int = int((Maze.CELL_SIZE - self.SIZE) / 2)
+        offset = int((Maze.CELL_SIZE - self.SIZE) / 2)
         self.rect.move_ip(offset, offset)
 
-    def update(self, events: list[pg.event.Event]) -> None:
-        pass
+    def update(self, events: list[pg.event.Event], dt: int) -> None:
+        for event in events:
+            if event.type == pg.KEYDOWN and event.key == pg.K_RIGHT:
+                self.rect.move_ip([0, 1])
