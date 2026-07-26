@@ -6,7 +6,7 @@ import pygame as pg
 
 class Scene(ABC):
 
-    def __init__(self):
+    def __init__(self) -> None:
         # next_scene_id is polled by the game to switch to another scene.
         self.next_scene_id: Optional[SceneId] = None
         self.quit: bool = False

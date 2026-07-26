@@ -15,7 +15,7 @@ class Game:
         self.config = config
         self.current_level: int = 1
 
-    def loop(self):
+    def loop(self) -> None:
         clock = pg.time.Clock()
         while True:
             # delta time, the time between the last frame and the current
@@ -33,7 +33,7 @@ class Game:
             self.active_scene.draw(self.screen)
             pg.display.flip()
 
-    def _maybe_scene_transition(self):
+    def _maybe_scene_transition(self) -> bool:
         next_id = self.active_scene.next_scene_id
         if next_id is not None:
             self.active_scene.next_scene_id = None

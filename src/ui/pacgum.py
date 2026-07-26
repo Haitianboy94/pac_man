@@ -15,7 +15,7 @@ class Pacgum(pg.sprite.Sprite):
         elif self.type == PacGumType.SUPER_PACGUM:
             self._make_gum(8)
 
-    def _make_gum(self, radius: int):
+    def _make_gum(self, radius: int) -> None:
         surface: pg.Surface = pg.Surface([radius * 2, radius * 2])
         gum: pg.Rect = pg.draw.circle(
                 surface, "white", [radius, radius], radius

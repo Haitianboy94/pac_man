@@ -24,7 +24,7 @@ class MainMenu(Scene):
     def draw(self, screen: pg.Surface) -> None:
         self.sprites.draw(screen)
 
-    def _create_ui(self):
+    def _create_ui(self) -> None:
         center: int = int(self.screen.get_width() / 2)
 
         title: Text = Text(self.title_font, "Pac-Man", pg.Color("white"))

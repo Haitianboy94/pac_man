@@ -18,7 +18,7 @@ def test_new_highscore_is_empty(tmp_path: Path) -> None:
 def test_load_missing_file_keeps_the_current_scores(tmp_path: Path) -> None:
     """Loading a missing file should be harmless and leave scores unchanged."""
     highscore = Highscore(str(tmp_path / "missing.json"))
-    assert highscore.add("Alice", 100) is None
+    highscore.add("Alice", 100)
 
     highscore.load()
 
@@ -88,8 +88,8 @@ def test_add_accepts_valid_boundary_values(tmp_path: Path) -> None:
     """Ten-character names and a zero score are valid inputs."""
     highscore = Highscore(str(tmp_path / "scores.json"))
 
-    assert highscore.add("TenChars10", 0) is None
-    assert highscore.add("A B", 1) is None
+    highscore.add("TenChars10", 0)
+    highscore.add("A B", 1)
     assert highscore.get() == [(1, "A B"), (0, "TenChars10")]
 
 
@@ -125,7 +125,7 @@ def test_add_keeps_only_the_top_ten_scores_in_descending_order(
     highscore = Highscore(str(tmp_path / "scores.json"))
 
     for score in range(11):
-        assert highscore.add(f"P{score}", score) is None
+        highscore.add(f"P{score}", score)
 
     assert highscore.get() == [
         (10, "P10"),

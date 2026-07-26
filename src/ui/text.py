@@ -9,6 +9,6 @@ class Text(pg.sprite.Sprite):
         self.image: pg.Surface = self.text
         self.rect: pg.Rect = self.image.get_rect()
 
-    def set_pos(self, pos: tuple[int, int]):
+    def set_pos(self, pos: tuple[int, int]) -> None:
         x, y = pos
         self.rect = self.image.get_rect(centerx=x, y=y)

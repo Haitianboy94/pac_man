@@ -5,7 +5,7 @@ import pygame as pg
 class Player(pg.sprite.Sprite):
     SIZE = 32
 
-    def __init__(self):
+    def __init__(self) -> None:
         pg.sprite.Sprite.__init__(self)
 
         self.image: pg.Surface = pg.Surface((self.SIZE, self.SIZE))
