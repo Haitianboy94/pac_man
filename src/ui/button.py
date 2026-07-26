@@ -3,6 +3,10 @@ import pygame as pg
 
 
 class Button(pg.sprite.Sprite):
+    """
+    UI button class which handles its own clicking behaviour.
+    Calls the `onclick` argument when clicked.
+    """
 
     def __init__(
             self,

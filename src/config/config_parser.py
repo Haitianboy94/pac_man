@@ -12,7 +12,7 @@ class InvalidConfigError(Exception):
 
 
 class ConfigParser:
-    """Convert JSON configuration contents into a validated ``Config``."""
+    """Convert JSON configuration contents into a validated `Config`."""
 
     def __init__(self, contents: str):
         """Initialize the parser with raw configuration contents."""

@@ -5,6 +5,11 @@ import pygame as pg
 
 
 class Maze():
+    """
+    Represents a maze from the `MazeGenerator` in the UI. Each cell is 
+    represented as a single `MazeCell`. The maze also contains the 
+    pacgums, and has methods used for positioning within the grid.
+    """
     CELL_SIZE = 36
 
     def __init__(
@@ -34,6 +39,7 @@ class Maze():
             y = y + self.CELL_SIZE - MazeCell.WALL_SIZE
 
     def cell_position(self, x: int, y: int) -> tuple[int, int]:
+        "Returns the top-left position for the cell at x, y"
         return (
             x * self.CELL_SIZE - x * MazeCell.WALL_SIZE,
             y * self.CELL_SIZE - y * MazeCell.WALL_SIZE

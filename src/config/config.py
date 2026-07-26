@@ -21,7 +21,7 @@ DEFAULTS: dict[str, Any] = {
 
 @dataclass
 class Config:
-    """Validated game configuration."""
+    """Game configuration with defaults."""
 
     highscore_filename: str = DEFAULTS["highscore_filename"]
     level: list[int] = field(default_factory=lambda: list(DEFAULTS["level"]))

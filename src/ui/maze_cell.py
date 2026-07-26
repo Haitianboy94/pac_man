@@ -4,6 +4,9 @@ import pygame as pg
 
 
 class MazeCell(pg.sprite.Sprite):
+    """
+    Represents a single maze cell in the UI.
+    """
     WALL_SIZE = 1
 
     def __init__(self, walls: Dir, size: int, position: Sequence[int]):

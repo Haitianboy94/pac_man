@@ -2,6 +2,7 @@ import pygame as pg
 
 
 class Text(pg.sprite.Sprite):
+    "A text node for the UI"
     def __init__(self, font: pg.font.Font, text: str, color: pg.Color):
         pg.sprite.Sprite.__init__(self)
 
