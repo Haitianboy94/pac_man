@@ -34,8 +34,8 @@ if __name__ == "__main__":
     pg.init()
 
     size = (
-            config.width * Maze.CELL_SIZE + 100,
-            config.height * Maze.CELL_SIZE + 100
+            config.width * Maze.cell_size() + 100,
+            config.height * Maze.cell_size() + 100
             )
 
     screen = pg.display.set_mode(size)

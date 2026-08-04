@@ -1,3 +1,4 @@
+from src.game_state import GameState
 from src.scenes.game_scene import GameScene
 from src.scenes.main_menu import MainMenu
 from src.scenes.scene_id import SceneId
@@ -19,6 +20,7 @@ class Game:
         self.active_scene: Scene = scene
         self.config = config
         self.current_level: int = 1
+        self.state: GameState = GameState(config)
 
     def loop(self) -> None:
         """
@@ -61,7 +63,7 @@ class Game:
             case SceneId.MAIN_MENU:
                 return MainMenu(self.screen)
             case SceneId.GAME:
-                return GameScene(self.screen, self.config, self.current_level)
+                return GameScene(self.screen, self.config, self.state)
 
     def _quit(self) -> None:
         "Exits the game"

@@ -6,10 +6,14 @@ class Text(pg.sprite.Sprite):
     def __init__(self, font: pg.font.Font, text: str, color: pg.Color):
         pg.sprite.Sprite.__init__(self)
 
-        self.text: pg.Surface = font.render(text, False, color)
-        self.image: pg.Surface = self.text
-        self.rect: pg.Rect = self.image.get_rect()
+        self.font: pg.font.Font = font
+        self.color: pg.Color = color
+        self.set_text(text)
 
     def set_pos(self, pos: tuple[int, int]) -> None:
         x, y = pos
         self.rect = self.image.get_rect(centerx=x, y=y)
+
+    def set_text(self, text: str) -> None:
+        self.image: pg.Surface = self.font.render(text, False, self.color)
+        self.rect: pg.Rect = self.image.get_rect()

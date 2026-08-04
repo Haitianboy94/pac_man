@@ -1,3 +1,6 @@
+from src.ui.game_clock import GameClock
+from src.game_state import GameState
+from src.ui.maze_cell import MazeCell
 from src.entities.player import Player
 from src.scenes.scene_id import SceneId
 from src.ui.panel import Panel
@@ -29,10 +32,12 @@ class GameScene(Scene):
     The game scene where pacman actually takes place.
     Calls `MazeGenerator` to create the level.
     """
-    def __init__(self, screen: pg.Surface, config: Config, current_level: int):
+    def __init__(self, screen: pg.Surface, config: Config, state: GameState):
         Scene.__init__(self)
         self.screen: pg.Surface = screen
-        seed = seed_for_level(current_level, int(config.seed))
+        self.config: Config = config
+        self.state: GameState = state
+        seed = seed_for_level(self.state.current_level, int(config.seed))
         try:
             dir_grid, _, _, _ = load_maze(
                 width=config.width,
@@ -55,10 +60,16 @@ class GameScene(Scene):
         self.pause_group: pg.sprite.Group = pg.sprite.Group()
         self._init_pause_menu(screen)
 
+        self.ui_group: pg.sprite.Group = pg.sprite.Group()
+        clock_font: pg.font.Font = pg.font.Font(None, 32)
+        game_clock: GameClock = GameClock(clock_font, pg.Color("white"), self.state)
+        self.ui_group.add(game_clock)
+
         self.entities_group: pg.sprite.Group = pg.sprite.Group()
         player = Player()
         player.rect.move_ip(self.maze.cell_position(0, 0))
         self.entities_group.add(player)
+
 
     def handle_event(self, event: pg.event.Event) -> None:
         if event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
@@ -70,11 +81,21 @@ class GameScene(Scene):
             self.pause_group.update(events)
             return
         self.entities_group.update(events, dt)
+        self.ui_group.update(events)
+        self.state.time_remaining_ms = self.state.time_remaining_ms - dt
 
     def draw(self, screen: pg.Surface) -> None:
-        self.maze.walls.draw(screen)
-        self.maze.pacgums.draw(screen)
-        self.entities_group.draw(screen)
+        game_screen = pg.Surface([
+            self.config.width * Maze.cell_size(),
+            self.config.height * Maze.cell_size()
+        ])
+
+        self.maze.walls.draw(game_screen)
+        self.maze.pacgums.draw(game_screen)
+        self.entities_group.draw(game_screen)
+        screen.blit(game_screen, [50, 50])
+
+        self.ui_group.draw(screen)
 
         if self.is_paused:
             self.pause_group.draw(screen)
