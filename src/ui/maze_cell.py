@@ -27,6 +27,9 @@ class MazeCell(pg.sprite.Sprite):
         self._place_walls()
 
     def _place_walls(self) -> None:
+        if (self.walls == Dir.ALL):
+            self.image.fill("blue")
+
         length: int = self.size
         horizontal: pg.Surface = pg.Surface([length, self.wall_size])
         horizontal.fill("white")

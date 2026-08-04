@@ -11,7 +11,7 @@ class Maze():
     pacgums, and has methods used for positioning within the grid.
     """
     CELL_SIZE = 32
-    WALL_SIZE = 4
+    WALL_SIZE = 6
 
     def __init__(
             self,
@@ -32,10 +32,12 @@ class Maze():
                     self.WALL_SIZE,
                     [x, y]
                     ))
-                self.pacgums.add(Pacgum(
-                    PacGumType.PACGUM,
-                    [x + cell_center, y + cell_center]
-                    ))
+                
+                if col != Dir.ALL:
+                    self.pacgums.add(Pacgum(
+                        PacGumType.PACGUM,
+                        [x + cell_center, y + cell_center]
+                        ))
 
                 x = x + self.CELL_SIZE + self.WALL_SIZE
             x = position[0]

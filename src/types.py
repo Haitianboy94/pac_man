@@ -14,6 +14,7 @@ class Dir(enum.IntFlag):
     EAST = 2
     SOUTH = 4
     WEST = 8
+    ALL = 15
 
 
 class PacGumType(enum.IntEnum):
