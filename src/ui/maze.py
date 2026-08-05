@@ -10,8 +10,8 @@ class Maze():
     represented as a single `MazeCell`. The maze also contains the 
     pacgums, and has methods used for positioning within the grid.
     """
-    CELL_SIZE = 32
-    WALL_SIZE = 6
+    CELL_SIZE = 16
+    WALL_SIZE = 4
 
     def __init__(
             self,

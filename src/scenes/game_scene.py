@@ -1,3 +1,4 @@
+from src.ui.spritesheet import Spritesheet
 from src.ui.game_clock import GameClock
 from src.game_state import GameState
 from src.ui.maze_cell import MazeCell
@@ -66,9 +67,14 @@ class GameScene(Scene):
         self.ui_group.add(game_clock)
 
         self.entities_group: pg.sprite.Group = pg.sprite.Group()
-        player = Player()
+        sprites = Spritesheet()
+        player = Player(sprites)
         player.rect.move_ip(self.maze.cell_position(0, 0))
         self.entities_group.add(player)
+        self.game_screen: pg.Surface = pg.Surface([
+            self.config.width * Maze.cell_size(),
+            self.config.height * Maze.cell_size()
+        ])
 
 
     def handle_event(self, event: pg.event.Event) -> None:
@@ -85,37 +91,33 @@ class GameScene(Scene):
         self.state.time_remaining_ms = self.state.time_remaining_ms - dt
 
     def draw(self, screen: pg.Surface) -> None:
-        game_screen = pg.Surface([
-            self.config.width * Maze.cell_size(),
-            self.config.height * Maze.cell_size()
-        ])
 
-        self.maze.walls.draw(game_screen)
-        self.maze.pacgums.draw(game_screen)
-        self.entities_group.draw(game_screen)
-        screen.blit(game_screen, [50, 50])
+        self.maze.walls.draw(self.game_screen)
+        self.maze.pacgums.draw(self.game_screen)
+        self.entities_group.draw(self.game_screen)
 
         self.ui_group.draw(screen)
 
+        screen.blit(self.game_screen, [50, 50])
         if self.is_paused:
             self.pause_group.draw(screen)
 
     def _init_pause_menu(self, screen: pg.Surface) -> None:
-        title_font: pg.font.Font = pg.font.Font(None, 64)
-        button_font: pg.font.Font = pg.font.Font(None, 32)
+        title_font: pg.font.Font = pg.font.Font(None, 32)
+        button_font: pg.font.Font = pg.font.Font(None, 24)
 
-        border: Panel = Panel(pg.Rect(0, 0, 510, 410), pg.Color("white"))
+        border: Panel = Panel(pg.Rect(0, 0, 256, 206), pg.Color("white"))
         border.rect.centerx = int(screen.get_width() / 2)
-        border.rect.y = 95
+        border.rect.y = 40
         self.pause_group.add(border)
 
-        background: Panel = Panel(pg.Rect(0, 0, 500, 400), pg.Color("black"))
+        background: Panel = Panel(pg.Rect(0, 0, 250, 200), pg.Color("black"))
         background.rect.centerx = int(screen.get_width() / 2)
-        background.rect.y = 100
+        background.rect.y = 43
         self.pause_group.add(background)
 
         title: Text = Text(title_font, "paused", pg.Color("white"))
-        title.set_pos((int(screen.get_width() / 2), 200))
+        title.set_pos((int(screen.get_width() / 2), 100))
         self.pause_group.add(title)
 
         button: Button = Button(
@@ -125,5 +127,5 @@ class GameScene(Scene):
                 Color("blue"),
                 lambda: setattr(self, 'next_scene_id', SceneId.MAIN_MENU)
                 )
-        button.set_pos((int(screen.get_width() / 2), 410))
+        button.set_pos((int(screen.get_width() / 2), 205))
         self.pause_group.add(button)
