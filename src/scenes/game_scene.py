@@ -1,6 +1,6 @@
+from src.graphics.general_sprites import GeneralSprites
 from src.scenes.scene_id import SceneId
 from src.scenes.scene import Scene
-from src.graphics.spritesheet import Spritesheet
 from src.config.config import Config
 from src.entities.player import Player
 from src.entities.maze import Maze
@@ -67,10 +67,10 @@ class GameScene(Scene):
         self.ui_group.add(game_clock)
 
         self.entities_group: pg.sprite.Group = pg.sprite.Group()
-        sprites = Spritesheet()
-        player = Player(sprites)
-        player.rect.move_ip(self.maze.cell_position(0, 0))
-        self.entities_group.add(player)
+        gen_sprites = GeneralSprites()
+        self.player: Player = Player(gen_sprites)
+        self.player.rect.move_ip(self.maze.cell_position(0, 0))
+        self.entities_group.add(self.player)
         self.game_screen: pg.Surface = pg.Surface([
             self.config.width * Maze.cell_size(),
             self.config.height * Maze.cell_size()
@@ -78,15 +78,23 @@ class GameScene(Scene):
 
 
     def handle_event(self, event: pg.event.Event) -> None:
-        if event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
-            self.is_paused = not self.is_paused
-        pass
+        match event:
+            case pg.event.Event(type=pg.KEYDOWN, key=pg.K_ESCAPE):
+                self.is_paused = not self.is_paused
+            case pg.event.Event(type=pg.KEYDOWN, key=pg.K_UP):
+                self.player.set_direction(Dir.NORTH)
+            case pg.event.Event(type=pg.KEYDOWN, key=pg.K_RIGHT):
+                self.player.set_direction(Dir.EAST)
+            case pg.event.Event(type=pg.KEYDOWN, key=pg.K_DOWN):
+                self.player.set_direction(Dir.SOUTH)
+            case pg.event.Event(type=pg.KEYDOWN, key=pg.K_LEFT):
+                self.player.set_direction(Dir.WEST)
 
     def update(self, events: list[pg.event.Event], dt: int) -> None:
         if self.is_paused:
             self.pause_group.update(events)
             return
-        self.entities_group.update(events, dt)
+        self.entities_group.update(dt)
         self.ui_group.update(events)
         self.state.time_remaining_ms = self.state.time_remaining_ms - dt
 

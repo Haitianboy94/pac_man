@@ -1,4 +1,4 @@
-from src.graphics.spritesheet import Spritesheet
+from src.graphics.general_sprites import GeneralSprites
 from src.types import Dir
 from src.entities.entity import Entity
 from src.entities.maze import Maze
@@ -12,16 +12,8 @@ class Player(Entity):
     SIZE = 16
 
     FPS = 16
-    MS_PER_FRAME = (1 / FPS) * 1000
 
-    FRAMES = [
-        [8 + 16 * 28, 0],
-        [8 + 16 * 29, 0],
-        [8 + 16 * 30, 0],
-        [8 + 16 * 29, 0],
-    ]
-
-    def __init__(self, sprites: Spritesheet) -> None:
+    def __init__(self, sprites: GeneralSprites) -> None:
         pg.sprite.Sprite.__init__(self)
 
         self.current_frame: int = 0
@@ -30,40 +22,26 @@ class Player(Entity):
         self.sprites = sprites
 
         self.direction: Dir = Dir.EAST
-        self.update_frame()
+        self.frames = self.sprites.player_moving_east()
+        self.image = self.frames[0]
 
-    def frames(self):
-        match self.direction:
-            case Dir.NORTH: return Spritesheet.PLAYER_MOVING_NORTH
-            case Dir.EAST: return Spritesheet.PLAYER_MOVING_EAST
-            case Dir.SOUTH: return Spritesheet.PLAYER_MOVING_SOUTH
-            case Dir.WEST: return Spritesheet.PLAYER_MOVING_WEST
-    
-    def update_frame(self):
-        self.image = pg.Surface((self.SIZE, self.SIZE))
-        self.image.blit(
-            self.sprites.general,
-            [0, 0],
-            pg.Rect(self.frames()[self.current_frame], [self.SIZE, self.SIZE])
-        )
+    def update_frame(self, dt: int):
+        ms_per_frame: int = int((1 / self.FPS) * 1000)
 
-    def update(self, events: list[pg.event.Event], dt: int) -> None:
         self.frame_elapsed_ms += dt
-        if self.frame_elapsed_ms > self.MS_PER_FRAME:
-            self.frame_elapsed_ms -= self.MS_PER_FRAME
+        if self.frame_elapsed_ms > ms_per_frame:
+            self.frame_elapsed_ms -= ms_per_frame
             self.current_frame += 1
-            self.current_frame %= len(self.FRAMES)
-            self.update_frame()
+            self.current_frame %= len(self.frames)
+            self.image = self.frames[self.current_frame]
 
-        for event in events:
-            if event.type == pg.KEYDOWN and event.key == pg.K_UP:
-                self.set_direction(Dir.NORTH)
-            if event.type == pg.KEYDOWN and event.key == pg.K_RIGHT:
-                self.set_direction(Dir.EAST)
-            if event.type == pg.KEYDOWN and event.key == pg.K_DOWN:
-                self.set_direction(Dir.SOUTH)
-            if event.type == pg.KEYDOWN and event.key == pg.K_LEFT:
-                self.set_direction(Dir.WEST)
+    def update(self, dt: int) -> None:
+        self.update_frame(dt)
 
     def set_direction(self, direction: Dir) -> None:
         self.direction = direction
+        match direction:
+            case Dir.NORTH: self.frames = self.sprites.player_moving_north()
+            case Dir.EAST: self.frames = self.sprites.player_moving_east()
+            case Dir.SOUTH: self.frames = self.sprites.player_moving_south()
+            case Dir.WEST: self.frames = self.sprites.player_moving_west()
