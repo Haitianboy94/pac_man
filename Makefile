@@ -19,4 +19,8 @@ lint:
 test:
 	uv run pytest
 
+format:
+	uv run ruff check --select I --fix
+	uv run ruff format
+
 .PHONY: install run debug clean lint test
