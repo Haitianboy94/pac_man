@@ -1,7 +1,7 @@
 from src.config.config_parser import ConfigParser, InvalidConfigError
 from src.game import Game
 from src.scenes.main_menu import MainMenu
-from src.ui.maze import Maze
+from src.entities.maze import Maze
 import sys
 
 # This to solve the recursive call in the provided mazegenerator

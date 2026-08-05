@@ -1,17 +1,17 @@
-from src.ui.spritesheet import Spritesheet
-from src.ui.game_clock import GameClock
-from src.game_state import GameState
-from src.ui.maze_cell import MazeCell
-from src.entities.player import Player
 from src.scenes.scene_id import SceneId
-from src.ui.panel import Panel
-from pygame.locals import Color
-from src.ui.button import Button
-from src.ui.text import Text
-from src.ui.maze import Maze, Dir
 from src.scenes.scene import Scene
-from src.maze_generator import load_maze, seed_for_level, MazeGenerationError
+from src.graphics.spritesheet import Spritesheet
 from src.config.config import Config
+from src.entities.player import Player
+from src.entities.maze import Maze
+from src.entities.maze_cell import MazeCell
+from src.game_state import GameState
+from src.maze_generator import load_maze, seed_for_level, MazeGenerationError
+from src.types import Dir
+from src.ui.button import Button
+from src.ui.panel import Panel
+from src.ui.text import Text
+from src.ui.game_clock import GameClock
 import pygame as pg
 
 FALLBACK_MAZE: list[list[Dir]] = [
@@ -123,8 +123,8 @@ class GameScene(Scene):
         button: Button = Button(
                 button_font,
                 "Return to main menu",
-                Color("white"),
-                Color("blue"),
+                pg.Color("white"),
+                pg.Color("blue"),
                 lambda: setattr(self, 'next_scene_id', SceneId.MAIN_MENU)
                 )
         button.set_pos((int(screen.get_width() / 2), 205))

@@ -1,5 +1,5 @@
-from src.game_state import GameState
 from src.ui.text import Text
+from src.game_state import GameState
 import pygame as pg
 
 

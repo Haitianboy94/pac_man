@@ -1,5 +1,6 @@
-from src.ui.pacgum import Pacgum
-from src.ui.maze_cell import MazeCell
+from src.entities.entity import Entity
+from src.entities.pacgum import Pacgum
+from src.entities.maze_cell import MazeCell
 from src.types import Dir, PacGumType
 import pygame as pg
 

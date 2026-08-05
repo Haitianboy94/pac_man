@@ -1,7 +1,7 @@
-from src.ui.spritesheet import Spritesheet
+from src.graphics.spritesheet import Spritesheet
 from src.types import Dir
 from src.entities.entity import Entity
-from src.ui.maze import Maze
+from src.entities.maze import Maze
 import pygame as pg
 
 
