@@ -1,35 +1,15 @@
+from src.graphics.sprites import Sprites
 from functools import cache
 from dataclasses import dataclass
 from src.types import Dir
 import pygame as pg
 
-class GeneralSprites:
+class GeneralSprites(Sprites):
     PATH = "sprites/general.png"
     SIZE = 16
 
     def __init__(self) -> None:
-        self.sheet: pg.Surface = pg.image.load(self.PATH).convert_alpha()
-
-    @cache
-    def _load(self, x: int, y: int) -> pg.Surface:
-        sprite: pg.Surface = pg.Surface([self.SIZE, self.SIZE])
-        sprite.blit(
-            self.sheet,
-            [0, 0],
-            pg.Rect([x, y], [self.SIZE, self.SIZE])
-        )
-        return sprite.convert_alpha()
-    
-    def _load_all(
-            self,
-            offset_x: int,
-            offset_y: int,
-            delta_coords: list[tuple[int, int]]
-    ) -> list[pg.Surface]:
-        return [
-            self._load(offset_x + dx, offset_y + dy)
-            for [dx, dy] in delta_coords
-        ]
+        Sprites.__init__(self, self.PATH)
 
     ##### Player sprites
 
@@ -57,6 +37,8 @@ class GeneralSprites:
         sprites = self._load_all(
             int(self.SIZE / 2) + self.SIZE * 28,
             32,
+            16,
+            16,
             self.PLAYER_MOVING
         )
         self.apply_transparent_border(sprites)
@@ -67,6 +49,8 @@ class GeneralSprites:
         sprites = self._load_all(
             int(self.SIZE / 2) + self.SIZE * 28,
             0,
+            16,
+            16,
             self.PLAYER_MOVING
         )
         self.apply_transparent_border(sprites)
@@ -76,6 +60,8 @@ class GeneralSprites:
     def player_moving_west(self) -> list[pg.Surface]:
         sprites = self._load_all(
             int(self.SIZE / 2) + self.SIZE * 28,
+            16,
+            16,
             16,
             self.PLAYER_MOVING
         )
@@ -87,6 +73,8 @@ class GeneralSprites:
         sprites = self._load_all(
             int(self.SIZE / 2) + self.SIZE * 28,
             48,
+            16,
+            16,
             self.PLAYER_MOVING
         )
         self.apply_transparent_border(sprites)
@@ -115,19 +103,19 @@ class GeneralSprites:
 
     def maze_t_east_south_west(self) -> pg.Surface:
         x, y = self.MAZE_T_BOTTOM;
-        return self._load(x, y)
+        return self._load(x, y, 16, 16)
 
     def maze_t_north_east_south(self) -> pg.Surface:
         x, y = self.MAZE_T_RIGHT;
-        return self._load(x, y)
+        return self._load(x, y, 16, 16)
 
     def maze_t_south_west_north(self) -> pg.Surface:
         x, y = self.MAZE_T_LEFT;
-        return self._load(x, y)
+        return self._load(x, y, 16, 16)
 
     def maze_t_west_north_east(self) -> pg.Surface:
         x, y = self.MAZE_T_TOP;
-        return self._load(x, y)
+        return self._load(x, y, 16, 16)
 
     @cache
     def maze_corner_north_east(self) -> pg.Surface:
@@ -146,31 +134,31 @@ class GeneralSprites:
 
     def maze_corner_south_west(self) -> pg.Surface:
         x, y = self.MAZE_CORNER_SOUTH_WEST
-        return self._load(x, y)
+        return self._load(x, y, 16, 16)
 
     def maze_horizontal(self) -> pg.Surface:
         x, y = self.MAZE_HORIZONTAL
-        return self._load(x, y)
+        return self._load(x, y, 16, 16)
 
     def maze_vertical(self) -> pg.Surface:
         x, y = self.MAZE_VERTICAL
-        return self._load(x, y)
+        return self._load(x, y, 16, 16)
 
     def maze_end_north(self) -> pg.Surface:
         x, y = self.MAZE_END_NORTH
-        return self._load(x, y)
+        return self._load(x, y, 16, 16)
 
     def maze_end_east(self) -> pg.Surface:
         x, y = self.MAZE_END_EAST
-        return self._load(x, y)
+        return self._load(x, y, 16, 16)
 
     def maze_end_south(self) -> pg.Surface:
         x, y = self.MAZE_END_SOUTH
-        return self._load(x, y)
+        return self._load(x, y, 16, 16)
 
     def maze_end_west(self) -> pg.Surface:
         x, y = self.MAZE_END_WEST
-        return self._load(x, y)
+        return self._load(x, y, 16, 16)
 
     # 8x8
     @cache
