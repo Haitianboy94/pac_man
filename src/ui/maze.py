@@ -17,6 +17,7 @@ class Maze():
             grid: list[list[Dir]],
             position: tuple[int, int] = (0, 0)
             ):
+        self.grid: list[list[Dir]] = grid
         self.walls: pg.sprite.Group = pg.sprite.Group()
         self.pacgums: pg.sprite.Group = pg.sprite.Group()
 
@@ -44,3 +45,22 @@ class Maze():
             x * self.CELL_SIZE - x * MazeCell.WALL_SIZE,
             y * self.CELL_SIZE - y * MazeCell.WALL_SIZE
         )
+    _DIRECTION_DELTAS: dict[Dir, tuple[int, int]] = {
+        Dir.NORTH: (0, -1),
+        Dir.EAST: (1, 0),
+        Dir.SOUTH: (0, 1),
+        Dir.WEST: (-1, 0),
+    }
+
+    def move_cell(self, cell: tuple[int, int], direction: Dir) -> tuple[int, int]:
+        "Returns the resulting cell after moving from `cell` in `direction`, without checking legality"
+        dx, dy = self._DIRECTION_DELTAS[direction]
+        x, y = cell
+        return (x + dx, y + dy)
+
+    def can_move(self, cell: tuple[int, int], direction: Dir) -> bool:
+        "Returns whether movement from `cell` in `direction` is legal"
+        x, y = cell
+        if not (0 <= y < len(self.grid) and 0 <= x < len(self.grid[0])):
+            return False
+        return not (self.grid[y][x] & direction)

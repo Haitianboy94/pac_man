@@ -32,6 +32,8 @@ class GameScene(Scene):
     def __init__(self, screen: pg.Surface, config: Config, current_level: int):
         Scene.__init__(self)
         self.screen: pg.Surface = screen
+        self.config = config
+        self.score: int = 0
         seed = seed_for_level(current_level, int(config.seed))
         try:
             dir_grid, _, _, _ = load_maze(
@@ -56,9 +58,8 @@ class GameScene(Scene):
         self._init_pause_menu(screen)
 
         self.entities_group: pg.sprite.Group = pg.sprite.Group()
-        player = Player()
-        player.rect.move_ip(self.maze.cell_position(0, 0))
-        self.entities_group.add(player)
+        self.player = Player(self.maze, start_cell=(0, 0))
+        self.entities_group.add(self.player)
 
     def handle_event(self, event: pg.event.Event) -> None:
         if event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
@@ -70,6 +71,8 @@ class GameScene(Scene):
             self.pause_group.update(events)
             return
         self.entities_group.update(events, dt)
+        eaten = pg.sprite.spritecollide(self.player, self.maze.pacgums, dokill=True)
+        self.score += len(eaten) * self.config.points_per_pacgum
 
     def draw(self, screen: pg.Surface) -> None:
         self.maze.walls.draw(screen)
