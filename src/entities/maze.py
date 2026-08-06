@@ -57,11 +57,11 @@ class Maze():
                     self.walls[row_index + 1][col_index].add_dir(Dir.NORTH)
                     self.walls[row_index][col_index].add_dir(Dir.SOUTH)
 
-                if cell != Dir.ALL:
-                    self.pacgums.add(Pacgum(
-                        PacGumType.PACGUM,
-                        [x + cell_center, y + cell_center]
-                        ))
+                # if cell != Dir.ALL:
+                #     self.pacgums.add(Pacgum(
+                #         PacGumType.PACGUM,
+                #         [x + cell_center, y + cell_center]
+                #         ))
 
                 x = x + self.CELL_SIZE + self.WALL_SIZE
             x = position[0]
@@ -70,7 +70,6 @@ class Maze():
             for wall in row:
                 wall.set_sprite()
                 self.cells.add(wall)
-        print(self.walls[0][0].dir)
                 
 
     def cell_position(self, x: int, y: int) -> tuple[int, int]:

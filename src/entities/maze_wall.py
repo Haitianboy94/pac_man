@@ -13,7 +13,9 @@ class MazeWall(pg.sprite.Sprite):
         self.image = pg.Surface((0,0))
 
     def set_sprite(self) -> None:
-        if self.dir == Dir.NORTH | Dir.EAST | Dir.SOUTH: 
+        if self.dir == Dir.ALL:
+            self.image = self.sprites.maze_all()
+        elif self.dir == Dir.NORTH | Dir.EAST | Dir.SOUTH: 
             self.image = self.sprites.maze_t_north_east_south()
         elif self.dir == Dir.EAST | Dir.SOUTH | Dir.WEST: 
             self.image = self.sprites.maze_t_east_south_west()
@@ -34,13 +36,13 @@ class MazeWall(pg.sprite.Sprite):
         elif self.dir == Dir.EAST | Dir.WEST:
             self.image = self.sprites.maze_horizontal()
         elif self.dir == Dir.NORTH:
-            self.image = self.sprites.maze_t_end_north()
+            self.image = self.sprites.maze_end_north()
         elif self.dir == Dir.EAST:
-            self.image = self.sprites.maze_t_end_east()
+            self.image = self.sprites.maze_end_east()
         elif self.dir == Dir.SOUTH:
-            self.image = self.sprites.maze_t_end_south()
+            self.image = self.sprites.maze_end_south()
         elif self.dir == Dir.WEST:
-            self.image = self.sprites.maze_t_end_west()
+            self.image = self.sprites.maze_end_west()
         else:
             self.image = pg.Surface((0,0))
 
