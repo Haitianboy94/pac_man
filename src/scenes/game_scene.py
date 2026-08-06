@@ -71,10 +71,9 @@ class GameScene(Scene):
         self.player: Player = Player(gen_sprites)
         self.player.rect.move_ip(self.maze.cell_position(0, 0))
         self.entities_group.add(self.player)
-        self.game_screen: pg.Surface = pg.Surface([
-            self.config.width * Maze.cell_size(),
-            self.config.height * Maze.cell_size()
-        ])
+        self.game_screen: pg.Surface = pg.Surface(
+            Maze.maze_size(self.config.width, self.config.height)
+        )
 
 
     def handle_event(self, event: pg.event.Event) -> None:
@@ -99,7 +98,7 @@ class GameScene(Scene):
         self.state.time_remaining_ms = self.state.time_remaining_ms - dt
 
     def draw(self, screen: pg.Surface) -> None:
-        self.maze.cells.draw(self.game_screen)
+        self.maze.draw(self.game_screen)
         self.maze.pacgums.draw(self.game_screen)
         self.entities_group.draw(self.game_screen)
 

@@ -70,6 +70,26 @@ class Maze():
             for wall in row:
                 wall.set_sprite()
                 self.cells.add(wall)
+
+    def draw(self, surface: pg.Surface) -> None:
+        self.cells.draw(surface)
+        horizontal = self.sprites.maze_horizontal_connector()
+        vertical = self.sprites.maze_vertical_connector()
+        for row in self.walls:
+            for wall in row:
+                x, y = wall.position
+                if wall.dir & Dir.EAST:
+                    rect = pg.Rect(
+                        (x + self.CELL_SIZE, y + int(self.WALL_SIZE / 2)),
+                        (8, 8)
+                    )
+                    surface.blit(horizontal, rect)
+                if wall.dir & Dir.SOUTH:
+                    rect = pg.Rect(
+                        (x + int(self.WALL_SIZE / 2), y + self.CELL_SIZE),
+                        (8, 8)
+                    )
+                    surface.blit(vertical, rect)
                 
 
     def cell_position(self, x: int, y: int) -> tuple[int, int]:
@@ -79,6 +99,15 @@ class Maze():
             offset + x * self.CELL_SIZE - (x - 1) * self.WALL_SIZE,
             offset + y * self.CELL_SIZE - (y - 1) * self.WALL_SIZE
         )
+
+    @staticmethod
+    def maze_size(width: int, height: int) -> tuple[int, int]:
+        cell = Maze.CELL_SIZE
+        wall = Maze.WALL_SIZE
+        return (
+            2 * wall + width * (cell + wall),
+            2 * wall + height * (cell + wall)
+        );
 
     @staticmethod
     def cell_size() -> int:

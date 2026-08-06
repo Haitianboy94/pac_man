@@ -1,3 +1,4 @@
+from src.scenes.scene_id import SceneId
 from src.config.config_parser import ConfigParser, InvalidConfigError
 from src.game import Game
 from src.scenes.main_menu import MainMenu
@@ -33,16 +34,14 @@ if __name__ == "__main__":
     import pygame as pg
     pg.init()
 
-    size = (
-            config.width * Maze.cell_size() + 50,
-            config.height * Maze.cell_size() + 50
-            )
+    x, y = Maze.maze_size(config.width, config.height)
 
-    screen = pg.display.set_mode(size, flags=pg.SCALED)
+    screen = pg.display.set_mode((x + 100, y + 100), flags=pg.SCALED)
 
     pg.display.set_caption("Pac-Man")
 
     initial_scene = MainMenu(screen)
+    initial_scene.next_scene_id = SceneId.GAME
     game = Game(screen, initial_scene, config)
 
     try:

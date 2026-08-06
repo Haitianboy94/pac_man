@@ -9,6 +9,7 @@ class MazeWall(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self)
         self.dir: Dir = dir
         self.sprites: GeneralSprites = sprites
+        self.position: Sequence[int] = position
         self.rect: pg.Rect = pg.Rect(position, [16, 16])
         self.image = pg.Surface((0,0))
 

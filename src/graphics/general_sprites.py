@@ -10,6 +10,7 @@ class GeneralSprites:
     def __init__(self) -> None:
         self.sheet: pg.Surface = pg.image.load(self.PATH)
         self.sheet.convert_alpha()
+        self.sheet.set_colorkey("black")
 
     @cache
     def _load(self, x: int, y: int) -> pg.Surface:
@@ -147,3 +148,16 @@ class GeneralSprites:
     def maze_end_west(self) -> pg.Surface:
         x, y = self.MAZE_END_WEST
         return self._load(x, y)
+
+    # 8x8
+    @cache
+    def maze_horizontal_connector(self) -> pg.Surface:
+        sprite = pg.Surface((8,8))
+        sprite.blit(self.maze_horizontal(), pg.Rect(0, -4, 8, 8))
+        return sprite
+
+    @cache
+    def maze_vertical_connector(self) -> pg.Surface:
+        sprite = pg.Surface((8,8))
+        sprite.blit(self.maze_vertical(), pg.Rect(-4, 0, 8, 8))
+        return sprite
