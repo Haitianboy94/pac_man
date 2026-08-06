@@ -65,6 +65,7 @@ class GameScene(Scene):
         self.ui_group: pg.sprite.Group = pg.sprite.Group()
         clock_font: pg.font.Font = pg.font.Font(None, 32)
         game_clock: GameClock = GameClock(clock_font, pg.Color("white"), self.state)
+        game_clock.position = (50, 32)
         self.ui_group.add(game_clock)
 
         self.entities_group: pg.sprite.Group = pg.sprite.Group()

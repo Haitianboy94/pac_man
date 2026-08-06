@@ -8,9 +8,7 @@ class GeneralSprites:
     SIZE = 16
 
     def __init__(self) -> None:
-        self.sheet: pg.Surface = pg.image.load(self.PATH)
-        self.sheet.convert_alpha()
-        self.sheet.set_colorkey("black")
+        self.sheet: pg.Surface = pg.image.load(self.PATH).convert_alpha()
 
     @cache
     def _load(self, x: int, y: int) -> pg.Surface:
@@ -20,7 +18,7 @@ class GeneralSprites:
             [0, 0],
             pg.Rect([x, y], [self.SIZE, self.SIZE])
         )
-        return sprite
+        return sprite.convert_alpha()
     
     def _load_all(
             self,
@@ -42,32 +40,57 @@ class GeneralSprites:
         (SIZE * 1, 0),
     ]
 
+    def apply_transparent_border(self, sprites: list[pg.Surface]) -> None:
+        """
+        Modifies a list of surfaces to create a 1px transparent border around
+        it each surface. Modifies in-place.
+        """
+        for sprite in sprites:
+            transparent = pg.Color(0,0,0,0)
+            sprite.fill(transparent, pg.Rect(0,0,16,1))
+            sprite.fill(transparent, pg.Rect(0,0,1,16))
+            sprite.fill(transparent, pg.Rect(15,0,1,16))
+            sprite.fill(transparent, pg.Rect(0,15,16,1))
+
+    @cache
     def player_moving_north(self) -> list[pg.Surface]:
-        return self._load_all(
+        sprites = self._load_all(
             int(self.SIZE / 2) + self.SIZE * 28,
             32,
             self.PLAYER_MOVING
         )
+        self.apply_transparent_border(sprites)
+        return sprites
+
+    @cache
     def player_moving_east(self) -> list[pg.Surface]:
-        return self._load_all(
+        sprites = self._load_all(
             int(self.SIZE / 2) + self.SIZE * 28,
             0,
             self.PLAYER_MOVING
         )
+        self.apply_transparent_border(sprites)
+        return sprites
 
+    @cache
     def player_moving_west(self) -> list[pg.Surface]:
-        return self._load_all(
+        sprites = self._load_all(
             int(self.SIZE / 2) + self.SIZE * 28,
             16,
             self.PLAYER_MOVING
         )
+        self.apply_transparent_border(sprites)
+        return sprites
 
+    @cache
     def player_moving_south(self) -> list[pg.Surface]:
-        return self._load_all(
+        sprites = self._load_all(
             int(self.SIZE / 2) + self.SIZE * 28,
             48,
             self.PLAYER_MOVING
         )
+        self.apply_transparent_border(sprites)
+        return sprites
     
     ##### Maze sprites
     MAZE_END_EAST = (4 + SIZE * 15, SIZE * 3)

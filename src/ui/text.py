@@ -8,6 +8,7 @@ class Text(pg.sprite.Sprite):
 
         self.font: pg.font.Font = font
         self.color: pg.Color = color
+        self.position: tuple[int, int] = (0, 0)
         self.set_text(text)
 
     def set_pos(self, pos: tuple[int, int]) -> None:
@@ -17,3 +18,4 @@ class Text(pg.sprite.Sprite):
     def set_text(self, text: str) -> None:
         self.image: pg.Surface = self.font.render(text, False, self.color)
         self.rect: pg.Rect = self.image.get_rect()
+        self.rect.move_ip(self.position)
