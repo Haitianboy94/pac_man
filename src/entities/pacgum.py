@@ -4,7 +4,7 @@ import pygame as pg
 
 
 class Pacgum(pg.sprite.Sprite):
-    "UI element for the pacgum"
+    "Entity for the pacgum"
     def __init__(self, type: PacGumType, position: Sequence[int]):
         pg.sprite.Sprite.__init__(self)
         self.type: PacGumType = type

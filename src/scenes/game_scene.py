@@ -54,8 +54,10 @@ class GameScene(Scene):
                     f", using fallback maze: {e}"
                     )
             dir_grid = FALLBACK_MAZE   # small hardcoded safe grid
+        gen_sprites = GeneralSprites()
+        self.gen_sprites = gen_sprites
 
-        self.maze: Maze = Maze(dir_grid)
+        self.maze: Maze = Maze(dir_grid, gen_sprites)
         self.is_paused: bool = False
 
         self.pause_group: pg.sprite.Group = pg.sprite.Group()
@@ -67,7 +69,6 @@ class GameScene(Scene):
         self.ui_group.add(game_clock)
 
         self.entities_group: pg.sprite.Group = pg.sprite.Group()
-        gen_sprites = GeneralSprites()
         self.player: Player = Player(gen_sprites)
         self.player.rect.move_ip(self.maze.cell_position(0, 0))
         self.entities_group.add(self.player)
@@ -99,8 +100,7 @@ class GameScene(Scene):
         self.state.time_remaining_ms = self.state.time_remaining_ms - dt
 
     def draw(self, screen: pg.Surface) -> None:
-
-        self.maze.walls.draw(self.game_screen)
+        self.maze.cells.draw(self.game_screen)
         self.maze.pacgums.draw(self.game_screen)
         self.entities_group.draw(self.game_screen)
 
