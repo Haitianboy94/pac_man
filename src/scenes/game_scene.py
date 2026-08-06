@@ -4,7 +4,6 @@ from src.scenes.scene import Scene
 from src.config.config import Config
 from src.entities.player import Player
 from src.entities.maze import Maze
-from src.entities.maze_cell import MazeCell
 from src.game_state import GameState
 from src.maze_generator import load_maze, seed_for_level, MazeGenerationError
 from src.types import Dir
