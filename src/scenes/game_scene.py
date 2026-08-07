@@ -107,7 +107,7 @@ class GameScene(Scene):
 
         self.ui_group.draw(screen)
 
-        screen.blit(self.game_screen, [16, 16])
+        screen.blit(self.game_screen, [0, 24])
         if self.is_paused:
             self.pause_group.draw(screen)
 
@@ -128,7 +128,7 @@ class GameScene(Scene):
 
         button: Button = Button(
                 self.text_sprites,
-                "Return to main menu",
+                "main menu",
                 'white',
                 'yellow',
                 2,

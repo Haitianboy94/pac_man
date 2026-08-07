@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
     x, y = Maze.maze_size(config.width, config.height)
 
-    screen = pg.display.set_mode((x + 32, y + 32), flags=pg.SCALED)
+    screen = pg.display.set_mode((x + 0, y + 48), flags=pg.SCALED)
 
     pg.display.set_caption("Pac-Man")
 

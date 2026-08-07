@@ -45,7 +45,6 @@ class MainMenu(Scene):
                 )
         start_game_button.set_pos((center, 80))
         self.sprites.add(start_game_button)
-        print(start_game_button.rect)
         
         highscores_button: Button = Button(
                 self.text_sprites,
