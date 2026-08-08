@@ -54,72 +54,66 @@ class TextSprites(Sprites):
         'yellow': 192,
     }
 
-    def __init__(self) -> None:
-        Sprites.__init__(self, self.PATH)
-
-    def render(self, string: str, color: str = 'white', scale: int = 1) -> pg.Surface:
+    @classmethod
+    def render(cls, string: str, color: str = 'white', scale: int = 1) -> pg.Surface:
         string = string.lower()
         width = 0
         for char in string:
-            width += self.WIDTHS[char] + 1
-        width
-        height = self.HEIGHT
-
-        result = pg.Surface((width, height))
+            width += cls.WIDTHS[char] + 1
+        result = pg.Surface((width, cls.HEIGHT))
         x = 0
         for char in string:
             if char != ' ':
-                result.blit(self.char(char, color), [x, 0])
-            x += self.WIDTHS[char] + 1
+                result.blit(cls.char(char, color), [x, 0])
+            x += cls.WIDTHS[char] + 1
         return pg.transform.scale_by(result, scale)
 
-
-    def char(self, in_char: str, color: str) -> pg.Surface:
+    @classmethod
+    def char(cls, in_char: str, color: str) -> pg.Surface:
         char = in_char.lower()
-        if char not in self.WIDTHS:
+        if char not in cls.WIDTHS:
             raise ValueError(f'Character {char} not found in widths')
-        if color not in self.COLOR_OFFSET:
+        if color not in cls.COLOR_OFFSET:
             raise ValueError(f'Color {color} not found')
-        width = self.WIDTHS[char]
-        height = self.HEIGHT
-        h_offset = self.COLOR_OFFSET[color]
+        size = (cls.WIDTHS[char], cls.HEIGHT)
+        dx = cls.COLOR_OFFSET[color]
 
         match char:
-            case 'a': return self._load(1, h_offset + 0, width, height)
-            case 'b': return self._load(9, h_offset + 0, width, height)
-            case 'c': return self._load(17, h_offset + 0, width, height)
-            case 'd': return self._load(25, h_offset + 0, width, height)
-            case 'e': return self._load(34, h_offset + 0, width, height)
-            case 'f': return self._load(41, h_offset + 0, width, height)
-            case 'g': return self._load(49, h_offset + 0, width, height)
-            case 'h': return self._load(57, h_offset + 0, width, height)
-            case 'i': return self._load(66, h_offset + 0, width, height)
-            case 'j': return self._load(73, h_offset + 0, width, height)
-            case 'k': return self._load(81, h_offset + 0, width, height)
-            case 'l': return self._load(90, h_offset + 0, width, height)
-            case 'm': return self._load(97, h_offset + 0, width, height)
-            case 'n': return self._load(105, h_offset + 0, width, height)
-            case 'o': return self._load(113, h_offset + 0, width, height)
-            case 'p': return self._load(1, h_offset + 8, width, height)
-            case 'q': return self._load(9, h_offset + 8, width, height)
-            case 'r': return self._load(17, h_offset + 8, width, height)
-            case 's': return self._load(25, h_offset + 8, width, height)
-            case 't': return self._load(34, h_offset + 8, width, height)
-            case 'u': return self._load(41, h_offset + 8, width, height)
-            case 'v': return self._load(49, h_offset + 8, width, height)
-            case 'w': return self._load(57, h_offset + 8, width, height)
-            case 'x': return self._load(65, h_offset + 8, width, height)
-            case 'y': return self._load(74, h_offset + 8, width, height)
-            case 'z': return self._load(81, h_offset + 8, width, height)
-            case '!': return self._load(90, h_offset + 8, width, height)
-            case '0': return self._load(1, h_offset + 16, width, height)
-            case '1': return self._load(10, h_offset + 16, width, height)
-            case '2': return self._load(17, h_offset + 16, width, height)
-            case '3': return self._load(25, h_offset + 16, width, height)
-            case '4': return self._load(33, h_offset + 16, width, height)
-            case '5': return self._load(41, h_offset + 16, width, height)
-            case '6': return self._load(49, h_offset + 16, width, height)
-            case '7': return self._load(57, h_offset + 16, width, height)
-            case '8': return self._load(65, h_offset + 16, width, height)
-            case '9': return self._load(73, h_offset + 16, width, height)
+            case 'a': return cls._load((1, dx + 0), size)
+            case 'b': return cls._load((9, dx + 0), size)
+            case 'c': return cls._load((17, dx + 0), size)
+            case 'd': return cls._load((25, dx + 0), size)
+            case 'e': return cls._load((34, dx + 0), size)
+            case 'f': return cls._load((41, dx + 0), size)
+            case 'g': return cls._load((49, dx + 0), size)
+            case 'h': return cls._load((57, dx + 0), size)
+            case 'i': return cls._load((66, dx + 0), size)
+            case 'j': return cls._load((73, dx + 0), size)
+            case 'k': return cls._load((81, dx + 0), size)
+            case 'l': return cls._load((90, dx + 0), size)
+            case 'm': return cls._load((97, dx + 0), size)
+            case 'n': return cls._load((105, dx + 0), size)
+            case 'o': return cls._load((113, dx + 0), size)
+            case 'p': return cls._load((1, dx + 8), size)
+            case 'q': return cls._load((9, dx + 8), size)
+            case 'r': return cls._load((17, dx + 8), size)
+            case 's': return cls._load((25, dx + 8), size)
+            case 't': return cls._load((34, dx + 8), size)
+            case 'u': return cls._load((41, dx + 8), size)
+            case 'v': return cls._load((49, dx + 8), size)
+            case 'w': return cls._load((57, dx + 8), size)
+            case 'x': return cls._load((65, dx + 8), size)
+            case 'y': return cls._load((74, dx + 8), size)
+            case 'z': return cls._load((81, dx + 8), size)
+            case '!': return cls._load((90, dx + 8), size)
+            case '0': return cls._load((1, dx + 16), size)
+            case '1': return cls._load((10, dx + 16), size)
+            case '2': return cls._load((17, dx + 16), size)
+            case '3': return cls._load((25, dx + 16), size)
+            case '4': return cls._load((33, dx + 16), size)
+            case '5': return cls._load((41, dx + 16), size)
+            case '6': return cls._load((49, dx + 16), size)
+            case '7': return cls._load((57, dx + 16), size)
+            case '8': return cls._load((65, dx + 16), size)
+            case '9': return cls._load((73, dx + 16), size)
         raise ValueError(f'Character {char} not found in font sprites')

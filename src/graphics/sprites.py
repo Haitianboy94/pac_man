@@ -1,30 +1,30 @@
 from functools import cache
-from abc import ABC, abstractmethod
 import pygame as pg
 
-class Sprites(ABC):
-    def __init__(self, path: str) -> None:
-        self.sheet: pg.Surface = pg.image.load(path).convert_alpha()
+class Sprites:
+    PATH: str
 
+    @classmethod
     @cache
-    def _load(self, x: int, y: int, size_x: int, size_y: int) -> pg.Surface:
-        sprite: pg.Surface = pg.Surface([size_x, size_y])
-        sprite.blit(
-            self.sheet,
-            [0, 0],
-            pg.Rect([x, y], [size_x, size_y])
-        )
-        return sprite.convert_alpha()
+    def sheet(cls) -> pg.Surface:
+        return pg.image.load(cls.PATH).convert_alpha()
+
+    @classmethod
+    @cache
+    def _load(cls, pos: tuple[int, int], size: tuple[int, int]) -> pg.Surface:
+        sprite: pg.Surface = pg.Surface(size, pg.SRCALPHA)
+        sprite.blit(cls.sheet(), [0, 0], pg.Rect(pos, size))
+        return sprite
     
+    @classmethod
     def _load_all(
-            self,
-            offset_x: int,
-            offset_y: int,
-            size_x: int,
-            size_y: int,
+            cls,
+            offset: tuple[int, int],
+            size: tuple[int, int],
             delta_coords: list[tuple[int, int]]
     ) -> list[pg.Surface]:
+
         return [
-            self._load(offset_x + dx, offset_y + dy, size_x, size_y)
+            cls._load((offset[0] + dx, offset[1] + dy), size)
             for [dx, dy] in delta_coords
         ]

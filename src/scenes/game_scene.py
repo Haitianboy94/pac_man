@@ -55,22 +55,19 @@ class GameScene(Scene):
                     )
             dir_grid = FALLBACK_MAZE   # small hardcoded safe grid
 
-        self.gen_sprites = GeneralSprites()
-        self.text_sprites = TextSprites()
-
-        self.maze: Maze = Maze(dir_grid, self.gen_sprites)
+        self.maze: Maze = Maze(dir_grid)
         self.is_paused: bool = False
 
         self.pause_group: pg.sprite.Group = pg.sprite.Group()
         self._init_pause_menu(screen)
 
         self.ui_group: pg.sprite.Group = pg.sprite.Group()
-        game_clock: GameClock = GameClock(self.text_sprites, self.state)
+        game_clock: GameClock = GameClock(self.state)
         game_clock.position = (16, 8)
         self.ui_group.add(game_clock)
 
         self.entities_group: pg.sprite.Group = pg.sprite.Group()
-        self.player = Player(self.maze, (0, 0), self.gen_sprites)
+        self.player = Player(self.maze, (0, 0))
         self.entities_group.add(self.player)
         self.game_screen: pg.Surface = pg.Surface(
             Maze.maze_size(self.config.width, self.config.height)
@@ -131,12 +128,11 @@ class GameScene(Scene):
         background.rect.y = 43
         self.pause_group.add(background)
 
-        title: Text = Text(self.text_sprites, "paused", 'white', 2)
+        title: Text = Text("paused", 'white', 2)
         title.set_pos((int(screen.get_width() / 2), 100))
         self.pause_group.add(title)
 
         button: Button = Button(
-                self.text_sprites,
                 "main menu",
                 'white',
                 'yellow',

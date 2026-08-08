@@ -13,7 +13,6 @@ class MainMenu(Scene):
         Scene.__init__(self)
         self.screen: pg.Surface = screen
         self.sprites: pg.sprite.Group = pg.sprite.Group()
-        self.text_sprites: TextSprites = TextSprites()
         self._create_ui()
 
     def handle_event(self, event: pg.event.Event) -> None:
@@ -29,14 +28,13 @@ class MainMenu(Scene):
         "Sets up all ui elements for the main menu"
         center: int = int(self.screen.get_width() / 2)
 
-        title: Text = Text(self.text_sprites, "pac man", 'yellow', 3)
+        title: Text = Text("pac man", 'yellow', 3)
         title.set_pos((center, 50))
         self.sprites.add(title)
         text_color = 'white'
         hover_color = 'yellow'
 
         start_game_button: Button = Button(
-                self.text_sprites,
                 "Start game",
                 text_color,
                 hover_color,
@@ -47,7 +45,6 @@ class MainMenu(Scene):
         self.sprites.add(start_game_button)
         
         highscores_button: Button = Button(
-                self.text_sprites,
                 "Highscores",
                 text_color,
                 hover_color,
@@ -58,7 +55,6 @@ class MainMenu(Scene):
         self.sprites.add(highscores_button)
 
         instructions_button: Button = Button(
-                self.text_sprites,
                 "Instructions",
                 text_color,
                 hover_color,
@@ -69,7 +65,6 @@ class MainMenu(Scene):
         self.sprites.add(instructions_button)
 
         exit_button: Button = Button(
-                self.text_sprites,
                 "Exit",
                 text_color,
                 hover_color,

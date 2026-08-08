@@ -5,9 +5,9 @@ import pygame as pg
 
 
 class GameClock(Text):
-    def __init__(self, text_sprites: TextSprites, state: GameState):
+    def __init__(self, state: GameState):
         pg.sprite.Sprite.__init__(self)
-        Text.__init__(self, text_sprites, "", 'white', 2)
+        Text.__init__(self, "", 'white', 2)
 
         self.state: GameState = state
         self._update_time()

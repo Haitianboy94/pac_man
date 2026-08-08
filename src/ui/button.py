@@ -11,7 +11,6 @@ class Button(pg.sprite.Sprite):
 
     def __init__(
             self,
-            text_sprites: TextSprites,
             text: str,
             color: str,
             hover_color: str,
@@ -20,8 +19,8 @@ class Button(pg.sprite.Sprite):
             ) -> None:
         pg.sprite.Sprite.__init__(self)
         self.onclick: Callable = onclick
-        self.text: pg.Surface = text_sprites.render(text, color, scale)
-        self.hover_text: pg.Surface = text_sprites.render(text, hover_color, scale)
+        self.text: pg.Surface = TextSprites.render(text, color, scale)
+        self.hover_text: pg.Surface = TextSprites.render(text, hover_color, scale)
         self.image: pg.Surface = self.text
         self.rect: pg.Rect = self.image.get_rect()
 

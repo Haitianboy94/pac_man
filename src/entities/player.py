@@ -15,19 +15,17 @@ class Player(Entity):
         self,
         maze: Maze,
         start_cell: tuple[int, int],
-        sprites: GeneralSprites
 ) -> None:
         Entity.__init__(self)
         self.maze: Maze = maze
         self.cell_x, self.cell_y = start_cell
         self.rect = pg.Rect(0, 0, self.SIZE, self.SIZE)
-        self.sprites = sprites
         self.direction: Dir = Dir.EAST
         self.move_animations: dict[Dir, Animation] = {
-            Dir.NORTH: Animation(self.sprites.player_moving_north(), self.FPS),
-            Dir.EAST: Animation(self.sprites.player_moving_east(), self.FPS),
-            Dir.SOUTH: Animation(self.sprites.player_moving_south(), self.FPS),
-            Dir.WEST: Animation(self.sprites.player_moving_west(), self.FPS),
+            Dir.NORTH: Animation(GeneralSprites.player_moving_north(), self.FPS),
+            Dir.EAST: Animation(GeneralSprites.player_moving_east(), self.FPS),
+            Dir.SOUTH: Animation(GeneralSprites.player_moving_south(), self.FPS),
+            Dir.WEST: Animation(GeneralSprites.player_moving_west(), self.FPS),
         }
         self.animation = self.move_animations[self.direction]
         self.image = self.animation.image

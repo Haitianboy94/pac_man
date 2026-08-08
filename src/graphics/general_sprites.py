@@ -1,15 +1,11 @@
 from src.graphics.sprites import Sprites
 from functools import cache
-from dataclasses import dataclass
 from src.types import Dir
 import pygame as pg
 
 class GeneralSprites(Sprites):
     PATH = "sprites/general.png"
     SIZE = 16
-
-    def __init__(self) -> None:
-        Sprites.__init__(self, self.PATH)
 
     ##### Player sprites
 
@@ -20,64 +16,63 @@ class GeneralSprites(Sprites):
         (SIZE * 1, 0),
     ]
 
-    def apply_transparent_border(self, sprites: list[pg.Surface]) -> None:
-        """
-        Modifies a list of surfaces to create a 1px transparent border around
-        it each surface. Modifies in-place.
-        """
+    @classmethod
+    def apply_transparent_border(cls, sprite: pg.Surface) -> None:
+        "Modifies a surface to create a 1px transparent border around it"
+        rect = sprite.get_rect()
+        w, h = rect.size
+        transparent = pg.Color(0,0,0,0)
+        sprite.fill(transparent, pg.Rect(0,0,w,1))
+        sprite.fill(transparent, pg.Rect(0,0,1,h))
+        sprite.fill(transparent, pg.Rect(w-1,0,1,h))
+        sprite.fill(transparent, pg.Rect(0,h-1,w,1))
+
+    @classmethod
+    @cache
+    def player_moving_north(cls) -> list[pg.Surface]:
+        sprites = cls._load_all(
+            (int(cls.SIZE / 2) + cls.SIZE * 28, 32),
+            (16, 16),
+            cls.PLAYER_MOVING
+        )
         for sprite in sprites:
-            transparent = pg.Color(0,0,0,0)
-            sprite.fill(transparent, pg.Rect(0,0,16,1))
-            sprite.fill(transparent, pg.Rect(0,0,1,16))
-            sprite.fill(transparent, pg.Rect(15,0,1,16))
-            sprite.fill(transparent, pg.Rect(0,15,16,1))
-
-    @cache
-    def player_moving_north(self) -> list[pg.Surface]:
-        sprites = self._load_all(
-            int(self.SIZE / 2) + self.SIZE * 28,
-            32,
-            16,
-            16,
-            self.PLAYER_MOVING
-        )
-        self.apply_transparent_border(sprites)
+            cls.apply_transparent_border(sprite)
         return sprites
 
+    @classmethod
     @cache
-    def player_moving_east(self) -> list[pg.Surface]:
-        sprites = self._load_all(
-            int(self.SIZE / 2) + self.SIZE * 28,
-            0,
-            16,
-            16,
-            self.PLAYER_MOVING
+    def player_moving_east(cls) -> list[pg.Surface]:
+        sprites = cls._load_all(
+            (int(cls.SIZE / 2) + cls.SIZE * 28, 0),
+            (16, 16),
+            cls.PLAYER_MOVING
         )
-        self.apply_transparent_border(sprites)
+        for sprite in sprites:
+            cls.apply_transparent_border(sprite)
         return sprites
 
+    @classmethod
     @cache
-    def player_moving_west(self) -> list[pg.Surface]:
-        sprites = self._load_all(
-            int(self.SIZE / 2) + self.SIZE * 28,
-            16,
-            16,
-            16,
-            self.PLAYER_MOVING
+    def player_moving_west(cls) -> list[pg.Surface]:
+        sprites = cls._load_all(
+            (int(cls.SIZE / 2) + cls.SIZE * 28, 16),
+            (16, 16),
+            cls.PLAYER_MOVING
         )
-        self.apply_transparent_border(sprites)
+        for sprite in sprites:
+            cls.apply_transparent_border(sprite)
         return sprites
 
+    @classmethod
     @cache
-    def player_moving_south(self) -> list[pg.Surface]:
-        sprites = self._load_all(
-            int(self.SIZE / 2) + self.SIZE * 28,
-            48,
-            16,
-            16,
-            self.PLAYER_MOVING
+    def player_moving_south(cls) -> list[pg.Surface]:
+        sprites = cls._load_all(
+            (int(cls.SIZE / 2) + cls.SIZE * 28, 48),
+            (16, 16),
+            cls.PLAYER_MOVING
         )
-        self.apply_transparent_border(sprites)
+        for sprite in sprites:
+            cls.apply_transparent_border(sprite)
         return sprites
     
     ##### Maze sprites
@@ -94,87 +89,95 @@ class GeneralSprites(Sprites):
     MAZE_T_LEFT = (12 + SIZE * 23, 8 + SIZE * 4)
     MAZE_T_TOP = (12 + SIZE * 17, 8 + SIZE * 13)
 
+    @classmethod
     @cache
-    def maze_all(self) -> pg.Surface:
+    def maze_all(cls) -> pg.Surface:
         sprite = pg.Surface((16, 16))
-        sprite.blit(self.maze_t_south_west_north(), (0, 0), pg.Rect(0, 0, 8, 16))
-        sprite.blit(self.maze_t_north_east_south(), (8, 0), pg.Rect(8, 0, 8, 16))
+        sprite.blit(cls.maze_t_south_west_north(), (0, 0), pg.Rect(0, 0, 8, 16))
+        sprite.blit(cls.maze_t_north_east_south(), (8, 0), pg.Rect(8, 0, 8, 16))
         return sprite
 
-    def maze_t_east_south_west(self) -> pg.Surface:
-        x, y = self.MAZE_T_BOTTOM;
-        return self._load(x, y, 16, 16)
+    @classmethod
+    def maze_t_east_south_west(cls) -> pg.Surface:
+        return cls._load(cls.MAZE_T_BOTTOM, (16, 16))
 
-    def maze_t_north_east_south(self) -> pg.Surface:
-        x, y = self.MAZE_T_RIGHT;
-        return self._load(x, y, 16, 16)
+    @classmethod
+    def maze_t_north_east_south(cls) -> pg.Surface:
+        return cls._load(cls.MAZE_T_RIGHT, (16, 16))
 
-    def maze_t_south_west_north(self) -> pg.Surface:
-        x, y = self.MAZE_T_LEFT;
-        return self._load(x, y, 16, 16)
+    @classmethod
+    def maze_t_south_west_north(cls) -> pg.Surface:
+        return cls._load(cls.MAZE_T_LEFT, (16, 16))
 
-    def maze_t_west_north_east(self) -> pg.Surface:
-        x, y = self.MAZE_T_TOP;
-        return self._load(x, y, 16, 16)
+    @classmethod
+    def maze_t_west_north_east(cls) -> pg.Surface:
+        return cls._load(cls.MAZE_T_TOP, (16, 16))
 
+    @classmethod
     @cache
-    def maze_corner_north_east(self) -> pg.Surface:
-        sprite = self.maze_corner_south_west()
+    def maze_corner_north_east(cls) -> pg.Surface:
+        sprite = cls.maze_corner_south_west()
         return pg.transform.flip(sprite, flip_x=True, flip_y=True)
     
+    @classmethod
     @cache
-    def maze_corner_north_west(self) -> pg.Surface:
-        sprite = self.maze_corner_south_west()
+    def maze_corner_north_west(cls) -> pg.Surface:
+        sprite = cls.maze_corner_south_west()
         return pg.transform.flip(sprite, flip_x=False, flip_y=True)
 
+    @classmethod
     @cache
-    def maze_corner_south_east(self) -> pg.Surface:
-        sprite = self.maze_corner_south_west()
+    def maze_corner_south_east(cls) -> pg.Surface:
+        sprite = cls.maze_corner_south_west()
         return pg.transform.flip(sprite, flip_x=True, flip_y=False)
 
-    def maze_corner_south_west(self) -> pg.Surface:
-        x, y = self.MAZE_CORNER_SOUTH_WEST
-        return self._load(x, y, 16, 16)
+    @classmethod
+    def maze_corner_south_west(cls) -> pg.Surface:
+        return cls._load(cls.MAZE_CORNER_SOUTH_WEST, (16, 16))
 
-    def maze_horizontal(self) -> pg.Surface:
-        x, y = self.MAZE_HORIZONTAL
-        return self._load(x, y, 16, 16)
+    @classmethod
+    def maze_horizontal(cls) -> pg.Surface:
+        return cls._load(cls.MAZE_HORIZONTAL, (16, 16))
 
-    def maze_vertical(self) -> pg.Surface:
-        x, y = self.MAZE_VERTICAL
-        return self._load(x, y, 16, 16)
+    @classmethod
+    def maze_vertical(cls) -> pg.Surface:
+        return cls._load(cls.MAZE_VERTICAL, (16, 16))
 
-    def maze_end_north(self) -> pg.Surface:
-        x, y = self.MAZE_END_NORTH
-        return self._load(x, y, 16, 16)
+    @classmethod
+    def maze_end_north(cls) -> pg.Surface:
+        return cls._load(cls.MAZE_END_NORTH, (16, 16))
 
-    def maze_end_east(self) -> pg.Surface:
-        x, y = self.MAZE_END_EAST
-        return self._load(x, y, 16, 16)
+    @classmethod
+    def maze_end_east(cls) -> pg.Surface:
+        return cls._load(cls.MAZE_END_EAST, (16, 16))
 
-    def maze_end_south(self) -> pg.Surface:
-        x, y = self.MAZE_END_SOUTH
-        return self._load(x, y, 16, 16)
+    @classmethod
+    def maze_end_south(cls) -> pg.Surface:
+        return cls._load(cls.MAZE_END_SOUTH, (16, 16))
 
-    def maze_end_west(self) -> pg.Surface:
-        x, y = self.MAZE_END_WEST
-        return self._load(x, y, 16, 16)
+    @classmethod
+    def maze_end_west(cls) -> pg.Surface:
+        return cls._load(cls.MAZE_END_WEST, (16, 16))
 
     # 8x8
+    @classmethod
     @cache
-    def maze_horizontal_connector(self) -> pg.Surface:
+    def maze_horizontal_connector(cls) -> pg.Surface:
         sprite = pg.Surface((8,8))
-        sprite.blit(self.maze_horizontal(), pg.Rect(0, -4, 8, 8))
+        sprite.blit(cls.maze_horizontal(), pg.Rect(0, -4, 8, 8))
         return sprite
 
+    @classmethod
     @cache
-    def maze_vertical_connector(self) -> pg.Surface:
+    def maze_vertical_connector(cls) -> pg.Surface:
         sprite = pg.Surface((8,8))
-        sprite.blit(self.maze_vertical(), pg.Rect(-4, 0, 8, 8))
+        sprite.blit(cls.maze_vertical(), pg.Rect(-4, 0, 8, 8))
         return sprite
 
-    def pacgum(self) -> pg.Surface:
-        return self._load(8, 8, 8, 8)
+    @classmethod
+    def pacgum(cls) -> pg.Surface:
+        return cls._load((8, 8), (8, 8))
 
-    def super_pacgum(self) -> pg.Surface:
-        return self._load(8, 24, 8, 8)
+    @classmethod
+    def super_pacgum(cls) -> pg.Surface:
+        return cls._load((8, 24), (8, 8))

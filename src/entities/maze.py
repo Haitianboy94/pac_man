@@ -18,13 +18,11 @@ class Maze():
     def __init__(
             self,
             grid: list[list[Dir]],
-            sprites: GeneralSprites,
             position: tuple[int, int] = (0, 0),
             ):
         self.grid: list[list[Dir]] = grid
         self.cells: pg.sprite.Group = pg.sprite.Group()
         self.pacgums: pg.sprite.Group = pg.sprite.Group()
-        self.sprites: GeneralSprites = sprites
         cols, rows = len(grid), len(grid[0])
         self.walls: list[list[MazeWall]] = [
             [
@@ -33,8 +31,7 @@ class Maze():
                     [
                         row * (self.CELL_SIZE + self.WALL_SIZE),
                         col * (self.CELL_SIZE + self.WALL_SIZE),
-                    ],
-                    sprites
+                    ]
                 )
                 for row in range(rows + 1)] 
             for col in range(cols + 1)
@@ -72,8 +69,7 @@ class Maze():
                     
                     self.pacgums.add(Pacgum(
                         type,
-                        [x + cell_center, y + cell_center],
-                        self.sprites
+                        [x + cell_center, y + cell_center]
                         ))
 
                 x = x + self.CELL_SIZE + self.WALL_SIZE
@@ -86,8 +82,8 @@ class Maze():
 
     def draw(self, surface: pg.Surface) -> None:
         self.cells.draw(surface)
-        horizontal = self.sprites.maze_horizontal_connector()
-        vertical = self.sprites.maze_vertical_connector()
+        horizontal = GeneralSprites.maze_horizontal_connector()
+        vertical = GeneralSprites.maze_vertical_connector()
         for row in self.walls:
             for wall in row:
                 x, y = wall.position
