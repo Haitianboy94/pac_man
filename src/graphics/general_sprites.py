@@ -172,3 +172,9 @@ class GeneralSprites(Sprites):
         sprite = pg.Surface((8,8))
         sprite.blit(self.maze_vertical(), pg.Rect(-4, 0, 8, 8))
         return sprite
+
+    def pacgum(self) -> pg.Surface:
+        return self._load(8, 8, 8, 8)
+
+    def super_pacgum(self) -> pg.Surface:
+        return self._load(8, 24, 8, 8)

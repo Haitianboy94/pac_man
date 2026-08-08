@@ -41,7 +41,7 @@ class Maze():
         ]
 
         x, y = position[0], position[1]
-        cell_center: int = int(self.cell_size() / 2) + 4
+        cell_center: int = int(self.cell_size() / 2)
 
         for row_index, row in enumerate(grid):
             for col_index, cell in enumerate(row):
@@ -59,9 +59,21 @@ class Maze():
                     self.walls[row_index][col_index].add_dir(Dir.SOUTH)
 
                 if cell != Dir.ALL:
+                    super_pos = [
+                        (1, 1),
+                        (1, cols - 2),
+                        (rows - 2, 1),
+                        (rows - 2, cols - 2),
+                    ]
+                    if (row_index, col_index) in super_pos:
+                        type = PacGumType.SUPER_PACGUM
+                    else:
+                        type = PacGumType.PACGUM
+                    
                     self.pacgums.add(Pacgum(
-                        PacGumType.PACGUM,
-                        [x + cell_center, y + cell_center]
+                        type,
+                        [x + cell_center, y + cell_center],
+                        self.sprites
                         ))
 
                 x = x + self.CELL_SIZE + self.WALL_SIZE

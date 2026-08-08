@@ -1,3 +1,4 @@
+from src.graphics.general_sprites import GeneralSprites
 from typing import Sequence
 from src.types import PacGumType
 import pygame as pg
@@ -5,22 +6,25 @@ import pygame as pg
 
 class Pacgum(pg.sprite.Sprite):
     "Entity for the pacgum"
-    def __init__(self, type: PacGumType, position: Sequence[int]):
+    def __init__(
+            self,
+            type: PacGumType,
+            position: Sequence[int],
+            sprites: GeneralSprites
+    ):
         pg.sprite.Sprite.__init__(self)
         self.type: PacGumType = type
         self.image: pg.Surface = pg.Surface([0, 0])
         self.position: Sequence[int] = position
+        self.sprites: GeneralSprites = sprites
 
-        if self.type == PacGumType.PACGUM:
-            self._make_gum(2)
-        elif self.type == PacGumType.SUPER_PACGUM:
-            self._make_gum(4)
+        self._make_gum()
 
-    def _make_gum(self, radius: int) -> None:
-        surface: pg.Surface = pg.Surface([radius * 2, radius * 2])
-        gum: pg.Rect = pg.draw.circle(
-                surface, "white", [radius, radius], radius
-                )
-        gum.move_ip([self.position[0] - radius, self.position[1] - radius])
-        self.image = surface
-        self.rect = gum
+    def _make_gum(self) -> None:
+        if self.type == PacGumType.SUPER_PACGUM:
+            sprite = self.sprites.super_pacgum()
+        else:
+            sprite = self.sprites.pacgum()
+        rect = sprite.get_rect().move([self.position[0], self.position[1]])
+        self.image = sprite
+        self.rect = rect
