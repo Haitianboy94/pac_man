@@ -14,11 +14,10 @@ class Entity(ABC, pg.sprite.Sprite):
         self.rect: pg.Rect
 
     @abstractmethod
-    def update(self, events: list[pg.event.Event], dt: int) -> None:
+    def update(self, dt: int) -> None:
         """
-        This method is called every frame on all entities in the active scene.
-        Use this method to implement the game logic for the entity.
+        This method is called every frame on all entities in the active scene. Use this method to
+        update the state of the entity. Events are handled in the scene.
 
-        events: List of events which occurred in the last frame.
         dt: The amount of milliseconds since the last frame was rendered.
         """

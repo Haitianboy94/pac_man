@@ -1,5 +1,5 @@
 from mazegenerator.mazegenerator import MazeGenerator
-from src.ui.maze import Dir
+from src.types import Dir
 
 
 class MazeGenerationError(Exception):

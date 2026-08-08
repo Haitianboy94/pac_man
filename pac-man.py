@@ -1,7 +1,8 @@
+from src.scenes.scene_id import SceneId
 from src.config.config_parser import ConfigParser, InvalidConfigError
 from src.game import Game
 from src.scenes.main_menu import MainMenu
-from src.ui.maze import Maze
+from src.entities.maze import Maze
 import sys
 
 # This to solve the recursive call in the provided mazegenerator
@@ -33,12 +34,12 @@ if __name__ == "__main__":
     import pygame as pg
     pg.init()
 
-    size = (
-            config.width * Maze.CELL_SIZE + 100,
-            config.height * Maze.CELL_SIZE + 100
-            )
+    x, y = Maze.maze_size(config.width, config.height)
 
-    screen = pg.display.set_mode(size)
+    screen = pg.display.set_mode(
+        (x + config.UI_BORDER_X, y + config.UI_BORDER_Y * 2),
+        flags=pg.SCALED
+    )
 
     pg.display.set_caption("Pac-Man")
 

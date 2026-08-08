@@ -23,6 +23,9 @@ DEFAULTS: dict[str, Any] = {
 class Config:
     """Game configuration with defaults."""
 
+    UI_BORDER_X = 0
+    UI_BORDER_Y = 24
+
     highscore_filename: str = DEFAULTS["highscore_filename"]
     level: list[int] = field(default_factory=lambda: list(DEFAULTS["level"]))
     width: int = DEFAULTS["width"]

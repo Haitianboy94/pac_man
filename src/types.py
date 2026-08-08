@@ -14,6 +14,24 @@ class Dir(enum.IntFlag):
     EAST = 2
     SOUTH = 4
     WEST = 8
+    ALL = 15
+
+    def __str__(self) -> str:
+        i = int(self)
+        if i == 0:
+            return "Dir(None)"
+        if i == self.ALL:
+            return "Dir(All)"
+        dirs = []
+        if i & self.NORTH:
+            dirs.append("North")
+        if i & self.EAST:
+            dirs.append("East")
+        if i & self.SOUTH:
+            dirs.append("South")
+        if i & self.WEST:
+            dirs.append("West")
+        return f"Dir({"|".join(dirs)})"
 
 
 class PacGumType(enum.IntEnum):

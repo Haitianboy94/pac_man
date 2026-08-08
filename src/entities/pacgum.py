@@ -4,7 +4,7 @@ import pygame as pg
 
 
 class Pacgum(pg.sprite.Sprite):
-    "UI element for the pacgum"
+    "Entity for the pacgum"
     def __init__(self, type: PacGumType, position: Sequence[int]):
         pg.sprite.Sprite.__init__(self)
         self.type: PacGumType = type
@@ -12,9 +12,9 @@ class Pacgum(pg.sprite.Sprite):
         self.position: Sequence[int] = position
 
         if self.type == PacGumType.PACGUM:
-            self._make_gum(4)
+            self._make_gum(2)
         elif self.type == PacGumType.SUPER_PACGUM:
-            self._make_gum(8)
+            self._make_gum(4)
 
     def _make_gum(self, radius: int) -> None:
         surface: pg.Surface = pg.Surface([radius * 2, radius * 2])

@@ -7,6 +7,7 @@ requires-python = ">=3.13"
 dependencies = [
     "mazegenerator",
     "pygame>=2.6.1",
+    "ruff>=0.16.1",
 ]
 
 [dependency-groups]
@@ -19,3 +20,12 @@ mazegenerator = { path = "vendor/mazegenerator-2.0.2-py3-none-any.whl" }
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
+
+[tool.ruff]
+# Match Flake8's default pycodestyle line length and Python version.
+line-length = 79
+target-version = "py313"
+
+[tool.ruff.lint]
+# Flake8's core checks: pycodestyle errors/warnings and Pyflakes.
+select = ["E", "F", "W"]
