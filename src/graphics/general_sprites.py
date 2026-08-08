@@ -8,7 +8,6 @@ class GeneralSprites(Sprites):
     SIZE = 16
 
     ##### Player sprites
-
     PLAYER_MOVING = [
         (0, 0),
         (SIZE * 1, 0),

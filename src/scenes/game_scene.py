@@ -104,6 +104,7 @@ class GameScene(Scene):
         eaten = pg.sprite.spritecollide(self.player, self.maze.pacgums, dokill=True)
         self.state.points += len(eaten) * self.config.points_per_pacgum
         self.entities_group.update(dt)
+        self.maze.pacgums.update(dt)
         self.ui_group.update(events)
         self.state.time_remaining_ms = self.state.time_remaining_ms - dt
 
