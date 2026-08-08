@@ -56,20 +56,26 @@ class TextSprites(Sprites):
 
     @classmethod
     def render(cls, string: str, color: str = 'white', scale: int = 1) -> pg.Surface:
+        # Todo: can crash if unknown character is given, such as in '-1'
         string = string.lower()
         width = 0
-        for char in string:
-            width += cls.WIDTHS[char] + 1
+        try:
+            for char in string:
+                width += cls.WIDTHS[char] + 1
+        except KeyError as e:
+            print(f"Attempted to render unknown character: {e}")
+            string = "error"
+            width = 50
         result = pg.Surface((width, cls.HEIGHT))
         x = 0
         for char in string:
             if char != ' ':
-                result.blit(cls.char(char, color), [x, 0])
+                result.blit(cls._char(char, color), [x, 0])
             x += cls.WIDTHS[char] + 1
         return pg.transform.scale_by(result, scale)
 
     @classmethod
-    def char(cls, in_char: str, color: str) -> pg.Surface:
+    def _char(cls, in_char: str, color: str) -> pg.Surface:
         char = in_char.lower()
         if char not in cls.WIDTHS:
             raise ValueError(f'Character {char} not found in widths')

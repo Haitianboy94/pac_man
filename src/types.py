@@ -35,13 +35,17 @@ class Dir(enum.IntFlag):
 
 
 class PacGumType(enum.IntEnum):
-    """
-    Enum for the different Pacgum types.
-    """
+    "Enum for the different Pacgum types"
     NONE = 0
     PACGUM = 1
     SUPER_PACGUM = 2
 
+class GhostType(enum.IntEnum):
+    "Enum for the different ghost types"
+    BLINKY = 1
+    PINKY = 2
+    INKY = 3
+    CLYDE = 4
 
 def is_nonempty_int_list(value: Any) -> TypeIs[list[int]]:
     """

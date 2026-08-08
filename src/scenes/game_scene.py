@@ -1,3 +1,4 @@
+from src.entities.ghost import Ghost
 from src.graphics.text_sprites import TextSprites
 from src.graphics.general_sprites import GeneralSprites
 from src.scenes.scene_id import SceneId
@@ -7,7 +8,7 @@ from src.entities.player import Player
 from src.entities.maze import Maze
 from src.game_state import GameState
 from src.maze_generator import load_maze, seed_for_level, MazeGenerationError
-from src.types import Dir
+from src.types import Dir, GhostType
 from src.ui.button import Button
 from src.ui.panel import Panel
 from src.ui.text import Text
@@ -68,6 +69,10 @@ class GameScene(Scene):
 
         self.entities_group: pg.sprite.Group = pg.sprite.Group()
         self.player = Player(self.maze, (0, 0))
+        self.entities_group.add(Ghost(GhostType.BLINKY, self.maze, (5, 5)))
+        self.entities_group.add(Ghost(GhostType.PINKY, self.maze, (4, 5)))
+        self.entities_group.add(Ghost(GhostType.INKY, self.maze, (5, 4)))
+        self.entities_group.add(Ghost(GhostType.CLYDE, self.maze, (4, 4)))
         self.entities_group.add(self.player)
         self.game_screen: pg.Surface = pg.Surface(
             Maze.maze_size(self.config.width, self.config.height)

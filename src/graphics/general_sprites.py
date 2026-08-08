@@ -1,6 +1,6 @@
 from src.graphics.sprites import Sprites
 from functools import cache
-from src.types import Dir
+from src.types import Dir, GhostType
 import pygame as pg
 
 class GeneralSprites(Sprites):
@@ -74,6 +74,72 @@ class GeneralSprites(Sprites):
         for sprite in sprites:
             cls.apply_transparent_border(sprite)
         return sprites
+
+    ##### Ghost sprites
+    GHOST_BLINKY_OFFSET = (456, 64)
+    GHOST_PINKY_OFFSET = (456, 80)
+    GHOST_INKY_OFFSET = (456, 96)
+    GHOST_CLYDE_OFFSET = (456, 112)
+    GHOST_MOVE_EAST = [(0, 0), (16, 0)]
+    GHOST_MOVE_WEST = [(32, 0), (48, 0)]
+    GHOST_MOVE_NORTH = [(64, 0), (80, 0)]
+    GHOST_MOVE_SOUTH = [(96, 0), (112, 0)]
+
+    GHOST_OFFSETS = {
+        GhostType.BLINKY: GHOST_BLINKY_OFFSET,
+        GhostType.PINKY: GHOST_PINKY_OFFSET,
+        GhostType.INKY: GHOST_INKY_OFFSET,
+        GhostType.CLYDE: GHOST_CLYDE_OFFSET,
+    }
+
+    @classmethod
+    @cache
+    def ghost_moving_east(cls, type: GhostType) -> list[pg.Surface]:
+        sprites = cls._load_all(
+            cls.GHOST_OFFSETS[type],
+            (16, 16),
+            cls.GHOST_MOVE_EAST,
+        )
+        for sprite in sprites:
+            cls.apply_transparent_border(sprite)
+        return sprites
+
+    @classmethod
+    @cache
+    def ghost_moving_west(cls, type: GhostType) -> list[pg.Surface]:
+        sprites = cls._load_all(
+            cls.GHOST_OFFSETS[type],
+            (16, 16),
+            cls.GHOST_MOVE_WEST,
+        )
+        for sprite in sprites:
+            cls.apply_transparent_border(sprite)
+        return sprites
+
+    @classmethod
+    @cache
+    def ghost_moving_north(cls, type: GhostType) -> list[pg.Surface]:
+        sprites = cls._load_all(
+            cls.GHOST_OFFSETS[type],
+            (16, 16),
+            cls.GHOST_MOVE_NORTH,
+        )
+        for sprite in sprites:
+            cls.apply_transparent_border(sprite)
+        return sprites
+
+    @classmethod
+    @cache
+    def ghost_moving_south(cls, type: GhostType) -> list[pg.Surface]:
+        sprites = cls._load_all(
+            cls.GHOST_OFFSETS[type],
+            (16, 16),
+            cls.GHOST_MOVE_SOUTH,
+        )
+        for sprite in sprites:
+            cls.apply_transparent_border(sprite)
+        return sprites
+
     
     ##### Maze sprites
     MAZE_END_EAST = (4 + SIZE * 15, SIZE * 3)
