@@ -14,13 +14,9 @@ class Text(pg.sprite.Sprite):
         self.position: tuple[int, int] = (0, 0)
         self.set_text(text)
 
-    def set_pos(self, pos: tuple[int, int]) -> None:
-        x, y = pos
-        self.rect = self.image.get_rect(centerx=x, y=y)
-
     def set_text(self, text: str) -> None:
         self.image: pg.Surface = TextSprites.render(
             text, self.color, self.scale
         )
-        self.rect: pg.Rect = self.image.get_rect()
+        self.rect = self.image.get_rect()
         self.rect.move_ip(self.position)

@@ -129,18 +129,20 @@ class GameScene(Scene):
             self.pause_group.draw(screen)
 
     def _init_pause_menu(self, screen: pg.Surface) -> None:
+        center: int = int(screen.get_width() / 2)
         border: Panel = Panel(pg.Rect(0, 0, 256, 206), pg.Color("white"))
-        border.rect.centerx = int(screen.get_width() / 2)
+        border.rect.centerx = center
         border.rect.y = 40
         self.pause_group.add(border)
 
         background: Panel = Panel(pg.Rect(0, 0, 250, 200), pg.Color("black"))
-        background.rect.centerx = int(screen.get_width() / 2)
+        background.rect.centerx = center
         background.rect.y = 43
         self.pause_group.add(background)
 
         title: Text = Text("paused", "white", 2)
-        title.set_pos((int(screen.get_width() / 2), 100))
+        title.rect.centerx = center
+        title.rect.y = 100
         self.pause_group.add(title)
 
         button: Button = Button(
@@ -150,5 +152,6 @@ class GameScene(Scene):
             2,
             lambda: setattr(self, "next_scene_id", SceneId.MAIN_MENU),
         )
-        button.set_pos((int(screen.get_width() / 2), 205))
+        button.rect.centerx = center
+        button.rect.y = 205
         self.pause_group.add(button)

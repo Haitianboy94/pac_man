@@ -29,7 +29,8 @@ class MainMenu(Scene):
         center: int = int(self.screen.get_width() / 2)
 
         title: Text = Text("pac man", "yellow", 3)
-        title.set_pos((center, 50))
+        title.rect.centerx = center
+        title.rect.y = 50
         self.sprites.add(title)
         text_color = "white"
         hover_color = "yellow"
@@ -41,19 +42,22 @@ class MainMenu(Scene):
             2,
             lambda: setattr(self, "next_scene_id", SceneId.GAME),
         )
-        start_game_button.set_pos((center, 80))
+        start_game_button.rect.centerx = center
+        start_game_button.rect.y = 80
         self.sprites.add(start_game_button)
 
         highscores_button: Button = Button(
             "Highscores", text_color, hover_color, 2, lambda: None
         )
-        highscores_button.set_pos((center, 100))
+        highscores_button.rect.centerx = center
+        highscores_button.rect.y = 100
         self.sprites.add(highscores_button)
 
         instructions_button: Button = Button(
             "Instructions", text_color, hover_color, 2, lambda: None
         )
-        instructions_button.set_pos((center, 120))
+        instructions_button.rect.centerx = center
+        instructions_button.rect.y = 120
         self.sprites.add(instructions_button)
 
         exit_button: Button = Button(
@@ -63,5 +67,6 @@ class MainMenu(Scene):
             2,
             lambda: pg.event.post(pg.event.Event(pg.QUIT)),
         )
-        exit_button.set_pos((center, 140))
+        exit_button.rect.centerx = center
+        exit_button.rect.y = 140
         self.sprites.add(exit_button)
