@@ -91,6 +91,9 @@ class GeneralSprites(Sprites):
         GhostType.CLYDE: GHOST_CLYDE_OFFSET,
     }
 
+    GHOST_SCARED_OFFSET = (584, 64)
+    GHOST_SCARED = [(0, 0), (16, 0)]
+
     @classmethod
     @cache
     def ghost_moving_east(cls, type: GhostType) -> list[pg.Surface]:
@@ -134,6 +137,18 @@ class GeneralSprites(Sprites):
             cls.GHOST_OFFSETS[type],
             (16, 16),
             cls.GHOST_MOVE_SOUTH,
+        )
+        for sprite in sprites:
+            cls.apply_transparent_border(sprite)
+        return sprites
+
+    @classmethod
+    @cache
+    def ghost_scared(cls) -> list[pg.Surface]:
+        sprites = cls._load_all(
+            cls.GHOST_SCARED_OFFSET,
+            (16, 16),
+            cls.GHOST_SCARED,
         )
         for sprite in sprites:
             cls.apply_transparent_border(sprite)

@@ -23,7 +23,7 @@ class Scene(ABC):
         pass
 
     @abstractmethod
-    def update(self, events: list[pg.event.Event], dt: int) -> None:
+    def update(self, dt: int) -> None:
         pass
 
     @abstractmethod

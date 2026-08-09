@@ -68,12 +68,15 @@ class GameScene(Scene):
         self.ui_group.add(game_clock)
 
         self.entities_group: pg.sprite.Group = pg.sprite.Group()
-        self.player = Player(self.maze, (0, 0))
-        self.entities_group.add(Ghost(GhostType.BLINKY, self.maze, (5, 5)))
-        self.entities_group.add(Ghost(GhostType.PINKY, self.maze, (4, 5)))
-        self.entities_group.add(Ghost(GhostType.INKY, self.maze, (5, 4)))
-        self.entities_group.add(Ghost(GhostType.CLYDE, self.maze, (4, 4)))
+        self.player: Player = Player(self.maze, (0, 0))
+        self.ghosts: list[Ghost] = [
+            Ghost(GhostType.BLINKY, self.maze, (5, 5)),
+            Ghost(GhostType.PINKY, self.maze, (4, 5)),
+            Ghost(GhostType.INKY, self.maze, (5, 4)),
+            Ghost(GhostType.CLYDE, self.maze, (4, 4)),
+        ]
         self.entities_group.add(self.player)
+        self.entities_group.add(self.ghosts)
         self.game_screen: pg.Surface = pg.Surface(
             Maze.maze_size(self.config.width, self.config.height)
         )
@@ -97,15 +100,15 @@ class GameScene(Scene):
             dir = self.player.key_to_direction(event.key)
             self.player.try_move(dir)
 
-    def update(self, events: list[pg.event.Event], dt: int) -> None:
+    def update(self, dt: int) -> None:
         if self.is_paused:
-            self.pause_group.update(events)
+            self.pause_group.update(dt)
             return
         eaten = pg.sprite.spritecollide(self.player, self.maze.pacgums, dokill=True)
         self.state.points += len(eaten) * self.config.points_per_pacgum
         self.entities_group.update(dt)
         self.maze.pacgums.update(dt)
-        self.ui_group.update(events)
+        self.ui_group.update(dt)
         self.state.time_remaining_ms = self.state.time_remaining_ms - dt
 
     def draw(self, screen: pg.Surface) -> None:

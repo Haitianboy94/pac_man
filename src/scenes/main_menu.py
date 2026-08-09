@@ -18,8 +18,8 @@ class MainMenu(Scene):
     def handle_event(self, event: pg.event.Event) -> None:
         pass
 
-    def update(self, events: list[pg.event.Event], dt: int) -> None:
-        self.sprites.update(events)
+    def update(self, dt: int) -> None:
+        self.sprites.update(dt)
 
     def draw(self, screen: pg.Surface) -> None:
         self.sprites.draw(screen)

@@ -10,11 +10,15 @@ class GameClock(Text):
         Text.__init__(self, "", 'white', 2)
 
         self.state: GameState = state
+        self.time: int = int(state.time_remaining_ms / 1000)
         self._update_time()
 
-    def update(self, events: list[pg.event.Event]) -> None:
-        self._update_time()
+    def update(self, dt) -> None:
+        if self.time > 0:
+            self._update_time()
 
     def _update_time(self) -> None:
-        text = str(int(self.state.time_remaining_ms / 1000))
-        self.set_text(text)
+        new_time: int = int(self.state.time_remaining_ms / 1000)
+        if new_time != self.time:
+            self.time = new_time
+            self.set_text(str(new_time))

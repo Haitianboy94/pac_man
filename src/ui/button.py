@@ -23,16 +23,27 @@ class Button(pg.sprite.Sprite):
         self.hover_text: pg.Surface = TextSprites.render(text, hover_color, scale)
         self.image: pg.Surface = self.text
         self.rect: pg.Rect = self.image.get_rect()
+        self.selected: bool = False
+
+    def select(self) -> None:
+        self.selected = True
+        self.image = self.hover_text
+
+    def unselect(self) -> None:
+        self.selected = False
+        self.image = self.text
 
     def update(self, events: list[pg.event.Event]) -> None:
         pos: tuple[int, int] = pg.mouse.get_pos()
-        if self.rect.collidepoint(pos):
-            self.image = self.hover_text
-            for event in events:
-                if event.type == pg.MOUSEBUTTONDOWN:
-                    self.onclick()
+        hovering: bool = self.rect.collidepoint(pos)
+        if hovering:
+            if not self.selected:
+                self.select()
+            if pg.mouse.get_pressed()[0]:
+                self.onclick()
         else:
-            self.image = self.text
+            if self.selected:
+                self.unselect()
 
     def set_pos(self, pos: tuple[int, int]) -> None:
         x, y = pos

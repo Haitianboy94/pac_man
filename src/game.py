@@ -37,13 +37,12 @@ class Game:
             if self._maybe_scene_transition():
                 continue
             dt: int = clock.tick(60)  # limits FPS to 60
-            events: list[pg.event.Event] = pg.event.get()
-            for event in events:
+            for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self._quit()
                 self.active_scene.handle_event(event)
 
-            self.active_scene.update(events, dt)
+            self.active_scene.update(dt)
             self.screen.fill("black")
             self.active_scene.draw(self.screen)
             pg.display.flip()
