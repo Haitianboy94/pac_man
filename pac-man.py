@@ -1,3 +1,4 @@
+import os
 import sys
 
 from src.config.config_parser import ConfigParser, InvalidConfigError
@@ -11,6 +12,9 @@ from src.scenes.main_menu import MainMenu
 # So a long winding path can easily blow past that limit.
 # This is a known limitation of recursive-DFS maze generators at scale
 sys.setrecursionlimit(10_000)
+
+# Position the window on the left side of the screen
+os.environ['SDL_VIDEO_WINDOW_POS'] = '50,50'
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:

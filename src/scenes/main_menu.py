@@ -16,7 +16,8 @@ class MainMenu(Scene):
         self._create_ui()
 
     def handle_event(self, event: pg.event.Event) -> None:
-        pass
+        if event.type == pg.KEYDOWN and event.key == pg.K_RETURN:
+            self._start()
 
     def update(self, dt: int) -> None:
         self.sprites.update(dt)
@@ -24,23 +25,28 @@ class MainMenu(Scene):
     def draw(self, screen: pg.Surface) -> None:
         self.sprites.draw(screen)
 
+    def _start(self) -> None:
+        "Starts the game"
+        self.next_scene_id = SceneId.GAME
+
+
     def _create_ui(self) -> None:
         "Sets up all ui elements for the main menu"
         center: int = int(self.screen.get_width() / 2)
+        text_color = "white"
+        hover_color = "yellow"
 
         title: Text = Text("pac man", "yellow", 3)
         title.rect.centerx = center
         title.rect.y = 50
         self.sprites.add(title)
-        text_color = "white"
-        hover_color = "yellow"
 
         start_game_button: Button = Button(
             "Start game",
             text_color,
             hover_color,
             2,
-            lambda: setattr(self, "next_scene_id", SceneId.GAME),
+            self._start
         )
         start_game_button.rect.centerx = center
         start_game_button.rect.y = 80

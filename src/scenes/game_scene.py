@@ -1,3 +1,4 @@
+from src.graphics.general_sprites import GeneralSprites
 import pygame as pg
 
 from src.config.config import Config
@@ -98,7 +99,7 @@ class GameScene(Scene):
             self.is_paused = not self.is_paused
         elif event.key in direction_keys:
             dir = self.player.key_to_direction(event.key)
-            self.player.try_move(dir)
+            self.player.target_direction = dir
 
     def update(self, dt: int) -> None:
         if self.is_paused:

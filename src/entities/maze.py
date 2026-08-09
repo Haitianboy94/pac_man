@@ -13,6 +13,7 @@ class Maze:
     for positioning within the grid.
     """
 
+    OFFSET = 12
     CELL_SIZE = 16
     WALL_SIZE = 8
 
@@ -101,20 +102,6 @@ class Maze:
                     )
                     surface.blit(vertical, rect)
 
-    def cell_position(self, x: int, y: int) -> tuple[int, int]:
-        "Returns the top-left position for the cell at x, y"
-        offset = self.WALL_SIZE * 2 + 4
-        return (
-            offset + x * self.CELL_SIZE + (x - 1) * self.WALL_SIZE,
-            offset + y * self.CELL_SIZE + (y - 1) * self.WALL_SIZE,
-        )
-
-    _DIRECTION_DELTAS: dict[Dir, tuple[int, int]] = {
-        Dir.NORTH: (0, -1),
-        Dir.EAST: (1, 0),
-        Dir.SOUTH: (0, 1),
-        Dir.WEST: (-1, 0),
-    }
 
     def move_cell(
         self, cell: tuple[int, int], direction: Dir
@@ -123,7 +110,7 @@ class Maze:
         Returns the resulting cell after moving from `cell` in `direction`
         without checking legality
         """
-        dx, dy = self._DIRECTION_DELTAS[direction]
+        dx, dy = direction.delta()
         x, y = cell
         return (x + dx, y + dy)
 
@@ -133,6 +120,24 @@ class Maze:
         if not (0 <= y < len(self.grid) and 0 <= x < len(self.grid[0])):
             return False
         return not (self.grid[y][x] & direction)
+
+    @staticmethod
+    def cell_position(pos: tuple[int, int]) -> tuple[int, int]:
+        "Returns the top-left position for the cell at x, y"
+        x, y = pos
+        return (
+            Maze.OFFSET + x * Maze.CELL_SIZE + x * Maze.WALL_SIZE,
+            Maze.OFFSET + y * Maze.CELL_SIZE + y * Maze.WALL_SIZE,
+        )
+
+    # def position_to_cell(self, pos: tuple[int | float, int | float]) -> tuple[int, int]:
+    #     x, y = pos
+    #     offset = self.WALL_SIZE * 2 + 4
+    #     return 
+    #     # return (
+    #     #     offset + x * self.CELL_SIZE + (x - 1) * self.WALL_SIZE,
+    #     #     offset + y * self.CELL_SIZE + (y - 1) * self.WALL_SIZE,
+
 
     @staticmethod
     def maze_size(width: int, height: int) -> tuple[int, int]:

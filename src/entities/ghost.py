@@ -43,8 +43,8 @@ class Ghost(Entity):
         self._sync_rect_to_cell()
 
     def _sync_rect_to_cell(self) -> None:
-        cell_x, cell_y = self.maze.cell_position(self.cell_x, self.cell_y)
-        offset = int((self.maze.CELL_SIZE - self.SIZE) / 2)
+        cell_x, cell_y = Maze.cell_position((self.cell_x, self.cell_y))
+        offset = int((Maze.CELL_SIZE - self.SIZE) / 2)
         self.rect.topleft = (cell_x + offset, cell_y + offset)
 
     def update(self, dt: int) -> None:

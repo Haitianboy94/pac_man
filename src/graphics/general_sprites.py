@@ -176,6 +176,10 @@ class GeneralSprites(Sprites):
     MAZE_T_TOP = (12 + SIZE * 17, 8 + SIZE * 13)
 
     @classmethod
+    def maze_color(cls) -> pg.Color:
+        return pg.Color(33, 33, 255, 255)
+
+    @classmethod
     @cache
     def maze_all(cls) -> pg.Surface:
         sprite = pg.Surface((16, 16))
