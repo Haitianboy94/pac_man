@@ -1,7 +1,7 @@
 import pygame as pg
 
-class Animation:
 
+class Animation:
     def __init__(self, frames: list[pg.Surface], fps: int):
         if len(frames) < 1:
             raise ValueError("Animation must contain at least one frame")
@@ -18,6 +18,3 @@ class Animation:
             self.current_frame += 1
             self.current_frame %= len(self.frames)
             self.image = self.frames[self.current_frame]
-
-
-

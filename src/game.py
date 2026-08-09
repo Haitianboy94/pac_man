@@ -1,11 +1,13 @@
-from src.game_state import GameState
-from src.scenes.scene import Scene
-from src.scenes.game_scene import GameScene
-from src.scenes.scene_id import SceneId
-from src.scenes.main_menu import MainMenu
-from src.config.config import Config
 import sys
+
 import pygame as pg
+
+from src.config.config import Config
+from src.game_state import GameState
+from src.scenes.game_scene import GameScene
+from src.scenes.main_menu import MainMenu
+from src.scenes.scene import Scene
+from src.scenes.scene_id import SceneId
 
 
 class Game:

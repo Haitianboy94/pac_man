@@ -1,28 +1,31 @@
+from typing import Sequence
+
+import pygame as pg
+
 from src.graphics.animation import Animation
 from src.graphics.general_sprites import GeneralSprites
-from typing import Sequence
 from src.types import PacGumType
-import pygame as pg
 
 
 class Pacgum(pg.sprite.Sprite):
     "Entity for the pacgum"
+
     def __init__(
-            self,
-            type: PacGumType,
-            position: Sequence[int],
+        self,
+        type: PacGumType,
+        position: Sequence[int],
     ):
         pg.sprite.Sprite.__init__(self)
         self.type: PacGumType = type
         self.position: Sequence[int] = position
         empty_frame = pg.Surface((8, 8))
-        empty_frame.fill('black')
+        empty_frame.fill("black")
         self.animation: Animation = Animation(
             [
                 GeneralSprites.super_pacgum(),
                 empty_frame,
             ],
-            4
+            4,
         )
 
         self._make_gum()

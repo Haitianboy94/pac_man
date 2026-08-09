@@ -1,6 +1,8 @@
-from src.graphics.text_sprites import TextSprites
 from typing import Callable
+
 import pygame as pg
+
+from src.graphics.text_sprites import TextSprites
 
 
 class Button(pg.sprite.Sprite):
@@ -10,17 +12,19 @@ class Button(pg.sprite.Sprite):
     """
 
     def __init__(
-            self,
-            text: str,
-            color: str,
-            hover_color: str,
-            scale: int,
-            onclick: Callable
-            ) -> None:
+        self,
+        text: str,
+        color: str,
+        hover_color: str,
+        scale: int,
+        onclick: Callable,
+    ) -> None:
         pg.sprite.Sprite.__init__(self)
         self.onclick: Callable = onclick
         self.text: pg.Surface = TextSprites.render(text, color, scale)
-        self.hover_text: pg.Surface = TextSprites.render(text, hover_color, scale)
+        self.hover_text: pg.Surface = TextSprites.render(
+            text, hover_color, scale
+        )
         self.image: pg.Surface = self.text
         self.rect: pg.Rect = self.image.get_rect()
         self.selected: bool = False

@@ -32,14 +32,14 @@ class ConfigParser:
         cells = config.width * config.height
         config.pacgum = self.clamp_int("pacgum", 0, cells)
         config.points_per_pacgum = self.clamp_int(
-                "points_per_pacgum", 1, 10_000
-                )
+            "points_per_pacgum", 1, 10_000
+        )
         config.points_per_super_pacgum = self.clamp_int(
-                "points_per_super_pacgum", 1, 1_000_000
-                )
+            "points_per_super_pacgum", 1, 1_000_000
+        )
         config.points_per_ghost = self.clamp_int(
-                "points_per_ghost", 1, 1_000_000
-                )
+            "points_per_ghost", 1, 1_000_000
+        )
         config.level_max_time = self.clamp_int("level_max_time", 1, 1_000)
         config.seed = self.clamp_int("seed", 0, sys.maxsize)
         config.highscore_filename = self.get_str("highscore_filename")

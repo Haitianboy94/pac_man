@@ -1,9 +1,9 @@
-from src.graphics.text_sprites import TextSprites
-from src.ui.text import Text
-from src.ui.button import Button
-from src.scenes.scene_id import SceneId
-from src.scenes.scene import Scene
 import pygame as pg
+
+from src.scenes.scene import Scene
+from src.scenes.scene_id import SceneId
+from src.ui.button import Button
+from src.ui.text import Text
 
 
 class MainMenu(Scene):
@@ -28,48 +28,40 @@ class MainMenu(Scene):
         "Sets up all ui elements for the main menu"
         center: int = int(self.screen.get_width() / 2)
 
-        title: Text = Text("pac man", 'yellow', 3)
+        title: Text = Text("pac man", "yellow", 3)
         title.set_pos((center, 50))
         self.sprites.add(title)
-        text_color = 'white'
-        hover_color = 'yellow'
+        text_color = "white"
+        hover_color = "yellow"
 
         start_game_button: Button = Button(
-                "Start game",
-                text_color,
-                hover_color,
-                2,
-                lambda: setattr(self, "next_scene_id", SceneId.GAME)
-                )
+            "Start game",
+            text_color,
+            hover_color,
+            2,
+            lambda: setattr(self, "next_scene_id", SceneId.GAME),
+        )
         start_game_button.set_pos((center, 80))
         self.sprites.add(start_game_button)
-        
+
         highscores_button: Button = Button(
-                "Highscores",
-                text_color,
-                hover_color,
-                2,
-                lambda: None
-                )
+            "Highscores", text_color, hover_color, 2, lambda: None
+        )
         highscores_button.set_pos((center, 100))
         self.sprites.add(highscores_button)
 
         instructions_button: Button = Button(
-                "Instructions",
-                text_color,
-                hover_color,
-                2,
-                lambda: None
-                )
+            "Instructions", text_color, hover_color, 2, lambda: None
+        )
         instructions_button.set_pos((center, 120))
         self.sprites.add(instructions_button)
 
         exit_button: Button = Button(
-                "Exit",
-                text_color,
-                hover_color,
-                2,
-                lambda: pg.event.post(pg.event.Event(pg.QUIT))
-                )
+            "Exit",
+            text_color,
+            hover_color,
+            2,
+            lambda: pg.event.post(pg.event.Event(pg.QUIT)),
+        )
         exit_button.set_pos((center, 140))
         self.sprites.add(exit_button)

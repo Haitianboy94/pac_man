@@ -5,6 +5,7 @@ class GameState:
     """
     Contains information about the state of the game.
     """
+
     def __init__(self, config: Config):
         self.lives: int = config.lives
         self.current_level: int = 1

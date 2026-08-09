@@ -1,5 +1,5 @@
-from typing import TypeIs, Any
 import enum
+from typing import Any, TypeIs
 
 
 class Dir(enum.IntFlag):
@@ -9,6 +9,7 @@ class Dir(enum.IntFlag):
     in a single cell. Power-of-2 values enable representing any wall
     combination (0-15) as a single integer for compact storage.
     """
+
     NONE = 0
     NORTH = 1
     EAST = 2
@@ -31,21 +32,25 @@ class Dir(enum.IntFlag):
             dirs.append("South")
         if i & self.WEST:
             dirs.append("West")
-        return f"Dir({"|".join(dirs)})"
+        return f"Dir({'|'.join(dirs)})"
 
 
 class PacGumType(enum.IntEnum):
     "Enum for the different Pacgum types"
+
     NONE = 0
     PACGUM = 1
     SUPER_PACGUM = 2
 
+
 class GhostType(enum.IntEnum):
     "Enum for the different ghost types"
+
     BLINKY = 1
     PINKY = 2
     INKY = 3
     CLYDE = 4
+
 
 def is_nonempty_int_list(value: Any) -> TypeIs[list[int]]:
     """
