@@ -14,7 +14,8 @@ class Player(Entity):
 
     SIZE = 16
     FPS = 16
-    DEFAULT_SPEED = 1.0
+    # Speed in pixels per second
+    DEFAULT_SPEED = 60.0
 
     def __init__(
         self,
@@ -27,7 +28,7 @@ class Player(Entity):
         self.rect = pg.Rect(0, 0, self.SIZE, self.SIZE)
         self.position: tuple[float, float] = (0, 0)
         self.move_direction: Dir = Dir.NONE
-        self.target_direction: Dir = Dir.EAST
+        self.target_direction: Dir = Dir.NONE
         self.speed: float = self.DEFAULT_SPEED
 
         self.move_animations: dict[Dir, Animation] = {
@@ -39,7 +40,7 @@ class Player(Entity):
                 GeneralSprites.player_moving_south(), self.FPS
             ),
             Dir.WEST: Animation(GeneralSprites.player_moving_west(), self.FPS),
-            Dir.NONE: Animation([GeneralSprites.player_moving_west()[0]], self.FPS)
+            Dir.NONE: Animation([GeneralSprites.player_moving_east()[0]], self.FPS)
         }
         self.animation = self.move_animations[self.move_direction]
         self.image = self.animation.image
@@ -57,9 +58,10 @@ class Player(Entity):
             return
 
         # calculate next position
-        x, y = self.position
+        x, y = prev_position = self.position
         dx, dy = self.move_direction.delta()
-        dx, dy = dx * self.speed, dy * self.speed
+        movement_factor = self.speed * dt / 1000
+        dx, dy = dx * movement_factor, dy * movement_factor
         next_x, next_y = x+dx, y+dy
         # move to next position
         self.position = (next_x, next_y)
@@ -69,7 +71,7 @@ class Player(Entity):
         if self.target_direction.opposite() is self.move_direction:
             self._move_in_target_dir()
         # if at cell corner player can try to turn, or be stopped by a wall
-        elif self.in_cell_corner():
+        elif self.passes_cell_corner(prev_position) or self.move_direction is Dir.NONE:
             if (self.target_direction is not Dir.NONE
                     and self.target_direction is not self.move_direction):
                 self._try_turn()
@@ -81,15 +83,20 @@ class Player(Entity):
         self.image = self.animation.image
 
 
-    def in_cell_corner(self) -> bool:
-        "Check if the player is current in a cell corner"
+    def passes_cell_corner(self, other_pos: tuple[float, float]) -> bool:
         # TODO: currently only works with integer position values
         cell_interval = Maze.CELL_SIZE + Maze.WALL_SIZE
-        x, y = self.position
-        x -= Maze.OFFSET
-        y -= Maze.OFFSET
-        
-        return x % cell_interval == 0 and y % cell_interval == 0
+
+        x1, y1 = self.position
+        x2, y2 = other_pos
+        x1, y1 = x1 - Maze.OFFSET, y1 - Maze.OFFSET
+        x2, y2 = x2 - Maze.OFFSET, y2 - Maze.OFFSET
+        cell_x1 = math.floor(x1 / cell_interval)
+        cell_y1 = math.floor(y1 / cell_interval)
+        cell_x2 = math.floor(x2 / cell_interval)
+        cell_y2 = math.floor(y2 / cell_interval)
+
+        return cell_x1 != cell_x2 or cell_y1 != cell_y2
 
     def _try_turn(self) -> bool:
         """
@@ -98,8 +105,10 @@ class Player(Entity):
         If the player turned the function returns True and clears
         the target_direction
         """
+        # todo: when turning, snap to integer position values
         if self.target_direction is Dir.NONE:
             return False
+        print(self.position)
         cell_offset = Maze.CELL_SIZE + Maze.WALL_SIZE
         x, y = self.position
         cell_x = math.floor(x / cell_offset)
@@ -107,8 +116,9 @@ class Player(Entity):
         can_move = self.maze.can_move((cell_x, cell_y), self.target_direction)
         if can_move:
             self._move_in_target_dir()
+            self.target_direction = Dir.NONE
+            self.position = Maze.cell_position((cell_x, cell_y))
             return True
-        self.target_direction = Dir.NONE
         return False
 
     def key_to_direction(self, key: int) -> Dir:
