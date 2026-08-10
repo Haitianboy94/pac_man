@@ -1,9 +1,10 @@
-from src.scenes.scene_id import SceneId
+import os
+import sys
+
 from src.config.config_parser import ConfigParser, InvalidConfigError
+from src.entities.maze import Maze
 from src.game import Game
 from src.scenes.main_menu import MainMenu
-from src.entities.maze import Maze
-import sys
 
 # This to solve the recursive call in the provided mazegenerator
 # Python's default recursion limit is 1000,
@@ -11,6 +12,9 @@ import sys
 # So a long winding path can easily blow past that limit.
 # This is a known limitation of recursive-DFS maze generators at scale
 sys.setrecursionlimit(10_000)
+
+# Position the window on the left side of the screen
+os.environ['SDL_VIDEO_WINDOW_POS'] = '50,50'
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
@@ -32,13 +36,13 @@ if __name__ == "__main__":
         exit(1)
 
     import pygame as pg
+
     pg.init()
 
     x, y = Maze.maze_size(config.width, config.height)
 
     screen = pg.display.set_mode(
-        (x + config.UI_BORDER_X, y + config.UI_BORDER_Y * 2),
-        flags=pg.SCALED
+        (x + config.UI_BORDER_X, y + config.UI_BORDER_Y * 2), flags=pg.SCALED
     )
 
     pg.display.set_caption("Pac-Man")

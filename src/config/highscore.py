@@ -25,25 +25,25 @@ class Highscore:
                 contents = file.read()
                 kv: dict[str, int] = json.loads(contents)
                 if not isinstance(kv, dict):
-                    raise InvalidHighscoreError('Json is not a key-value pair')
+                    raise InvalidHighscoreError("Json is not a key-value pair")
                 for name, score in kv.items():
                     self.add(name, score)
         except FileNotFoundError:
-            print('No highscore file found, proceeding with empty scores')
+            print("No highscore file found, proceeding with empty scores")
             pass
         except json.JSONDecodeError as e:
-            raise InvalidHighscoreError('Invalid json') from e
+            raise InvalidHighscoreError("Invalid json") from e
 
     def store(self) -> None:
         """Commits the internal highscore values to the JSON file."""
         try:
-            with open(self.filename, 'w') as file:
+            with open(self.filename, "w") as file:
                 score_dict: dict[str, int] = {
-                        name: score for score, name in self.scores
-                        }
+                    name: score for score, name in self.scores
+                }
                 file.write(json.dumps(score_dict))
         except Exception:
-            print('Failed to write highscore')
+            print("Failed to write highscore")
 
     def add(self, name: str, score: int) -> None:
         """
@@ -51,20 +51,20 @@ class Highscore:
         Raises InvalidHighscoreError if the input was invalid.
         """
         if not isinstance(name, str):
-            raise InvalidHighscoreError('Name must be a string')
+            raise InvalidHighscoreError("Name must be a string")
         if isinstance(score, bool):
-            raise InvalidHighscoreError('Score must be an int')
+            raise InvalidHighscoreError("Score must be an int")
         if not isinstance(score, int):
-            raise InvalidHighscoreError('Score must be an int')
+            raise InvalidHighscoreError("Score must be an int")
         if len(name) == 0:
-            raise InvalidHighscoreError('Name must be at least 1 character')
+            raise InvalidHighscoreError("Name must be at least 1 character")
         if len(name) > 10:
-            raise InvalidHighscoreError('Name must be at most 10 character')
+            raise InvalidHighscoreError("Name must be at most 10 character")
         for char in name:
             if not char.isalnum() and not char == " ":
-                raise InvalidHighscoreError('Name must be alphanumeric')
+                raise InvalidHighscoreError("Name must be alphanumeric")
         if score < 0:
-            raise InvalidHighscoreError('Score must not be negative')
+            raise InvalidHighscoreError("Score must not be negative")
         heapq.heappush(self.scores, (score, name))
 
     def get(self) -> list[tuple[int, str]]:

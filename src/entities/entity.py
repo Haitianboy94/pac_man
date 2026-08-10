@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+
 import pygame as pg
 
 
@@ -16,8 +17,9 @@ class Entity(ABC, pg.sprite.Sprite):
     @abstractmethod
     def update(self, dt: int) -> None:
         """
-        This method is called every frame on all entities in the active scene. Use this method to
-        update the state of the entity. Events are handled in the scene.
+        This method is called every frame on all entities in the active scene.
+        Use this method to update the state of the entity. Events are handled
+        in the scene.
 
         dt: The amount of milliseconds since the last frame was rendered.
         """

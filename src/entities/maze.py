@@ -1,25 +1,27 @@
-from src.entities.maze_wall import MazeWall
-from src.graphics.general_sprites import GeneralSprites
-from src.entities.entity import Entity
-from src.entities.pacgum import Pacgum
-from src.types import Dir, PacGumType
 import pygame as pg
 
+from src.entities.maze_wall import MazeWall
+from src.entities.pacgum import Pacgum
+from src.graphics.general_sprites import GeneralSprites
+from src.types import Dir, PacGumType
 
-class Maze():
+
+class Maze:
     """
     Represents a maze from the `MazeGenerator` in the UI. Walls are represented
     using 'MazeWall. The maze also contains the pacgums, and has methods used
     for positioning within the grid.
     """
+
+    OFFSET = 12
     CELL_SIZE = 16
     WALL_SIZE = 8
 
     def __init__(
-            self,
-            grid: list[list[Dir]],
-            position: tuple[int, int] = (0, 0),
-            ):
+        self,
+        grid: list[list[Dir]],
+        position: tuple[int, int] = (0, 0),
+    ):
         self.grid: list[list[Dir]] = grid
         self.cells: pg.sprite.Group = pg.sprite.Group()
         self.pacgums: pg.sprite.Group = pg.sprite.Group()
@@ -31,9 +33,10 @@ class Maze():
                     [
                         row * (self.CELL_SIZE + self.WALL_SIZE),
                         col * (self.CELL_SIZE + self.WALL_SIZE),
-                    ]
+                    ],
                 )
-                for row in range(rows + 1)] 
+                for row in range(rows + 1)
+            ]
             for col in range(cols + 1)
         ]
 
@@ -66,11 +69,10 @@ class Maze():
                         type = PacGumType.SUPER_PACGUM
                     else:
                         type = PacGumType.PACGUM
-                    
-                    self.pacgums.add(Pacgum(
-                        type,
-                        [x + cell_center, y + cell_center]
-                        ))
+
+                    self.pacgums.add(
+                        Pacgum(type, [x + cell_center, y + cell_center])
+                    )
 
                 x = x + self.CELL_SIZE + self.WALL_SIZE
             x = position[0]
@@ -90,35 +92,25 @@ class Maze():
                 if wall.dir & Dir.EAST:
                     rect = pg.Rect(
                         (x + self.CELL_SIZE, y + int(self.WALL_SIZE / 2)),
-                        (8, 8)
+                        (8, 8),
                     )
                     surface.blit(horizontal, rect)
                 if wall.dir & Dir.SOUTH:
                     rect = pg.Rect(
                         (x + int(self.WALL_SIZE / 2), y + self.CELL_SIZE),
-                        (8, 8)
+                        (8, 8),
                     )
                     surface.blit(vertical, rect)
-                
 
-    def cell_position(self, x: int, y: int) -> tuple[int, int]:
-        "Returns the top-left position for the cell at x, y"
-        offset = self.WALL_SIZE * 2 + 4
-        return (
-            offset + x * self.CELL_SIZE + (x - 1) * self.WALL_SIZE,
-            offset + y * self.CELL_SIZE + (y - 1) * self.WALL_SIZE
-        )
 
-    _DIRECTION_DELTAS: dict[Dir, tuple[int, int]] = {
-        Dir.NORTH: (0, -1),
-        Dir.EAST: (1, 0),
-        Dir.SOUTH: (0, 1),
-        Dir.WEST: (-1, 0),
-    }
-
-    def move_cell(self, cell: tuple[int, int], direction: Dir) -> tuple[int, int]:
-        "Returns the resulting cell after moving from `cell` in `direction`, without checking legality"
-        dx, dy = self._DIRECTION_DELTAS[direction]
+    def move_cell(
+        self, cell: tuple[int, int], direction: Dir
+    ) -> tuple[int, int]:
+        """
+        Returns the resulting cell after moving from `cell` in `direction`
+        without checking legality
+        """
+        dx, dy = direction.delta()
         x, y = cell
         return (x + dx, y + dy)
 
@@ -150,13 +142,31 @@ class Maze():
         return candidates
 
     @staticmethod
+    def cell_position(pos: tuple[int, int]) -> tuple[int, int]:
+        "Returns the top-left position for the cell at x, y"
+        x, y = pos
+        return (
+            Maze.OFFSET + x * Maze.CELL_SIZE + x * Maze.WALL_SIZE,
+            Maze.OFFSET + y * Maze.CELL_SIZE + y * Maze.WALL_SIZE,
+        )
+
+    # def position_to_cell(self, pos: tuple[int | float, int | float]) -> tuple[int, int]:
+    #     x, y = pos
+    #     offset = self.WALL_SIZE * 2 + 4
+    #     return 
+    #     # return (
+    #     #     offset + x * self.CELL_SIZE + (x - 1) * self.WALL_SIZE,
+    #     #     offset + y * self.CELL_SIZE + (y - 1) * self.WALL_SIZE,
+
+
+    @staticmethod
     def maze_size(width: int, height: int) -> tuple[int, int]:
         cell = Maze.CELL_SIZE
         wall = Maze.WALL_SIZE
         return (
             2 * wall + width * (cell + wall),
-            2 * wall + height * (cell + wall)
-        );
+            2 * wall + height * (cell + wall),
+        )
 
     @staticmethod
     def cell_size() -> int:

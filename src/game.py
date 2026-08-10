@@ -1,11 +1,13 @@
-from src.game_state import GameState
-from src.scenes.scene import Scene
-from src.scenes.game_scene import GameScene
-from src.scenes.scene_id import SceneId
-from src.scenes.main_menu import MainMenu
-from src.config.config import Config
 import sys
+
 import pygame as pg
+
+from src.config.config import Config
+from src.game_state import GameState
+from src.scenes.game_scene import GameScene
+from src.scenes.main_menu import MainMenu
+from src.scenes.scene import Scene
+from src.scenes.scene_id import SceneId
 
 
 class Game:
@@ -37,13 +39,12 @@ class Game:
             if self._maybe_scene_transition():
                 continue
             dt: int = clock.tick(60)  # limits FPS to 60
-            events: list[pg.event.Event] = pg.event.get()
-            for event in events:
+            for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self._quit()
                 self.active_scene.handle_event(event)
 
-            self.active_scene.update(events, dt)
+            self.active_scene.update(dt)
             self.screen.fill("black")
             self.active_scene.draw(self.screen)
             pg.display.flip()

@@ -1,14 +1,11 @@
-
-from src.maze_generator import load_maze, MazeGenerationError
 from mazegenerator.mazegenerator import MazeGenerator
+
+from src.maze_generator import MazeGenerationError, load_maze
 
 # test mazegenerator provided
 g = MazeGenerator(
-        size=(4, 4),
-        perfect=False,
-        entry_cell=(0, 0),
-        exit_cell=(3, 3),
-        seed=1)
+    size=(4, 4), perfect=False, entry_cell=(0, 0), exit_cell=(3, 3), seed=1
+)
 print(g.maze)
 print(g.shortest_path)
 print(g.maze_entry, g.maze_exit)

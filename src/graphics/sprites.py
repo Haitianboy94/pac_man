@@ -1,5 +1,7 @@
 from functools import cache
+
 import pygame as pg
+
 
 class Sprites:
     PATH: str
@@ -15,13 +17,13 @@ class Sprites:
         sprite: pg.Surface = pg.Surface(size, pg.SRCALPHA)
         sprite.blit(cls.sheet(), [0, 0], pg.Rect(pos, size))
         return sprite
-    
+
     @classmethod
     def _load_all(
-            cls,
-            offset: tuple[int, int],
-            size: tuple[int, int],
-            delta_coords: list[tuple[int, int]]
+        cls,
+        offset: tuple[int, int],
+        size: tuple[int, int],
+        delta_coords: list[tuple[int, int]],
     ) -> list[pg.Surface]:
 
         return [

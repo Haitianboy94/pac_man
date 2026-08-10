@@ -1,13 +1,15 @@
-from src.scenes.scene_id import SceneId
-from typing import Optional
 from abc import ABC, abstractmethod
+from typing import Optional
+
 import pygame as pg
+
+from src.scenes.scene_id import SceneId
 
 
 class Scene(ABC):
     """
     A scene is a single 'screen' in the game. It is used to separate different
-    parts of the game from each other. It has its own methods for drawing 
+    parts of the game from each other. It has its own methods for drawing
     sprites to the screen, and for handling events. The update method is
     called each frame by the `Game` class.
 
@@ -23,7 +25,7 @@ class Scene(ABC):
         pass
 
     @abstractmethod
-    def update(self, events: list[pg.event.Event], dt: int) -> None:
+    def update(self, dt: int) -> None:
         pass
 
     @abstractmethod

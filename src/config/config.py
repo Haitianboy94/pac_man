@@ -3,7 +3,6 @@
 from dataclasses import dataclass, field
 from typing import Any
 
-
 DEFAULTS: dict[str, Any] = {
     "highscore_filename": "highscore.json",
     "level": list(range(1, 11)),
