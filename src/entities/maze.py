@@ -129,6 +129,26 @@ class Maze():
             return False
         return not (self.grid[y][x] & direction)
 
+    def center(self) -> tuple[int, int]:
+        "Returns the approximate center cell of the maze grid"
+        width = len(self.grid[0])
+        height = len(self.grid)
+        return (width // 2, height // 2)
+
+    def corners(self) -> list[tuple[int, int]]:
+        width = len(self.grid[0])
+        height = len(self.grid)
+        candidates = [
+            (0, 0),
+            (width - 1, 0),
+            (0, height - 1),
+            (width - 1, height - 1),
+        ]
+        for x, y in candidates:
+            if self.grid[y][x] == Dir.NORTH | Dir.EAST | Dir.SOUTH | Dir.WEST:
+                print(f"[Maze] Warning: corner ({x},{y}) is fully sealed")
+        return candidates
+
     @staticmethod
     def maze_size(width: int, height: int) -> tuple[int, int]:
         cell = Maze.CELL_SIZE

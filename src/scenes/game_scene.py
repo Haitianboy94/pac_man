@@ -13,6 +13,7 @@ from src.ui.button import Button
 from src.ui.panel import Panel
 from src.ui.text import Text
 from src.ui.game_clock import GameClock
+from src.types import PacGumType
 import pygame as pg
 
 FALLBACK_MAZE: list[list[Dir]] = [
@@ -39,6 +40,8 @@ class GameScene(Scene):
         self.screen: pg.Surface = screen
         self.config: Config = config
         self.state: GameState = state
+        self.edible_until: int | None = None
+        # self.score: int = 0
         seed = seed_for_level(state.current_level, config.seed)
         try:
             dir_grid, _, _, _ = load_maze(
@@ -67,13 +70,19 @@ class GameScene(Scene):
         game_clock.position = (16, 8)
         self.ui_group.add(game_clock)
 
+        self.player = Player(self.maze, self.maze.center())
+        # self.ghosts_group.add(Ghost(GhostType.BLINKY, self.maze, (5, 5)))
+        # self.ghosts_group.add(Ghost(GhostType.PINKY, self.maze, (4, 5)))
+        # self.ghosts_group.add(Ghost(GhostType.INKY, self.maze, (5, 4)))
+        # self.ghosts_group.add(Ghost(GhostType.CLYDE, self.maze, (4, 4)))
+        corners = self.maze.corners()
+        ghost_types = [GhostType.BLINKY, GhostType.PINKY, GhostType.INKY, GhostType.CLYDE]
+        self.ghosts_group: pg.sprite.Group = pg.sprite.Group()
+        for ghost_type, corner in zip(ghost_types, corners):
+            self.ghosts_group.add(Ghost(ghost_type, self.maze, corner))
         self.entities_group: pg.sprite.Group = pg.sprite.Group()
-        self.player = Player(self.maze, (0, 0))
-        self.entities_group.add(Ghost(GhostType.BLINKY, self.maze, (5, 5)))
-        self.entities_group.add(Ghost(GhostType.PINKY, self.maze, (4, 5)))
-        self.entities_group.add(Ghost(GhostType.INKY, self.maze, (5, 4)))
-        self.entities_group.add(Ghost(GhostType.CLYDE, self.maze, (4, 4)))
         self.entities_group.add(self.player)
+        self.entities_group.add(*self.ghosts_group)
         self.game_screen: pg.Surface = pg.Surface(
             Maze.maze_size(self.config.width, self.config.height)
         )
@@ -101,12 +110,33 @@ class GameScene(Scene):
         if self.is_paused:
             self.pause_group.update(events)
             return
+
         eaten = pg.sprite.spritecollide(self.player, self.maze.pacgums, dokill=True)
-        self.state.points += len(eaten) * self.config.points_per_pacgum
-        self.entities_group.update(dt)
+        for gum in eaten:
+            if gum.type == PacGumType.SUPER_PACGUM:
+                self.state.points += self.config.points_per_super_pacgum
+                self.edible_until = pg.time.get_ticks() + 8000
+            else:
+                self.state.points += self.config.points_per_pacgum
+
+        edible = self.edible_until is not None and pg.time.get_ticks() < self.edible_until
+        touched_ghosts = pg.sprite.spritecollide(self.player, self.ghosts_group, dokill=False)
+        if touched_ghosts and not edible:
+            self._handle_player_hit()
+        # TODO 4.7/4.8: handle `touched_ghosts and edible` case separately
+
+        target_cell = (self.player.cell_x, self.player.cell_y)
+        self.player.update(dt)
+        for ghost in self.ghosts_group:
+            ghost.update(dt, target_cell)
         self.maze.pacgums.update(dt)
         self.ui_group.update(events)
         self.state.time_remaining_ms = self.state.time_remaining_ms - dt
+
+    def _handle_player_hit(self) -> None:
+        self.state.lives -= 1
+        # TODO: respawn player at center — need a method on Player for this
+        # TODO: what happens when self.state.lives reaches 0? (4.10's territory)
 
     def draw(self, screen: pg.Surface) -> None:
         self.game_screen.fill('black')
