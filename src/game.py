@@ -1,3 +1,4 @@
+from src.config.highscore import Highscore
 import sys
 
 import pygame as pg
@@ -23,6 +24,8 @@ class Game:
         self.config = config
         self.current_level: int = 1
         self.state: GameState = GameState(config)
+        self.highscore: Highscore = Highscore(config.highscore_filename)
+        self.highscore.load()
 
     def loop(self) -> None:
         """
@@ -64,7 +67,12 @@ class Game:
             case SceneId.MAIN_MENU:
                 return MainMenu(self.screen)
             case SceneId.GAME:
-                return GameScene(self.screen, self.config, self.state)
+                return GameScene(
+                    self.screen,
+                    self.config,
+                    self.highscore,
+                    self.state
+                )
 
     def _quit(self) -> None:
         "Exits the game"

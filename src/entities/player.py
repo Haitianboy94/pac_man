@@ -74,13 +74,10 @@ class Player(Entity):
             self._move_in_target_dir()
         # if at cell corner player can try to turn, or be stopped by a wall
         elif self.passes_cell_corner(prev_position) or self.move_direction is Dir.NONE:
-            print(self.move_direction, self.target_direction)
             if (self.target_direction is not Dir.NONE
                     and self.target_direction is not self.move_direction):
-                print("try to turn")
                 self._try_turn()
             else:
-                print("maybe stop")
                 self._maybe_stop()
 
         # animations

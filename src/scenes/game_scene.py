@@ -1,3 +1,5 @@
+from src.ui.points_counter import PointsCounter
+from src.config.highscore import Highscore
 from src.graphics.general_sprites import GeneralSprites
 import pygame as pg
 
@@ -35,10 +37,16 @@ class GameScene(Scene):
     Calls `MazeGenerator` to create the level.
     """
 
-    def __init__(self, screen: pg.Surface, config: Config, state: GameState):
+    def __init__(self,
+                 screen: pg.Surface,
+                 config: Config,
+                 highscore: Highscore,
+                 state: GameState
+                 ):
         Scene.__init__(self)
         self.screen: pg.Surface = screen
         self.config: Config = config
+        self.highscore: Highscore = highscore
         self.state: GameState = state
         self.edible_until: int | None = None
         # self.score: int = 0
@@ -66,15 +74,9 @@ class GameScene(Scene):
         self._init_pause_menu(screen)
 
         self.ui_group: pg.sprite.Group = pg.sprite.Group()
-        game_clock: GameClock = GameClock(self.state)
-        game_clock.position = (16, 8)
-        self.ui_group.add(game_clock)
+        self._init_game_ui(screen)
 
         self.player = Player(self.maze, self.maze.center())
-        # self.ghosts_group.add(Ghost(GhostType.BLINKY, self.maze, (5, 5)))
-        # self.ghosts_group.add(Ghost(GhostType.PINKY, self.maze, (4, 5)))
-        # self.ghosts_group.add(Ghost(GhostType.INKY, self.maze, (5, 4)))
-        # self.ghosts_group.add(Ghost(GhostType.CLYDE, self.maze, (4, 4)))
         corners = self.maze.corners()
         ghost_types = [GhostType.BLINKY, GhostType.PINKY, GhostType.INKY, GhostType.CLYDE]
         self.ghosts_group: pg.sprite.Group = pg.sprite.Group()
@@ -155,6 +157,7 @@ class GameScene(Scene):
             self.pause_group.draw(screen)
 
     def _init_pause_menu(self, screen: pg.Surface) -> None:
+        "Creates all elements for the pause menu"
         center: int = int(screen.get_width() / 2)
         border: Panel = Panel(pg.Rect(0, 0, 256, 206), pg.Color("white"))
         border.rect.centerx = center
@@ -181,3 +184,50 @@ class GameScene(Scene):
         button.rect.centerx = center
         button.rect.y = 205
         self.pause_group.add(button)
+
+    def _init_game_ui(self, screen: pg.Surface) -> None:
+        "Creates the game ui"
+        top_margin = 6
+
+        # clock
+        clock_title_text: Text = Text("time", 'white', 1)
+        clock_title_text.rect.x = 8
+        clock_title_text.rect.y = top_margin
+        self.ui_group.add(clock_title_text)
+        game_clock: GameClock = GameClock(self.state)
+        game_clock.position = (8, top_margin + 10)
+        self.ui_group.add(game_clock)
+
+        points_title_text: Text = Text("pts", 'white', 1)
+        points_title_text.rect.x = 50
+        points_title_text.rect.y = top_margin
+        self.ui_group.add(points_title_text)
+        points_counter: PointsCounter = PointsCounter(self.state)
+        points_counter.position = (50, top_margin + 10)
+
+        self.ui_group.add(points_counter)
+
+        # highscore
+        highscore_title_text: Text = Text("high score", 'white', 1)
+        highscore_title_text.rect.x = 130
+        highscore_title_text.rect.y = top_margin
+        self.ui_group.add(highscore_title_text)
+        if not self.highscore.scores:
+            highscore_points: int = 0
+        else:
+            highscore_points: int = self.highscore.scores[0][0]
+        highscore_points_text: Text = Text(str(highscore_points), 'white', 1)
+        highscore_points_text.rect.x = 130
+        highscore_points_text.rect.y = top_margin + 10
+        self.ui_group.add(highscore_points_text)
+
+        # level
+        level_title_text: Text = Text("lvl", 'white', 1)
+        level_title_text.rect.x = 220
+        level_title_text.rect.y = top_margin
+        self.ui_group.add(level_title_text)
+        level_points_text: Text = Text(str(self.state.current_level), 'white', 1)
+        level_points_text.rect.x = 220
+        level_points_text.rect.y = top_margin + 10
+        self.ui_group.add(level_points_text)
+

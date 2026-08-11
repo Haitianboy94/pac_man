@@ -7,7 +7,7 @@ from src.ui.text import Text
 class GameClock(Text):
     def __init__(self, state: GameState):
         pg.sprite.Sprite.__init__(self)
-        Text.__init__(self, "", "white", 2)
+        Text.__init__(self, "", "white", 1)
 
         self.state: GameState = state
         self.time: int = int(state.time_remaining_ms / 1000)
