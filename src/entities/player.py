@@ -24,13 +24,11 @@ class Player(Entity):
     ) -> None:
         Entity.__init__(self)
         self.maze: Maze = maze
-        self.cell_x, self.cell_y = start_cell
         self.rect = pg.Rect(0, 0, self.SIZE, self.SIZE)
         self.position: tuple[float, float] = (0, 0)
         self.move_direction: Dir = Dir.NONE
         self.target_direction: Dir = Dir.NONE
         self.speed: float = self.DEFAULT_SPEED
-
         self.move_animations: dict[Dir, Animation] = {
             Dir.NORTH: Animation(
                 GeneralSprites.player_moving_north(), self.FPS
@@ -44,13 +42,25 @@ class Player(Entity):
         }
         self.animation = self.move_animations[self.move_direction]
         self.image = self.animation.image
-        self._sync_rect_to_cell()
+        self._sync_rect_to_cell(start_cell)
 
-    def _sync_rect_to_cell(self) -> None:
-        cell_x, cell_y = Maze.cell_position((self.cell_x, self.cell_y))
+    @property
+    def cell_x(self) -> int:
+        return math.floor((self.position[0] - Maze.OFFSET) / (Maze.CELL_SIZE + Maze.WALL_SIZE))
+
+    @property
+    def cell_y(self) -> int:
+        return math.floor((self.position[1] - Maze.OFFSET) / (Maze.CELL_SIZE + Maze.WALL_SIZE))
+
+    def _sync_rect_to_cell(self, cell: tuple[int, int]) -> None:
+        cell_x, cell_y = Maze.cell_position(cell)
         offset = int((Maze.CELL_SIZE - self.SIZE) / 2)
         self.position = (cell_x + offset, cell_y + offset)
         self.rect.topleft = self.position
+
+    def respawn(self, cell: tuple[int, int]) -> None:
+        "Resets the player's position to `cell` (e.g. after losing a life)"
+        self._sync_rect_to_cell(cell)
 
     def update(self, dt: int) -> None:
         # only continue update if moving or trying to start moving
@@ -67,7 +77,6 @@ class Player(Entity):
             # move to next position
             self.position = (next_x, next_y)
             self.rect.topleft = (int(next_x), int(next_y))
-
 
         # player can reverse direction at any time
         if self.target_direction.opposite() is self.move_direction:
@@ -87,7 +96,6 @@ class Player(Entity):
         if self.move_direction is not Dir.NONE:
             self.animation.update_frame(dt)
             self.image = self.animation.image
-
 
     def passes_cell_corner(self, other_pos: tuple[float, float]) -> bool:
         cell_interval = Maze.CELL_SIZE + Maze.WALL_SIZE

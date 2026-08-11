@@ -150,15 +150,6 @@ class Maze:
             Maze.OFFSET + y * Maze.CELL_SIZE + y * Maze.WALL_SIZE,
         )
 
-    # def position_to_cell(self, pos: tuple[int | float, int | float]) -> tuple[int, int]:
-    #     x, y = pos
-    #     offset = self.WALL_SIZE * 2 + 4
-    #     return 
-    #     # return (
-    #     #     offset + x * self.CELL_SIZE + (x - 1) * self.WALL_SIZE,
-    #     #     offset + y * self.CELL_SIZE + (y - 1) * self.WALL_SIZE,
-
-
     @staticmethod
     def maze_size(width: int, height: int) -> tuple[int, int]:
         cell = Maze.CELL_SIZE
