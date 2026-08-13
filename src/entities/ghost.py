@@ -43,18 +43,21 @@ class Ghost(Entity):
                 GeneralSprites.ghost_moving_west(type), self.FPS
             ),
         }
-        self.animation = self.move_animations[self.direction]
-        self.image = self.animation.image
-        self._sync_rect_to_cell()
-        self.move_timer: int = random.randint(0, self.MOVE_INTERVAL_MS)
         self.player_cell: tuple[int, int]
         self.player_direction: Dir
-        self.edible: bool
+        self.edible: bool = False
+        self.scared_animation = Animation(GeneralSprites.ghost_scared(), self.FPS)
+        self.image = self._get_animation().image
+        self._sync_rect_to_cell()
+        self.move_timer: int = random.randint(0, self.MOVE_INTERVAL_MS)
 
     def _sync_rect_to_cell(self) -> None:
         cell_x, cell_y = Maze.cell_position((self.cell_x, self.cell_y))
         offset = int((Maze.CELL_SIZE - self.SIZE) / 2)
         self.rect.topleft = (cell_x + offset, cell_y + offset)
+
+    def set_edible(self, edible: bool) -> None:
+        self.edible = edible
 
     def is_eaten(self) -> bool:
         return self.respawn_at is not None
@@ -63,6 +66,7 @@ class Ghost(Entity):
         self.cell_x, self.cell_y = self.start_cell
         self._sync_rect_to_cell()
         self.respawn_at = pg.time.get_ticks() + respawn_delay_ms
+        self.set_edible(False)
         print(f"[{self.type.name}] eaten at {pg.time.get_ticks()}, respawn_at={self.respawn_at}")
 
     def update(self, dt: int) -> None:
@@ -71,13 +75,19 @@ class Ghost(Entity):
                 self.respawn_at = None
             else:
                 return
-        self.animation.update_frame(dt)
-        self.image = self.animation.image
+        self._get_animation().update_frame(dt)
+        self.image = self._get_animation().image
         self.move_timer += dt
         if self.move_timer >= self.MOVE_INTERVAL_MS:
             self.move_timer = 0
             target_cell = self._get_target_cell()
             self._chase(target_cell)
+
+    def _get_animation(self) -> Animation:
+        "Return the active animation for the ghost"
+        if self.edible:
+            return self.scared_animation
+        return self.move_animations[self.direction]
 
     def _find_path_direction(self, target_cell: tuple[int, int]) -> Dir | None:
         """BFS from current cell to target_cell; returns the first step's direction, or None if unreachable"""

@@ -120,13 +120,20 @@ class GameScene(Scene):
             if gum.type == PacGumType.SUPER_PACGUM:
                 self.state.points += self.config.points_per_super_pacgum
                 self.edible_until = pg.time.get_ticks() + 7000
+                for ghost in self.ghosts_group:
+                    ghost.set_edible(True)
             else:
                 self.state.points += self.config.points_per_pacgum
 
-        edible = self.edible_until is not None and pg.time.get_ticks() < self.edible_until
+        edible_expired = self.edible_until and pg.time.get_ticks() > self.edible_until
+        if edible_expired:
+            self.edible_until = None
+            for ghost in self.ghosts_group:
+                ghost.set_edible(False)
+
         touched_ghosts = pg.sprite.spritecollide(self.player, self.ghosts_group, dokill=False)
         if touched_ghosts:
-            if edible:
+            if self.edible_until is not None:
                 for ghost in touched_ghosts:
                     if not ghost.is_eaten():
                         self.state.points += self.config.points_per_ghost
@@ -138,7 +145,6 @@ class GameScene(Scene):
         for ghost in self.ghosts_group:
             ghost.player_cell = self.player.cell
             ghost.player_direction = self.player.move_direction
-            ghost.edible = edible
             ghost.update(dt)
 
         self.maze.pacgums.update(dt)
