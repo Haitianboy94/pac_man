@@ -1,3 +1,5 @@
+from src.ui.lives_counter import LivesCounter
+from src.graphics.hud_sprites import HudSprites
 from src.ui.points_counter import PointsCounter
 from src.config.highscore import Highscore
 from src.graphics.general_sprites import GeneralSprites
@@ -239,3 +241,7 @@ class GameScene(Scene):
         level_points_text.rect.y = top_margin + 10
         self.ui_group.add(level_points_text)
 
+        # lives
+        lives_counter: LivesCounter = LivesCounter(self.state)
+        lives_counter.rect.topleft = (8, screen.get_height()-24)
+        self.ui_group.add(lives_counter)
