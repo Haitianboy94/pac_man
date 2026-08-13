@@ -117,19 +117,24 @@ class GameScene(Scene):
         for gum in eaten:
             if gum.type == PacGumType.SUPER_PACGUM:
                 self.state.points += self.config.points_per_super_pacgum
-                self.edible_until = pg.time.get_ticks() + 8000
+                self.edible_until = pg.time.get_ticks() + 7000
             else:
                 self.state.points += self.config.points_per_pacgum
 
         edible = self.edible_until is not None and pg.time.get_ticks() < self.edible_until
         touched_ghosts = pg.sprite.spritecollide(self.player, self.ghosts_group, dokill=False)
-        if touched_ghosts and not edible:
-            self._handle_player_hit()
-        # TODO 4.7/4.8: handle `touched_ghosts and edible` case separately
+        if touched_ghosts:
+            if edible:
+                for ghost in touched_ghosts:
+                    if not ghost.is_eaten():
+                        self.state.points += self.config.points_per_ghost
+                        ghost.get_eaten(respawn_delay_ms=7000)
+            else:
+                self._handle_player_hit()
 
         self.player.update(dt)
         for ghost in self.ghosts_group:
-            ghost.update(dt, self.player.cell)
+            ghost.update(dt, self.player.cell, self.player.move_direction, edible)
 
         self.maze.pacgums.update(dt)
         self.ui_group.update(dt)
@@ -137,8 +142,9 @@ class GameScene(Scene):
 
     def _handle_player_hit(self) -> None:
         self.state.lives -= 1
-        # TODO: respawn player at center — need a method on Player for this
-        # TODO: what happens when self.state.lives reaches 0? (4.10's territory)
+        self.player.respawn(self.maze.center())
+        if self.state.lives <= 0:
+            self.next_scene_id = SceneId.MAIN_MENU
 
     def draw(self, screen: pg.Surface) -> None:
         self.game_screen.fill("black")

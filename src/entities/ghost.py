@@ -1,10 +1,11 @@
 import pygame as pg
-
+from collections import deque
 from src.entities.entity import Entity
 from src.entities.maze import Maze
 from src.graphics.animation import Animation
 from src.graphics.general_sprites import GeneralSprites
 from src.types import Dir, GhostType
+import random
 
 
 class Ghost(Entity):
@@ -22,7 +23,10 @@ class Ghost(Entity):
     ) -> None:
         Entity.__init__(self)
         self.maze: Maze = maze
+        self.type: GhostType = type
+        self.start_cell: tuple[int, int] = start_cell
         self.cell_x, self.cell_y = start_cell
+        self.respawn_at: int | None = None
         self.rect = pg.Rect(0, 0, self.SIZE, self.SIZE)
         self.direction: Dir = Dir.EAST
         self.move_animations: dict[Dir, Animation] = {
@@ -42,46 +46,96 @@ class Ghost(Entity):
         self.animation = self.move_animations[self.direction]
         self.image = self.animation.image
         self._sync_rect_to_cell()
-        self.move_timer: int = 0
+        self.move_timer: int = random.randint(0, self.MOVE_INTERVAL_MS)
 
     def _sync_rect_to_cell(self) -> None:
         cell_x, cell_y = Maze.cell_position((self.cell_x, self.cell_y))
         offset = int((Maze.CELL_SIZE - self.SIZE) / 2)
         self.rect.topleft = (cell_x + offset, cell_y + offset)
 
-    # def update(self, dt: int) -> None:
-    #     self.animation.update_frame(dt)
-    #     self.image = self.animation.image
-    def update(self, dt: int, target_cell: tuple[int, int]) -> None:
+    def is_eaten(self) -> bool:
+        return self.respawn_at is not None
+
+    def get_eaten(self, respawn_delay_ms: int) -> None:
+        self.cell_x, self.cell_y = self.start_cell
+        self._sync_rect_to_cell()
+        self.respawn_at = pg.time.get_ticks() + respawn_delay_ms
+        print(f"[{self.type.name}] eaten at {pg.time.get_ticks()}, respawn_at={self.respawn_at}")
+
+    def update(self, dt: int,
+               player_cell: tuple[int, int],
+               player_direction: Dir,
+               edible: bool) -> None:
+        if self.is_eaten():
+            if pg.time.get_ticks() >= self.respawn_at:
+                self.respawn_at = None
+            else:
+                return
         self.animation.update_frame(dt)
         self.image = self.animation.image
-
         self.move_timer += dt
         if self.move_timer >= self.MOVE_INTERVAL_MS:
             self.move_timer = 0
+            target_cell = self._get_target_cell(player_cell,
+                                                player_direction, edible)
             self._chase(target_cell)
 
-    def _chase(self, target_cell: tuple[int, int]) -> None:
-        best_direction: Dir | None = None
-        best_cell: tuple[int, int] | None = None
-        best_distance: int | None = None
+    def _find_path_direction(self, target_cell: tuple[int, int]) -> Dir | None:
+        """BFS from current cell to target_cell; returns the first step's direction, or None if unreachable"""
+        start = (self.cell_x, self.cell_y)
+        if start == target_cell:
+            return None
 
-        for direction in (Dir.NORTH, Dir.EAST, Dir.SOUTH, Dir.WEST):
-            if not self.maze.can_move((self.cell_x, self.cell_y), direction):
-                continue
-            candidate_cell = self.maze.move_cell((self.cell_x, self.cell_y), direction)
-            distance = (
-                (candidate_cell[0] - target_cell[0]) ** 2 +
-                (candidate_cell[1] - target_cell[1]) ** 2
+        visited = {start}
+        queue = deque([(start, None)])
+
+        while queue:
+            cell, first_dir = queue.popleft()
+            for direction in (Dir.NORTH, Dir.EAST, Dir.SOUTH, Dir.WEST):
+                if not self.maze.can_move(cell, direction):
+                    continue
+                next_cell = self.maze.move_cell(cell, direction)
+                if next_cell in visited:
+                    continue
+                next_first_dir = first_dir if first_dir is not None else direction
+                if next_cell == target_cell:
+                    return next_first_dir
+                visited.add(next_cell)
+                queue.append((next_cell, next_first_dir))
+
+        return None
+
+    def _get_target_cell(self,
+                         player_cell: tuple[int, int],
+                         player_direction: Dir, edible) -> tuple[int, int]:
+        if edible:
+            width = len(self.maze.grid[0])
+            height = len(self.maze.grid)
+            candidates = self.maze.corners()
+            return max(candidates, key=lambda c: (c[0]-player_cell[0])**2 + (c[1]-player_cell[1])**2)
+        if self.type == GhostType.BLINKY:
+            return player_cell
+        elif self.type == GhostType.PINKY:
+            dx, dy = player_direction.delta() if player_direction != Dir.NONE else (0, 0)
+            return (player_cell[0] + dx * 4, player_cell[1] + dy * 4)
+        elif self.type == GhostType.CLYDE:
+            dist = (self.cell_x - player_cell[0]) ** 2 + (self.cell_y - player_cell[1]) ** 2
+            if dist < 64:
+                width = len(self.maze.grid[0])
+                height = len(self.maze.grid)
+                return (random.randint(0, width - 1), random.randint(0, height - 1))
+            return player_cell
+        else:
+            return (
+                player_cell[0] + random.randint(-3, 3),
+                player_cell[1] + random.randint(-3, 3),
             )
 
-            if best_distance is None or distance < best_distance:
-                best_direction = direction
-                best_cell = candidate_cell
-                best_distance = distance
-
-        if best_cell is not None and best_direction is not None:
-            self.cell_x, self.cell_y = best_cell
-            self.direction = best_direction
-            self.animation = self.move_animations[self.direction]
-            self._sync_rect_to_cell()
+    def _chase(self, target_cell: tuple[int, int]) -> None:
+        direction = self._find_path_direction(target_cell)
+        if direction is None:
+            return
+        self.cell_x, self.cell_y = self.maze.move_cell((self.cell_x, self.cell_y), direction)
+        self.direction = direction
+        self.animation = self.move_animations[self.direction]
+        self._sync_rect_to_cell()

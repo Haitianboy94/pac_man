@@ -1,0 +1,3 @@
+# Task for reviewer
+
+Analyze movement and grid/collision logic in /Users/robbin/projects/codam/pac_man/src/entities/player.py together with src/entities/maze.py and src/types.py. The user explicitly wants conceptual debugging guidance only: do not edit any file. Identify concrete causes of wall penetration, coordinate-space/offset mistakes, float/grid-state problems, and recommend a clean movement model that handles delta time, turns, reversals, walls, and potentially large dt. Cite file/line ranges and distinguish immediate bugs from architectural improvements.

@@ -31,7 +31,6 @@ class Player(Entity):
         self.move_progress: float = 0.0
         self.target_direction: Dir = Dir.EAST
         self.speed: float = self.DEFAULT_SPEED
-
         self.move_animations: dict[Dir, Animation] = {
             Dir.NORTH: Animation(
                 GeneralSprites.player_moving_north(), self.FPS
@@ -60,6 +59,11 @@ class Player(Entity):
             pg.K_d: Dir.EAST,
         }
         return mapping[key]
+
+    def respawn(self, cell: tuple[int, int]) -> None:
+        "Resets the player's position to `cell` (e.g. after losing a life)"
+        self.cell = cell
+        self._sync_rect_to_cell()
 
     def update(self, dt: int) -> None:
         # only continue to update if moving or trying to start moving
