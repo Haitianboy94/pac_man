@@ -134,7 +134,10 @@ class GameScene(Scene):
 
         self.player.update(dt)
         for ghost in self.ghosts_group:
-            ghost.update(dt, self.player.cell, self.player.move_direction, edible)
+            ghost.player_cell = self.player.cell
+            ghost.player_direction = self.player.move_direction
+            ghost.edible = edible
+            ghost.update(dt)
 
         self.maze.pacgums.update(dt)
         self.ui_group.update(dt)

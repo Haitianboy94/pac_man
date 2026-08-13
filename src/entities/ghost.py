@@ -47,6 +47,9 @@ class Ghost(Entity):
         self.image = self.animation.image
         self._sync_rect_to_cell()
         self.move_timer: int = random.randint(0, self.MOVE_INTERVAL_MS)
+        self.player_cell: tuple[int, int]
+        self.player_direction: Dir
+        self.edible: bool
 
     def _sync_rect_to_cell(self) -> None:
         cell_x, cell_y = Maze.cell_position((self.cell_x, self.cell_y))
@@ -62,11 +65,8 @@ class Ghost(Entity):
         self.respawn_at = pg.time.get_ticks() + respawn_delay_ms
         print(f"[{self.type.name}] eaten at {pg.time.get_ticks()}, respawn_at={self.respawn_at}")
 
-    def update(self, dt: int,
-               player_cell: tuple[int, int],
-               player_direction: Dir,
-               edible: bool) -> None:
-        if self.is_eaten():
+    def update(self, dt: int) -> None:
+        if self.is_eaten() and self.respawn_at is not None:
             if pg.time.get_ticks() >= self.respawn_at:
                 self.respawn_at = None
             else:
@@ -76,8 +76,7 @@ class Ghost(Entity):
         self.move_timer += dt
         if self.move_timer >= self.MOVE_INTERVAL_MS:
             self.move_timer = 0
-            target_cell = self._get_target_cell(player_cell,
-                                                player_direction, edible)
+            target_cell = self._get_target_cell()
             self._chase(target_cell)
 
     def _find_path_direction(self, target_cell: tuple[int, int]) -> Dir | None:
@@ -105,30 +104,28 @@ class Ghost(Entity):
 
         return None
 
-    def _get_target_cell(self,
-                         player_cell: tuple[int, int],
-                         player_direction: Dir, edible) -> tuple[int, int]:
-        if edible:
+    def _get_target_cell(self) -> tuple[int, int]:
+        if self.edible:
             width = len(self.maze.grid[0])
             height = len(self.maze.grid)
             candidates = self.maze.corners()
-            return max(candidates, key=lambda c: (c[0]-player_cell[0])**2 + (c[1]-player_cell[1])**2)
+            return max(candidates, key=lambda c: (c[0]-self.player_cell[0])**2 + (c[1]-self.player_cell[1])**2)
         if self.type == GhostType.BLINKY:
-            return player_cell
+            return self.player_cell
         elif self.type == GhostType.PINKY:
-            dx, dy = player_direction.delta() if player_direction != Dir.NONE else (0, 0)
-            return (player_cell[0] + dx * 4, player_cell[1] + dy * 4)
+            dx, dy = self.player_direction.delta() if self.player_direction != Dir.NONE else (0, 0)
+            return (self.player_cell[0] + dx * 4, self.player_cell[1] + dy * 4)
         elif self.type == GhostType.CLYDE:
-            dist = (self.cell_x - player_cell[0]) ** 2 + (self.cell_y - player_cell[1]) ** 2
+            dist = (self.cell_x - self.player_cell[0]) ** 2 + (self.cell_y - self.player_cell[1]) ** 2
             if dist < 64:
                 width = len(self.maze.grid[0])
                 height = len(self.maze.grid)
                 return (random.randint(0, width - 1), random.randint(0, height - 1))
-            return player_cell
+            return self.player_cell
         else:
             return (
-                player_cell[0] + random.randint(-3, 3),
-                player_cell[1] + random.randint(-3, 3),
+                self.player_cell[0] + random.randint(-3, 3),
+                self.player_cell[1] + random.randint(-3, 3),
             )
 
     def _chase(self, target_cell: tuple[int, int]) -> None:
