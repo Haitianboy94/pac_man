@@ -21,17 +21,6 @@ class GeneralSprites(Sprites):
     ]
 
     @classmethod
-    def apply_transparent_border(cls, sprite: pg.Surface) -> None:
-        "Modifies a surface to create a 1px transparent border around it"
-        rect = sprite.get_rect()
-        w, h = rect.size
-        transparent = pg.Color(0, 0, 0, 0)
-        sprite.fill(transparent, pg.Rect(0, 0, w, 1))
-        sprite.fill(transparent, pg.Rect(0, 0, 1, h))
-        sprite.fill(transparent, pg.Rect(w - 1, 0, 1, h))
-        sprite.fill(transparent, pg.Rect(0, h - 1, w, 1))
-
-    @classmethod
     @cache
     def player_moving_north(cls) -> list[pg.Surface]:
         sprites = cls._load_all(
@@ -40,7 +29,7 @@ class GeneralSprites(Sprites):
             cls.PLAYER_MOVING,
         )
         for sprite in sprites:
-            cls.apply_transparent_border(sprite)
+            sprite.set_colorkey('black')
         return sprites
 
     @classmethod
@@ -50,7 +39,7 @@ class GeneralSprites(Sprites):
             (int(cls.SIZE / 2) + cls.SIZE * 28, 0), (16, 16), cls.PLAYER_MOVING
         )
         for sprite in sprites:
-            cls.apply_transparent_border(sprite)
+            sprite.set_colorkey('black')
         return sprites
 
     @classmethod
@@ -62,7 +51,7 @@ class GeneralSprites(Sprites):
             cls.PLAYER_MOVING,
         )
         for sprite in sprites:
-            cls.apply_transparent_border(sprite)
+            sprite.set_colorkey('black')
         return sprites
 
     @classmethod
@@ -74,7 +63,7 @@ class GeneralSprites(Sprites):
             cls.PLAYER_MOVING,
         )
         for sprite in sprites:
-            cls.apply_transparent_border(sprite)
+            sprite.set_colorkey('black')
         return sprites
 
     #
@@ -108,7 +97,7 @@ class GeneralSprites(Sprites):
             cls.GHOST_MOVE_EAST,
         )
         for sprite in sprites:
-            cls.apply_transparent_border(sprite)
+            sprite.set_colorkey('black')
         return sprites
 
     @classmethod
@@ -120,7 +109,7 @@ class GeneralSprites(Sprites):
             cls.GHOST_MOVE_WEST,
         )
         for sprite in sprites:
-            cls.apply_transparent_border(sprite)
+            sprite.set_colorkey('black')
         return sprites
 
     @classmethod
@@ -132,7 +121,7 @@ class GeneralSprites(Sprites):
             cls.GHOST_MOVE_NORTH,
         )
         for sprite in sprites:
-            cls.apply_transparent_border(sprite)
+            sprite.set_colorkey('black')
         return sprites
 
     @classmethod
@@ -144,7 +133,7 @@ class GeneralSprites(Sprites):
             cls.GHOST_MOVE_SOUTH,
         )
         for sprite in sprites:
-            cls.apply_transparent_border(sprite)
+            sprite.set_colorkey('black')
         return sprites
 
     @classmethod
@@ -156,7 +145,7 @@ class GeneralSprites(Sprites):
             cls.GHOST_SCARED,
         )
         for sprite in sprites:
-            cls.apply_transparent_border(sprite)
+            sprite.set_colorkey('black')
         return sprites
 
     #
