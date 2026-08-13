@@ -4,6 +4,7 @@ import sys
 from src.config.config_parser import ConfigParser, InvalidConfigError
 from src.entities.maze import Maze
 from src.game import Game
+from src.resources import resource_path
 from src.scenes.main_menu import MainMenu
 
 # This to solve the recursive call in the provided mazegenerator
@@ -14,15 +15,19 @@ from src.scenes.main_menu import MainMenu
 sys.setrecursionlimit(10_000)
 
 # Position the window on the left side of the screen
-os.environ['SDL_VIDEO_WINDOW_POS'] = '50,50'
+os.environ["SDL_VIDEO_WINDOW_POS"] = "50,50"
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("usage: uv run pac-man.py [config file]")
+    if len(sys.argv) > 2:
+        print("usage: pac-man [config file]")
         sys.exit(1)
 
+    config_path = (
+        sys.argv[1] if len(sys.argv) == 2 else resource_path("config.json")
+    )
+
     try:
-        with open(sys.argv[1]) as file:
+        with open(config_path) as file:
             parser = ConfigParser(file.read())
             config = parser.parse()
     except InvalidConfigError as e:

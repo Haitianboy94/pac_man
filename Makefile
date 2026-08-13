@@ -4,6 +4,9 @@ install:
 run:
 	uv run python pac-man.py config.json
 
+package:
+	uv run pyinstaller --noconfirm --clean pac-man.spec
+
 debug:
 	uv run python -m pdb python pac-man.py config.json
 
@@ -23,4 +26,4 @@ format:
 	uv run ruff check --select I --fix
 	uv run ruff format
 
-.PHONY: install run debug clean lint test
+.PHONY: install run package debug clean lint test format

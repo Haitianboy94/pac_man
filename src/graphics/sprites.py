@@ -2,6 +2,8 @@ from functools import cache
 
 import pygame as pg
 
+from src.resources import resource_path
+
 
 class Sprites:
     PATH: str
@@ -9,7 +11,7 @@ class Sprites:
     @classmethod
     @cache
     def sheet(cls) -> pg.Surface:
-        return pg.image.load(cls.PATH).convert_alpha()
+        return pg.image.load(resource_path(cls.PATH)).convert_alpha()
 
     @classmethod
     @cache
