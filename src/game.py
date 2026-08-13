@@ -65,7 +65,7 @@ class Game:
         "Factory method which constructs new scenes"
         match scene_id:
             case SceneId.MAIN_MENU:
-                return MainMenu(self.screen)
+                return MainMenu(self.screen, self.config)
             case SceneId.GAME:
                 return GameScene(
                     self.screen,

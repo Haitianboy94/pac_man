@@ -102,13 +102,17 @@ class GameScene(Scene):
             pg.K_a,
             pg.K_d,
         ]
-        if event.type != pg.KEYDOWN:
-            return
-        if event.key == pg.K_ESCAPE:
+        if event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
             self.is_paused = not self.is_paused
-        elif event.key in direction_keys:
+        elif event.type == pg.KEYDOWN and event.key in direction_keys:
             dir = self.player.key_to_direction(event.key)
             self.player.target_direction = dir
+        elif event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
+            print('click')
+            for sprite in self.pause_group:
+                print(sprite)
+                if isinstance(sprite, Button):
+                    sprite.handle_event(event)
 
     def update(self, dt: int) -> None:
         if self.is_paused:

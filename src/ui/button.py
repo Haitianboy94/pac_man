@@ -27,24 +27,28 @@ class Button(pg.sprite.Sprite):
         )
         self.image: pg.Surface = self.text
         self.rect: pg.Rect = self.image.get_rect()
-        self.selected: bool = False
+        self.hovering: bool = False
 
-    def select(self) -> None:
-        self.selected = True
+    def hover(self) -> None:
+        self.hovering = True
         self.image = self.hover_text
 
-    def unselect(self) -> None:
-        self.selected = False
+    def unhover(self) -> None:
+        self.hovering = False
         self.image = self.text
+
+    def handle_event(self, event: pg.event.Event) -> None:
+        if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
+            if self.hovering:
+                self.onclick()
 
     def update(self, events: list[pg.event.Event]) -> None:
         pos: tuple[int, int] = pg.mouse.get_pos()
         hovering: bool = self.rect.collidepoint(pos)
+        clicked = False
         if hovering:
-            if not self.selected:
-                self.select()
-            if pg.mouse.get_pressed()[0]:
-                self.onclick()
+            if not self.hovering:
+                self.hover()
         else:
-            if self.selected:
-                self.unselect()
+            if self.hovering:
+                self.unhover()

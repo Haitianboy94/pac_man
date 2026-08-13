@@ -29,7 +29,6 @@ class Highscore:
                 for name, score in kv.items():
                     self.add(name, score)
         except FileNotFoundError:
-            print("No highscore file found, proceeding with empty scores")
             pass
         except json.JSONDecodeError as e:
             raise InvalidHighscoreError("Invalid json") from e

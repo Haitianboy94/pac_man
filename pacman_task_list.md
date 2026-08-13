@@ -102,10 +102,10 @@ Legend: **[S]** small, **[M]** medium, **[L]** large · Dependencies in *(depend
 
 ## 8. Packaging & Deployment
 
-- [ ] **8.1** [M] Choose platform (Steam or Itch.io), set up unlisted/private build
-- [ ] **8.2** [M] Packaging script/spec (e.g., PyInstaller or platform-specific build tool) — must live at repo root
+- [*] **8.1** [M] Choose platform (Steam or Itch.io), set up unlisted/private build
+- [*] **8.2** [M] Packaging script/spec (e.g., PyInstaller or platform-specific build tool) — must live at repo root
 - [ ] **8.3** [S] In-package instructions (controls, options, configuration) bundled with the build
-- [ ] **8.4** [S] Verify packaged build launches standalone (no dev environment dependencies)
+- [*] **8.4** [S] Verify packaged build launches standalone (no dev environment dependencies)
 - [ ] **8.5** [S] Document/test the "regenerate package" process, since it may be requested live during review
 
 ---

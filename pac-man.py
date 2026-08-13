@@ -52,7 +52,7 @@ if __name__ == "__main__":
 
     pg.display.set_caption("Pac-Man")
 
-    initial_scene = MainMenu(screen)
+    initial_scene = MainMenu(screen, config)
     game = Game(screen, initial_scene, config)
 
     try:
