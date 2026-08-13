@@ -9,7 +9,7 @@ class LivesCounter(pg.sprite.Sprite):
         self.state: GameState = state
         self.lives: int = state.lives
         self.sprite: pg.Surface = HudSprites.hud_lives()
-        self.image: pg.Surface
+        self.image: pg.Surface = pg.Surface((0, 0))
         self.rect: pg.Rect = pg.Rect(0, 0, 0, 0)
         self._render()
 
@@ -19,6 +19,8 @@ class LivesCounter(pg.sprite.Sprite):
             self._render()
 
     def _render(self):
+        if self.lives < 0:
+            return
         width, height = self.sprite.get_size()
         image = pg.Surface((width * self.lives, height))
         for i in range(self.lives):

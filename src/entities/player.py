@@ -79,9 +79,11 @@ class Player(Entity):
             self._reverse_direction()
             
         # calculate move_progress from dt and speed
-        progress: float = self.speed * dt / 1000
-        self.move_progress += progress
-        in_next_cell: bool = self.move_progress // self.CELL_DISTANCE >= 1
+        in_next_cell: bool = False
+        if self.move_direction is not None:
+            progress: float = self.speed * dt / 1000
+            self.move_progress += progress
+            in_next_cell = self.move_progress // self.CELL_DISTANCE >= 1
 
         # cell threshold was crossed
         if in_next_cell:
@@ -120,6 +122,8 @@ class Player(Entity):
                 self.move_direction = self.target_direction
                 self.target_direction = Dir.NONE
                 self.animation = self.move_animations[self.move_direction]
+            if self.move_direction is Dir.NONE:
+                self.target_direction = Dir.NONE
 
     def _reverse_direction(self) -> None:
         "Turn around, swapping the current cell with the next"

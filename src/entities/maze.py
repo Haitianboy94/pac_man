@@ -116,6 +116,8 @@ class Maze:
 
     def can_move(self, cell: tuple[int, int], direction: Dir) -> bool:
         "Returns whether movement from `cell` in `direction` is legal"
+        if direction is Dir.NONE:
+            return False
         x, y = cell
         if not (0 <= y < len(self.grid) and 0 <= x < len(self.grid[0])):
             return False
