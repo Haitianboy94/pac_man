@@ -13,7 +13,7 @@ class Ghost(Entity):
 
     SIZE = 16
     FPS = 4
-    MOVE_INTERVAL_MS = 500  # how often the ghost decides to move
+    MOVE_INTERVAL_MS = 700  # how often the ghost decides to move
 
     def __init__(
         self,

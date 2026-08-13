@@ -102,7 +102,6 @@ class Maze:
                     )
                     surface.blit(vertical, rect)
 
-
     def move_cell(
         self, cell: tuple[int, int], direction: Dir
     ) -> tuple[int, int]:
@@ -122,10 +121,25 @@ class Maze:
         return not (self.grid[y][x] & direction)
 
     def center(self) -> tuple[int, int]:
-        "Returns the approximate center cell of the maze grid"
+        "Returns the approximate center cell of the maze grid, adjusted if sealed"
         width = len(self.grid[0])
         height = len(self.grid)
-        return (width // 2, height // 2)
+        cx, cy = width // 2, height // 2
+
+        if self._is_open(cx, cy):
+            return (cx, cy)
+
+        for radius in range(1, max(width, height)):
+            for dx in range(-radius, radius + 1):
+                for dy in range(-radius, radius + 1):
+                    x, y = cx + dx, cy + dy
+                    if 0 <= x < width and 0 <= y < height and self._is_open(x, y):
+                        return (x, y)
+        return (cx, cy)
+
+    def _is_open(self, x: int, y: int) -> bool:
+        "Returns whether the cell at (x, y) is not fully sealed"
+        return self.grid[y][x] != Dir.NORTH | Dir.EAST | Dir.SOUTH | Dir.WEST
 
     def corners(self) -> list[tuple[int, int]]:
         width = len(self.grid[0])
