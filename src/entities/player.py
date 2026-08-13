@@ -72,7 +72,7 @@ class Player(Entity):
 
         # player can turn around at any time
         if self.target_direction.opposite() == self.move_direction:
-            pass
+            self._reverse_direction()
             
         # calculate move_progress from dt and speed
         progress: float = self.speed * dt / 1000
@@ -116,3 +116,13 @@ class Player(Entity):
                 self.move_direction = self.target_direction
                 self.target_direction = Dir.NONE
                 self.animation = self.move_animations[self.move_direction]
+
+    def _reverse_direction(self) -> None:
+        "Turn around, swapping the current cell with the next"
+        dx, dy = self.move_direction.delta()
+        next_cell = (self.cell[0] + dx, self.cell[1] + dy)
+        self.cell = next_cell
+        self.move_progress = 24 - self.move_progress
+        self.move_direction = self.target_direction
+        self.target_direction = Dir.NONE
+        self.animation = self.move_animations[self.move_direction]

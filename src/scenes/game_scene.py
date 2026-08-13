@@ -127,10 +127,9 @@ class GameScene(Scene):
             self._handle_player_hit()
         # TODO 4.7/4.8: handle `touched_ghosts and edible` case separately
 
-        target_cell = (self.player.cell_x, self.player.cell_y)
         self.player.update(dt)
         for ghost in self.ghosts_group:
-            ghost.update(dt, target_cell)
+            ghost.update(dt, self.player.cell)
 
         self.maze.pacgums.update(dt)
         self.ui_group.update(dt)
