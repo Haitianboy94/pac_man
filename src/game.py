@@ -5,6 +5,7 @@ import pygame as pg
 
 from src.config.config import Config
 from src.game_state import GameState
+from src.scenes.game_over import GameOverScene
 from src.scenes.game_scene import GameScene
 from src.scenes.main_menu import MainMenu
 from src.scenes.scene import Scene
@@ -18,14 +19,15 @@ class Game:
     and handles scene transisitons.
     """
 
-    def __init__(self, screen: pg.Surface, scene: Scene, config: Config):
+    def __init__(self, screen: pg.Surface, config: Config):
         self.screen = screen
-        self.active_scene: Scene = scene
         self.config = config
         self.current_level: int = 1
         self.state: GameState = GameState(config)
         self.highscore: Highscore = Highscore(config.highscore_filename)
         self.highscore.load()
+        self.pending_game_over: tuple[bool, int] | None = None
+        self.active_scene: Scene = MainMenu(screen, self)
 
     def loop(self) -> None:
         """
@@ -65,14 +67,18 @@ class Game:
         "Factory method which constructs new scenes"
         match scene_id:
             case SceneId.MAIN_MENU:
-                return MainMenu(self.screen, self.config)
+                return MainMenu(self.screen, self)
             case SceneId.GAME:
                 return GameScene(
                     self.screen,
                     self.config,
                     self.highscore,
-                    self.state
+                    self.state,
+                    self,
                 )
+            case SceneId.GAME_OVER:
+                won, score = self.pending_game_over
+                return GameOverScene(self.screen, won, score, self)
 
     def _quit(self) -> None:
         "Exits the game"

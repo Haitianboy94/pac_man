@@ -13,7 +13,7 @@ class Ghost(Entity):
 
     SIZE = 16
     FPS = 4
-    MOVE_INTERVAL_MS = 700  # how often the ghost decides to move
+    MOVE_INTERVAL_MS = 900  # how often the ghost decides to move
 
     def __init__(
         self,
@@ -67,7 +67,6 @@ class Ghost(Entity):
         self._sync_rect_to_cell()
         self.respawn_at = pg.time.get_ticks() + respawn_delay_ms
         self.set_edible(False)
-        print(f"[{self.type.name}] eaten at {pg.time.get_ticks()}, respawn_at={self.respawn_at}")
 
     def update(self, dt: int) -> None:
         if self.is_eaten() and self.respawn_at is not None:

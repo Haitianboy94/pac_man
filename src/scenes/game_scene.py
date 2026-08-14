@@ -43,9 +43,10 @@ class GameScene(Scene):
                  screen: pg.Surface,
                  config: Config,
                  highscore: Highscore,
-                 state: GameState
+                 state: GameState,
+                 game: "Game"
                  ):
-        Scene.__init__(self)
+        Scene.__init__(self, game)
         self.screen: pg.Surface = screen
         self.config: Config = config
         self.highscore: Highscore = highscore
@@ -129,15 +130,21 @@ class GameScene(Scene):
             else:
                 self.state.points += self.config.points_per_pacgum
 
+        if len(self.maze.pacgums) == 0:
+            self.game.pending_game_over = (True, self.state.points)
+            self.next_scene_id = SceneId.GAME_OVER
+            return
+
         edible_expired = self.edible_until and pg.time.get_ticks() > self.edible_until
         if edible_expired:
             self.edible_until = None
             for ghost in self.ghosts_group:
                 ghost.set_edible(False)
 
+        edible = self.edible_until is not None and pg.time.get_ticks() < self.edible_until
         touched_ghosts = pg.sprite.spritecollide(self.player, self.ghosts_group, dokill=False)
         if touched_ghosts:
-            if self.edible_until is not None:
+            if edible:
                 for ghost in touched_ghosts:
                     if not ghost.is_eaten():
                         self.state.points += self.config.points_per_ghost
@@ -159,7 +166,8 @@ class GameScene(Scene):
         self.state.lives -= 1
         self.player.respawn(self.maze.center())
         if self.state.lives <= 0:
-            self.next_scene_id = SceneId.MAIN_MENU
+            self.game.pending_game_over = (False, self.state.points)
+            self.next_scene_id = SceneId.GAME_OVER
 
     def draw(self, screen: pg.Surface) -> None:
         self.game_screen.fill("black")

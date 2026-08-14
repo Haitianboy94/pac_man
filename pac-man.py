@@ -5,16 +5,9 @@ from src.config.config_parser import ConfigParser, InvalidConfigError
 from src.entities.maze import Maze
 from src.game import Game
 from src.resources import resource_path
-from src.scenes.main_menu import MainMenu
 
-# This to solve the recursive call in the provided mazegenerator
-# Python's default recursion limit is 1000,
-# Your config.width = 50, height = 50 means up to 2500 cells,
-# So a long winding path can easily blow past that limit.
-# This is a known limitation of recursive-DFS maze generators at scale
 sys.setrecursionlimit(10_000)
 
-# Position the window on the left side of the screen
 os.environ["SDL_VIDEO_WINDOW_POS"] = "50,50"
 
 if __name__ == "__main__":
@@ -52,8 +45,7 @@ if __name__ == "__main__":
 
     pg.display.set_caption("Pac-Man")
 
-    initial_scene = MainMenu(screen, config)
-    game = Game(screen, initial_scene, config)
+    game = Game(screen, config)
 
     try:
         game.loop()

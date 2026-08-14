@@ -8,15 +8,15 @@ from src.scenes.scene_id import SceneId
 from src.ui.button import Button
 from src.ui.text import Text
 
+
 class MainMenu(Scene):
     "Main menu scene"
 
-    def __init__(self, screen: pg.Surface, config: Config):
-        Scene.__init__(self)
+    def __init__(self, screen: pg.Surface, game: "Game"):
+        Scene.__init__(self, game)
         self.screen: pg.Surface = screen
-        self.config: Config = config
-        self.highscore: Highscore = Highscore(config.highscore_filename)
-        self.highscore.load()
+        self.config: Config = game.config
+        self.highscore: Highscore = game.highscore
         self.main_group: pg.sprite.Group = pg.sprite.Group()
         self.highscores_group: pg.sprite.Group = pg.sprite.Group()
         self.instructions_group: pg.sprite.Group = pg.sprite.Group()

@@ -1,7 +1,4 @@
-from shutil import move
-import math
 import pygame as pg
-
 from src.entities.entity import Entity
 from src.entities.maze import Maze
 from src.graphics.animation import Animation
@@ -29,7 +26,7 @@ class Player(Entity):
         self.rect = pg.Rect(0, 0, self.SIZE, self.SIZE)
         self.move_direction: Dir = Dir.NONE
         self.move_progress: float = 0.0
-        self.target_direction: Dir = Dir.EAST
+        self.target_direction: Dir = Dir.NONE
         self.speed: float = self.DEFAULT_SPEED
         self.move_animations: dict[Dir, Animation] = {
             Dir.NORTH: Animation(
@@ -61,40 +58,40 @@ class Player(Entity):
         return mapping[key]
 
     def respawn(self, cell: tuple[int, int]) -> None:
-        "Resets the player's position to `cell` (e.g. after losing a life)"
         self.cell = cell
+        self.move_direction = Dir.NONE
+        self.target_direction = Dir.NONE
+        self.move_progress = 0.0
         self._sync_rect_to_cell()
 
     def update(self, dt: int) -> None:
-        # only continue to update if moving or trying to start moving
         if self.move_direction is Dir.NONE and self.target_direction is Dir.NONE:
             return
 
-        # in cell exactly, usually when stationary
-        if self.move_progress == 0.0:
+        if self.move_direction is Dir.NONE:
             self._cell_movement()
 
-        # player can turn around at any time
         if self.target_direction.opposite() == self.move_direction:
             self._reverse_direction()
-            
-        # calculate move_progress from dt and speed
-        in_next_cell: bool = False
-        if self.move_direction is not None:
-            progress: float = self.speed * dt / 1000
-            self.move_progress += progress
-            in_next_cell = self.move_progress // self.CELL_DISTANCE >= 1
 
-        # cell threshold was crossed
-        if in_next_cell:
+        if self.move_direction is Dir.NONE:
+            self._sync_rect_to_cell()
+            return
+
+        progress: float = self.speed * dt / 1000
+        self.move_progress += progress
+
+        while self.move_progress >= self.CELL_DISTANCE and self.move_direction is not Dir.NONE:
             dx, dy = self.move_direction.delta()
-            self.move_progress %= self.CELL_DISTANCE
+            self.move_progress -= self.CELL_DISTANCE
             self.cell = (self.cell[0] + dx, self.cell[1] + dy)
             self._cell_movement()
+            if self.move_direction is Dir.NONE:
+                self.move_progress = 0
+                break
 
         self._sync_rect_to_cell()
 
-        # animations
         if self.move_direction is not Dir.NONE:
             self.animation.update_frame(dt)
             self.image = self.animation.image
@@ -130,7 +127,7 @@ class Player(Entity):
         dx, dy = self.move_direction.delta()
         next_cell = (self.cell[0] + dx, self.cell[1] + dy)
         self.cell = next_cell
-        self.move_progress = 24 - self.move_progress
+        self.move_progress = self.CELL_DISTANCE - self.move_progress
         self.move_direction = self.target_direction
         self.target_direction = Dir.NONE
         self.animation = self.move_animations[self.move_direction]

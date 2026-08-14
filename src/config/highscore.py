@@ -65,6 +65,8 @@ class Highscore:
         if score < 0:
             raise InvalidHighscoreError("Score must not be negative")
         heapq.heappush(self.scores, (score, name))
+        if len(self.scores) > 10:
+            heapq.heappop(self.scores)
 
     def get(self) -> list[tuple[int, str]]:
         """Returns the current highscores."""

@@ -1,9 +1,10 @@
+from src.scenes.scene_id import SceneId
+from typing import Optional, TYPE_CHECKING
 from abc import ABC, abstractmethod
-from typing import Optional
-
 import pygame as pg
 
-from src.scenes.scene_id import SceneId
+if TYPE_CHECKING:
+    from src.game import Game
 
 
 class Scene(ABC):
@@ -17,7 +18,8 @@ class Scene(ABC):
     class to transition the scene.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, game: "Game") -> None:
+        self.game: "Game" = game
         self.next_scene_id: Optional[SceneId] = None
 
     @abstractmethod
