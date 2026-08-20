@@ -117,6 +117,13 @@ class Maze:
                     )
                     surface.blit(vertical, rect)
 
+        # fill cells with walls on each side
+        for row_index, row in enumerate(self.grid):
+            for col_index, cell in enumerate(row):
+                if cell == Dir.ALL:
+                    x, y = self.cell_position((col_index, row_index)) 
+                    pg.draw.rect(surface, "#2121FF", pg.Rect((x, y), (16,16)))
+
     def move_cell(
         self, cell: tuple[int, int], direction: Dir
     ) -> tuple[int, int]:
