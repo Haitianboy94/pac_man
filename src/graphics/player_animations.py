@@ -15,8 +15,13 @@ class PlayerAnimations:
             Dir.NONE: Animation([GeneralSprites.player_moving_east()[0]], 16)
         }
         self._death_animation = Animation(GeneralSprites.player_death(), 8)
-        self._active: Animation = self._move_animations[Dir.NONE]
-        self.image: pg.Surface = self._active.image
+        self._active: Animation 
+        self.image: pg.Surface
+        self.initial()
+
+    def initial(self) -> None:
+        self._active = self._move_animations[Dir.NONE]
+        self.image = self._active.image
 
     def start_moving(self, dir: Dir) -> None:
         self._active = self._move_animations[dir]
@@ -37,9 +42,10 @@ class PlayerAnimations:
     def stop(self):
         self.playing = False
 
-    def update(self, dt: int):
+    def update(self, dt: int) -> None:
         if self.playing:
             self._active.update_frame(dt)
             self.image = self._active.image
             if self._active.is_last_frame() and not self.loop:
                 self.stop()
+                self._active.reset()

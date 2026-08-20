@@ -78,6 +78,7 @@ class Game:
                 )
             case SceneId.GAME_OVER:
                 won, score = self.pending_game_over
+                self.state = GameState(self.config)
                 return GameOverScene(self.screen, won, score, self)
 
     def _quit(self) -> None:

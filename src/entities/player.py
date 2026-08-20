@@ -26,6 +26,7 @@ class Player(Entity):
         self.maze: Maze = maze
         self.cell: tuple[int, int] = start_cell
         self.rect = pg.Rect(0, 0, self.SIZE, self.SIZE)
+        self.moving: bool = True
         self.move_direction: Dir = Dir.NONE
         self.move_progress: float = 0.0
         self.target_direction: Dir = Dir.NONE
@@ -58,6 +59,8 @@ class Player(Entity):
         self.target_direction = Dir.NONE
         self.move_progress = 0.0
         self._sync_rect_to_cell()
+        self.moving = True
+        self.animations.initial()
 
     def update(self, dt: int) -> None:
         self.animations.update(dt)
@@ -74,6 +77,9 @@ class Player(Entity):
 
         if self.move_direction is Dir.NONE:
             self._sync_rect_to_cell()
+            return
+
+        if not self.moving:
             return
 
         progress: float = self.speed * dt / 1000

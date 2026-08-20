@@ -30,6 +30,7 @@ class Ghost(Entity):
         self.move_progress: float = 0.0
         self.respawn_at: int | None = None
         self.rect = pg.Rect(0, 0, self.SIZE, self.SIZE)
+        self.moving: bool = True
         self.direction: Dir = Dir.EAST
         self.player_cell: tuple[int, int] = start_cell
         self.player_direction: Dir = Dir.NONE
@@ -82,6 +83,12 @@ class Ghost(Entity):
     def is_eaten(self) -> bool:
         return self.respawn_at is not None
 
+    def respawn(self) -> None:
+        self.cell_x, self.cell_y = self.start_cell
+        self.move_progress = 0.0
+        self._sync_rect_to_cell()
+        self.moving = True
+
     def get_eaten(self, respawn_delay_ms: int) -> None:
         self.cell_x, self.cell_y = self.start_cell
         self.move_progress = 0.0
@@ -106,7 +113,7 @@ class Ghost(Entity):
         # Process movement in cell-sized chunks. This is important:
         # whenever the ghost reaches a new cell, it immediately runs
         # pathfinding again and can turn at a junction.
-        while remaining > 0:
+        while remaining > 0 and self.moving:
             current_cell = (self.cell_x, self.cell_y)
 
             # Pick a direction whenever we are exactly at a cell.

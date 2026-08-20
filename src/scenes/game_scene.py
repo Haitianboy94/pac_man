@@ -37,6 +37,8 @@ FALLBACK_MAZE: list[list[Dir]] = [
 
 
 class GameScene(Scene):
+    DEATH_PAUSE: int = 1000
+    DEATH_ANIM: int = 2000
     """
     The game scene where pacman actually takes place.
     Calls `MazeGenerator` to create the level.
@@ -74,16 +76,18 @@ class GameScene(Scene):
             dir_grid = FALLBACK_MAZE  # small hardcoded safe grid
 
         self.maze: Maze = Maze(dir_grid)
-        self.is_paused: bool = False
+        self.show_pause_menu: bool = False
 
         self.pause_menu: PauseMenu = PauseMenu(screen, state, self._finish_level)
         self.game_ui: GameUI = GameUI(screen, state, highscore)
 
         self.player = Player(self.maze, self.maze.center())
-        corners = self.maze.corners()
+        self.death_pause_until: int | None = None
+        self.death_anim_until: int | None = None
+        self.corners: list[tuple[int, int]] = self.maze.corners()
         ghost_types = [GhostType.BLINKY, GhostType.PINKY, GhostType.INKY, GhostType.CLYDE]
         self.ghosts_group: pg.sprite.Group = pg.sprite.Group()
-        for ghost_type, corner in zip(ghost_types, corners):
+        for ghost_type, corner in zip(ghost_types, self.corners):
             self.ghosts_group.add(Ghost(ghost_type, self.maze, corner))
         self.entities_group: pg.sprite.Group = pg.sprite.Group()
         self.entities_group.add(*self.ghosts_group)
@@ -93,6 +97,8 @@ class GameScene(Scene):
         )
 
     def handle_event(self, event: pg.event.Event) -> None:
+        if self.death_pause_until or self.death_anim_until:
+            return
         direction_keys = [
             pg.K_UP,
             pg.K_DOWN,
@@ -104,19 +110,31 @@ class GameScene(Scene):
             pg.K_d,
         ]
         if event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
-            self.is_paused = not self.is_paused
+            self.show_pause_menu = not self.show_pause_menu
+        elif event.type == pg.KEYDOWN and event.key == pg.K_k:
+            self._handle_player_hit()
         elif event.type == pg.KEYDOWN and event.key in direction_keys:
             dir = self.player.key_to_direction(event.key)
             self.player.target_direction = dir
         elif event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
             for sprite in self.pause_menu.group:
-                print(sprite)
                 if isinstance(sprite, Button):
                     sprite.handle_event(event)
 
     def update(self, dt: int) -> None:
         self.game_ui.group.update(dt)
-        if self.is_paused:
+
+        time: int = pg.time.get_ticks()
+        if self.death_pause_until:
+            if time > self.death_pause_until:
+                self._start_death_anim()
+                self.death_pause_until = None
+        if self.death_anim_until:
+            if time > self.death_anim_until:
+                self._respawn_or_end()
+                self.death_anim_until = None
+                return
+        if self.show_pause_menu:
             self.pause_menu.group.update(dt)
             return
 
@@ -173,7 +191,7 @@ class GameScene(Scene):
             self.game_screen,
             [self.config.UI_BORDER_X, self.config.UI_BORDER_Y],
         )
-        if self.is_paused:
+        if self.show_pause_menu:
             self.pause_menu.group.draw(screen)
 
     def _finish_level(self) -> None:
@@ -181,9 +199,24 @@ class GameScene(Scene):
         self.next_scene_id = SceneId.GAME_OVER
 
     def _handle_player_hit(self) -> None:
+        if not self.death_pause_until and not self.death_anim_until:
+            self.death_pause_until = pg.time.get_ticks() + self.DEATH_PAUSE
+            self.player.moving = False
+            self.player.animations.stop()
+            for ghost in self.ghosts_group:
+                ghost.moving = False
+
+    def _start_death_anim(self) -> None:
+        self.death_anim_until = pg.time.get_ticks() + self.DEATH_ANIM
+        self.player.die()
+
+    def _respawn_or_end(self) -> None:
         self.state.lives -= 1
         self.player.respawn(self.maze.center())
+        for ghost in self.ghosts_group:
+            ghost.respawn()
         if self.state.lives <= 0:
             self.game.pending_game_over = (False, self.state.points)
             self.next_scene_id = SceneId.GAME_OVER
+
 

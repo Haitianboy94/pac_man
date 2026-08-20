@@ -11,6 +11,10 @@ class Animation:
         self.current_frame: int = 0
         self.frame_elapsed_ms: int = 0
 
+    def reset(self) -> None:
+        self.current_frame = 0
+        self.frame_elapsed_ms = 0
+
     def update_frame(self, dt: int) -> None:
         self.frame_elapsed_ms += dt
         if self.frame_elapsed_ms > self.ms_per_frame:
