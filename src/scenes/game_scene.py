@@ -1,3 +1,4 @@
+from src.sounds import Sounds
 import pygame as pg
 
 from src.config.config import Config
@@ -54,7 +55,7 @@ class GameScene(Scene):
         self.highscore: Highscore = highscore
         self.state: GameState = state
         self.edible_until: int | None = None
-        # self.score: int = 0
+
         seed = seed_for_level(state.current_level, config.seed)
         try:
             dir_grid, _, _, _ = load_maze(
@@ -121,6 +122,7 @@ class GameScene(Scene):
 
         eaten = pg.sprite.spritecollide(self.player, self.maze.pacgums, dokill=True)
         for gum in eaten:
+            Sounds.eat_gum().play()
             if gum.type == PacGumType.SUPER_PACGUM:
                 self.state.points += self.config.points_per_super_pacgum
                 self.edible_until = pg.time.get_ticks() + 7000

@@ -80,10 +80,10 @@ Legend: **[S]** small, **[M]** medium, **[L]** large · Dependencies in *(depend
 - [x] **6.6** [M] Main Menu screen: Start Game, View Highscores, Instructions, Exit
 - [x] **6.7** [M] In-game HUD: score, lives, level, remaining time (always visible)
 - [x] **6.8** [M] Pause Menu: Resume, Return to Main Menu
-- [ ] **6.9** [M] Game Over screen: final score + name entry for highscore
+- [x] **6.9** [M] Game Over screen: final score + name entry for highscore
 - [ ] **6.10** [M] Victory screen: final score + congratulatory message + name entry
-- [ ] **6.11** [S] Instructions screen (controls/rules)
-- [ ] **6.12** [S] Highscore display screen/panel (top 10, names + scores)
+- [x] **6.11** [S] Instructions screen (controls/rules)
+- [x] **6.12** [S] Highscore display screen/panel (top 10, names + scores)
 - [x] **6.13** [S] Input handling glue: keyboard events → menu navigation / pause toggle
 
 ---

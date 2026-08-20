@@ -38,6 +38,7 @@ if __name__ == "__main__":
     pg.init()
 
     x, y = Maze.maze_size(config.width, config.height)
+    pg.mixer.init()
 
     screen = pg.display.set_mode(
         (x + config.UI_BORDER_X, y + config.UI_BORDER_Y * 2), flags=pg.SCALED

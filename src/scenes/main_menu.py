@@ -1,3 +1,4 @@
+from src.resources import resource_path
 from src.config.config import Config
 from src.config.highscore import Highscore
 from enum import Enum
