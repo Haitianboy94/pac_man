@@ -1,3 +1,4 @@
+from src.graphics.text_sprites import TextSprites
 from src.graphics.hud_sprites import HudSprites
 from src.game_state import GameState
 import pygame as pg
@@ -22,7 +23,17 @@ class LivesCounter(pg.sprite.Sprite):
         if self.lives < 0:
             return
         width, height = self.sprite.get_size()
-        image = pg.Surface((width * self.lives, height))
-        for i in range(self.lives):
-            image.blit(self.sprite, (16 * i, 0))
-        self.image = image
+        if self.lives <=5 :
+            image = pg.Surface((width * self.lives, height))
+            for i in range(self.lives):
+                image.blit(self.sprite, (16 * i, 0))
+            self.image = image
+        else:
+            text = TextSprites.render(str(self.lives))
+            text_width: int = text.get_rect().width
+            image = pg.Surface((width + text_width, height))
+            image.blit(text, (0, 4))
+            image.blit(self.sprite, (text_width, 0))
+            self.image = image
+
+

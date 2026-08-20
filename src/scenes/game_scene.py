@@ -1,23 +1,24 @@
-from src.ui.pause_menu import PauseMenu
-from src.ui.lives_counter import LivesCounter
-from src.graphics.hud_sprites import HudSprites
-from src.ui.points_counter import PointsCounter
-from src.config.highscore import Highscore
-from src.graphics.general_sprites import GeneralSprites
 import pygame as pg
 
 from src.config.config import Config
+from src.config.highscore import Highscore
 from src.entities.ghost import Ghost
 from src.entities.maze import Maze
 from src.entities.player import Player
 from src.game_state import GameState
+from src.graphics.general_sprites import GeneralSprites
+from src.graphics.hud_sprites import HudSprites
 from src.maze_generator import MazeGenerationError, load_maze, seed_for_level
 from src.scenes.scene import Scene
 from src.scenes.scene_id import SceneId
 from src.types import Dir, GhostType, PacGumType
 from src.ui.button import Button
 from src.ui.game_clock import GameClock
+from src.ui.game_ui import GameUI
+from src.ui.lives_counter import LivesCounter
 from src.ui.panel import Panel
+from src.ui.pause_menu import PauseMenu
+from src.ui.points_counter import PointsCounter
 from src.ui.text import Text
 
 FALLBACK_MAZE: list[list[Dir]] = [
@@ -75,9 +76,7 @@ class GameScene(Scene):
         self.is_paused: bool = False
 
         self.pause_menu: PauseMenu = PauseMenu(screen, state, self._finish_level)
-
-        self.ui_group: pg.sprite.Group = pg.sprite.Group()
-        self._init_game_ui(screen)
+        self.game_ui: GameUI = GameUI(screen, state, highscore)
 
         self.player = Player(self.maze, self.maze.center())
         corners = self.maze.corners()
@@ -115,7 +114,7 @@ class GameScene(Scene):
                     sprite.handle_event(event)
 
     def update(self, dt: int) -> None:
-        self.ui_group.update(dt)
+        self.game_ui.group.update(dt)
         if self.is_paused:
             self.pause_menu.group.update(dt)
             return
@@ -166,7 +165,7 @@ class GameScene(Scene):
         self.maze.pacgums.draw(self.game_screen)
         self.entities_group.draw(self.game_screen)
 
-        self.ui_group.draw(screen)
+        self.game_ui.group.draw(screen)
 
         screen.blit(
             self.game_screen,
@@ -186,53 +185,3 @@ class GameScene(Scene):
             self.game.pending_game_over = (False, self.state.points)
             self.next_scene_id = SceneId.GAME_OVER
 
-    def _init_game_ui(self, screen: pg.Surface) -> None:
-        "Creates the game ui"
-        top_margin = 6
-
-        # clock
-        clock_title_text: Text = Text("time", 'white', 1)
-        clock_title_text.rect.x = 8
-        clock_title_text.rect.y = top_margin
-        self.ui_group.add(clock_title_text)
-        game_clock: GameClock = GameClock(self.state)
-        game_clock.position = (8, top_margin + 10)
-        self.ui_group.add(game_clock)
-
-        points_title_text: Text = Text("pts", 'white', 1)
-        points_title_text.rect.x = 50
-        points_title_text.rect.y = top_margin
-        self.ui_group.add(points_title_text)
-        points_counter: PointsCounter = PointsCounter(self.state)
-        points_counter.position = (50, top_margin + 10)
-
-        self.ui_group.add(points_counter)
-
-        # highscore
-        highscore_title_text: Text = Text("high score", 'white', 1)
-        highscore_title_text.rect.x = 130
-        highscore_title_text.rect.y = top_margin
-        self.ui_group.add(highscore_title_text)
-        if not self.highscore.scores:
-            highscore_points: int = 0
-        else:
-            highscore_points: int = self.highscore.scores[0][0]
-        highscore_points_text: Text = Text(str(highscore_points), 'white', 1)
-        highscore_points_text.rect.x = 130
-        highscore_points_text.rect.y = top_margin + 10
-        self.ui_group.add(highscore_points_text)
-
-        # level
-        level_title_text: Text = Text("lvl", 'white', 1)
-        level_title_text.rect.x = 220
-        level_title_text.rect.y = top_margin
-        self.ui_group.add(level_title_text)
-        level_points_text: Text = Text(str(self.state.current_level), 'white', 1)
-        level_points_text.rect.x = 220
-        level_points_text.rect.y = top_margin + 10
-        self.ui_group.add(level_points_text)
-
-        # lives
-        lives_counter: LivesCounter = LivesCounter(self.state)
-        lives_counter.rect.topleft = (8, screen.get_height()-24)
-        self.ui_group.add(lives_counter)
