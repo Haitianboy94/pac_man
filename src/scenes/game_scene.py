@@ -178,6 +178,8 @@ class GameScene(Scene):
 
         self.maze.pacgums.update(dt)
         self.state.time_remaining_ms = self.state.time_remaining_ms - dt
+        if self.state.time_remaining_ms <= 0:
+            self._handle_player_hit()
 
     def draw(self, screen: pg.Surface) -> None:
         self.game_screen.fill("black")
@@ -212,6 +214,7 @@ class GameScene(Scene):
 
     def _respawn_or_end(self) -> None:
         self.state.lives -= 1
+        self.state.time_remaining_ms = self.config.level_max_time * 1000
         self.player.respawn(self.maze.center())
         for ghost in self.ghosts_group:
             ghost.respawn()
