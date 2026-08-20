@@ -23,7 +23,6 @@ class Game:
         self.screen = screen
         self.config = config
         self.current_level: int = 1
-        self.state: GameState = GameState(config)
         self.highscore: Highscore = Highscore(config.highscore_filename)
         self.highscore.load()
         self.pending_game_over: tuple[bool, int] | None = None
@@ -73,12 +72,11 @@ class Game:
                     self.screen,
                     self.config,
                     self.highscore,
-                    self.state,
+                    GameState(self.config),
                     self,
                 )
             case SceneId.GAME_OVER:
                 won, score = self.pending_game_over
-                self.state = GameState(self.config)
                 return GameOverScene(self.screen, won, score, self)
 
     def _quit(self) -> None:
