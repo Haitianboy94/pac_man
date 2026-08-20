@@ -1,3 +1,4 @@
+from src.ui.pause_menu import PauseMenu
 from src.ui.lives_counter import LivesCounter
 from src.graphics.hud_sprites import HudSprites
 from src.ui.points_counter import PointsCounter
@@ -73,8 +74,7 @@ class GameScene(Scene):
         self.maze: Maze = Maze(dir_grid)
         self.is_paused: bool = False
 
-        self.pause_group: pg.sprite.Group = pg.sprite.Group()
-        self._init_pause_menu(screen)
+        self.pause_menu: PauseMenu = PauseMenu(screen, state, self._finish_level)
 
         self.ui_group: pg.sprite.Group = pg.sprite.Group()
         self._init_game_ui(screen)
@@ -86,8 +86,8 @@ class GameScene(Scene):
         for ghost_type, corner in zip(ghost_types, corners):
             self.ghosts_group.add(Ghost(ghost_type, self.maze, corner))
         self.entities_group: pg.sprite.Group = pg.sprite.Group()
-        self.entities_group.add(self.player)
         self.entities_group.add(*self.ghosts_group)
+        self.entities_group.add(self.player)
         self.game_screen: pg.Surface = pg.Surface(
             Maze.maze_size(self.config.width, self.config.height)
         )
@@ -109,15 +109,15 @@ class GameScene(Scene):
             dir = self.player.key_to_direction(event.key)
             self.player.target_direction = dir
         elif event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
-            print('click')
-            for sprite in self.pause_group:
+            for sprite in self.pause_menu.group:
                 print(sprite)
                 if isinstance(sprite, Button):
                     sprite.handle_event(event)
 
     def update(self, dt: int) -> None:
+        self.ui_group.update(dt)
         if self.is_paused:
-            self.pause_group.update(dt)
+            self.pause_menu.group.update(dt)
             return
 
         eaten = pg.sprite.spritecollide(self.player, self.maze.pacgums, dokill=True)
@@ -131,8 +131,7 @@ class GameScene(Scene):
                 self.state.points += self.config.points_per_pacgum
 
         if len(self.maze.pacgums) == 0:
-            self.game.pending_game_over = (True, self.state.points)
-            self.next_scene_id = SceneId.GAME_OVER
+            self._finish_level()
             return
 
         edible_expired = self.edible_until and pg.time.get_ticks() > self.edible_until
@@ -159,15 +158,7 @@ class GameScene(Scene):
             ghost.update(dt)
 
         self.maze.pacgums.update(dt)
-        self.ui_group.update(dt)
         self.state.time_remaining_ms = self.state.time_remaining_ms - dt
-
-    def _handle_player_hit(self) -> None:
-        self.state.lives -= 1
-        self.player.respawn(self.maze.center())
-        if self.state.lives <= 0:
-            self.game.pending_game_over = (False, self.state.points)
-            self.next_scene_id = SceneId.GAME_OVER
 
     def draw(self, screen: pg.Surface) -> None:
         self.game_screen.fill("black")
@@ -182,36 +173,18 @@ class GameScene(Scene):
             [self.config.UI_BORDER_X, self.config.UI_BORDER_Y],
         )
         if self.is_paused:
-            self.pause_group.draw(screen)
+            self.pause_menu.group.draw(screen)
 
-    def _init_pause_menu(self, screen: pg.Surface) -> None:
-        "Creates all elements for the pause menu"
-        center: int = int(screen.get_width() / 2)
-        border: Panel = Panel(pg.Rect(0, 0, 256, 206), pg.Color("white"))
-        border.rect.centerx = center
-        border.rect.y = 40
-        self.pause_group.add(border)
+    def _finish_level(self) -> None:
+        self.game.pending_game_over = (True, self.state.points)
+        self.next_scene_id = SceneId.GAME_OVER
 
-        background: Panel = Panel(pg.Rect(0, 0, 250, 200), pg.Color("black"))
-        background.rect.centerx = center
-        background.rect.y = 43
-        self.pause_group.add(background)
-
-        title: Text = Text("paused", "white", 2)
-        title.rect.centerx = center
-        title.rect.y = 100
-        self.pause_group.add(title)
-
-        button: Button = Button(
-            "main menu",
-            "white",
-            "yellow",
-            2,
-            lambda: setattr(self, "next_scene_id", SceneId.MAIN_MENU),
-        )
-        button.rect.centerx = center
-        button.rect.y = 205
-        self.pause_group.add(button)
+    def _handle_player_hit(self) -> None:
+        self.state.lives -= 1
+        self.player.respawn(self.maze.center())
+        if self.state.lives <= 0:
+            self.game.pending_game_over = (False, self.state.points)
+            self.next_scene_id = SceneId.GAME_OVER
 
     def _init_game_ui(self, screen: pg.Surface) -> None:
         "Creates the game ui"
