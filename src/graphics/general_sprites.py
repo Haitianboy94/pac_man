@@ -66,6 +66,17 @@ class GeneralSprites(Sprites):
             sprite.set_colorkey('black')
         return sprites
 
+    @classmethod
+    @cache
+    def player_death(cls) -> list[pg.Surface]:
+        frames = [(i * cls.SIZE, 0) for i in range(0, 11)]
+        sprites = cls._load_all(
+            (8 + cls.SIZE * 32, 0), (16, 16), frames
+        )
+        for sprite in sprites:
+            sprite.set_colorkey('black')
+        return sprites
+
     #
     # Ghost sprites
     #

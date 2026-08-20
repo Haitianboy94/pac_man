@@ -1,3 +1,5 @@
+from src.graphics.player_animations import PlayerAnimations
+from src.sounds import Sounds
 import pygame as pg
 from src.entities.entity import Entity
 from src.entities.maze import Maze
@@ -28,19 +30,8 @@ class Player(Entity):
         self.move_progress: float = 0.0
         self.target_direction: Dir = Dir.NONE
         self.speed: float = self.DEFAULT_SPEED
-        self.move_animations: dict[Dir, Animation] = {
-            Dir.NORTH: Animation(
-                GeneralSprites.player_moving_north(), self.FPS
-            ),
-            Dir.EAST: Animation(GeneralSprites.player_moving_east(), self.FPS),
-            Dir.SOUTH: Animation(
-                GeneralSprites.player_moving_south(), self.FPS
-            ),
-            Dir.WEST: Animation(GeneralSprites.player_moving_west(), self.FPS),
-            Dir.NONE: Animation([GeneralSprites.player_moving_east()[0]], self.FPS)
-        }
-        self.animation = self.move_animations[self.move_direction]
-        self.image = self.animation.image
+        self.animations: PlayerAnimations = PlayerAnimations()
+        self.image = self.animations.image
         self._sync_rect_to_cell()
 
     def key_to_direction(self, key: int) -> Dir:
@@ -57,6 +48,10 @@ class Player(Entity):
         }
         return mapping[key]
 
+    def die(self) -> None:
+        self.animations.die()
+        Sounds.death().play()
+
     def respawn(self, cell: tuple[int, int]) -> None:
         self.cell = cell
         self.move_direction = Dir.NONE
@@ -65,6 +60,9 @@ class Player(Entity):
         self._sync_rect_to_cell()
 
     def update(self, dt: int) -> None:
+        self.animations.update(dt)
+        self.image = self.animations.image
+
         if self.move_direction is Dir.NONE and self.target_direction is Dir.NONE:
             return
 
@@ -92,9 +90,6 @@ class Player(Entity):
 
         self._sync_rect_to_cell()
 
-        if self.move_direction is not Dir.NONE:
-            self.animation.update_frame(dt)
-            self.image = self.animation.image
 
     def _sync_rect_to_cell(self) -> None:
         """
@@ -114,11 +109,12 @@ class Player(Entity):
         if not can_continue:
             self.move_direction = Dir.NONE
             self.move_progress = 0
+            self.animations.stop_moving()
         if self.target_direction is not Dir.NONE:
             if can_turn:
                 self.move_direction = self.target_direction
                 self.target_direction = Dir.NONE
-                self.animation = self.move_animations[self.move_direction]
+                self.animations.start_moving(self.move_direction)
             if self.move_direction is Dir.NONE:
                 self.target_direction = Dir.NONE
 
@@ -130,4 +126,4 @@ class Player(Entity):
         self.move_progress = self.CELL_DISTANCE - self.move_progress
         self.move_direction = self.target_direction
         self.target_direction = Dir.NONE
-        self.animation = self.move_animations[self.move_direction]
+        self.animations.start_moving(self.move_direction)

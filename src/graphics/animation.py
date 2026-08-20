@@ -18,3 +18,6 @@ class Animation:
             self.current_frame += 1
             self.current_frame %= len(self.frames)
             self.image = self.frames[self.current_frame]
+
+    def is_last_frame(self) -> bool:
+        return self.current_frame == len(self.frames) - 1
