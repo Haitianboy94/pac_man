@@ -1,3 +1,4 @@
+from src.ui.cheats_indicator import CheatsIndicator
 from src.config.highscore import Highscore
 from src.ui.points_counter import PointsCounter
 from src.ui.game_clock import GameClock
@@ -69,5 +70,10 @@ class GameUI:
         lives_counter: LivesCounter = LivesCounter(self.state)
         lives_counter.rect.topleft = (8, self.screen.get_height()-24)
         group.add(lives_counter)
+
+        # cheats
+        cheats: CheatsIndicator = CheatsIndicator(self.state)
+        cheats.rect.topleft = (90, self.screen.get_height()-20)
+        group.add(cheats)
 
         return group

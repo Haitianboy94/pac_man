@@ -12,8 +12,8 @@ class GameState:
         self.points: int = 0
         self.time_remaining_ms: int = config.level_max_time * 1000
         self.cheats_invincibility: bool = False
-        self.cheats_super_speed: bool = False
         self.cheats_freeze_ghosts: bool = False
+        self.cheats_super_speed: bool = False
 
     def toggle_invincibility(self) -> None:
         "Toggle invincibility"
