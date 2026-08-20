@@ -6,12 +6,13 @@ class Animation:
         if len(frames) < 1:
             raise ValueError("Animation must contain at least one frame")
         self.frames: list[pg.Surface] = frames
-        self.image: pg.Surface = frames[0]
         self.ms_per_frame: int = int((1 / fps) * 1000)
+        self.image: pg.Surface = frames[0]
         self.current_frame: int = 0
         self.frame_elapsed_ms: int = 0
 
     def reset(self) -> None:
+        self.image = self.frames[0]
         self.current_frame = 0
         self.frame_elapsed_ms = 0
 
