@@ -73,6 +73,21 @@ class Maze:
                     self.pacgums.add(
                         Pacgum(type, [x + cell_center, y + cell_center])
                     )
+                    if not cell & Dir.SOUTH:
+                        self.pacgums.add(
+                            Pacgum(
+                                PacGumType.PACGUM,
+                                [x + cell_center, y + cell_center + self.OFFSET]
+                            )
+                        )
+                    if not cell & Dir.EAST:
+                        self.pacgums.add(
+                            Pacgum(
+                                PacGumType.PACGUM,
+                                [x + cell_center + self.OFFSET, y + cell_center]
+                            )
+                        )
+
 
                 x = x + self.CELL_SIZE + self.WALL_SIZE
             x = position[0]
