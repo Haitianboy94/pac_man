@@ -40,21 +40,21 @@ Legend: **[S]** small, **[M]** medium, **[L]** large · Dependencies in *(depend
 
 ## 4. Core Game Entities & Logic
 
-- [ ] **4.1** [M] Player entity: position, direction, movement through corridors only, collision with walls
-- [ ] **4.2** [S] Input handling: arrow keys / WASD
-- [ ] **4.3** [M] Pacgum placement (most corridors) + consumption logic (+X score)
-- [ ] **4.4** [M] Super-pacgum placement (4 corners) + consumption logic (+Y score, triggers ghost-edible state)
-- [ ] **4.5** [L] Ghost entity base class: position, corner spawn, movement through corridors
-- [ ] **4.6** [L] Ghost "chase" behavior when not edible (define & implement algorithm — distance-based or similar)
-- [ ] **4.7** [M] Ghost "flee" behavior when edible
-- [ ] **4.8** [M] Ghost eaten logic: +Z score, respawn to corner after delay (5–10s)
-- [ ] **4.9** [M] Player-ghost collision: lose life (unless edible-ghost-eaten case), respawn player at center
-- [ ] **4.10** [S] Lives system: start at 3, decrement on hit, game over at 0
+- [x] **4.1** [M] Player entity: position, direction, movement through corridors only, collision with walls
+- [x] **4.2** [S] Input handling: arrow keys / WASD
+- [x] **4.3** [M] Pacgum placement (most corridors) + consumption logic (+X score)
+- [x] **4.4** [M] Super-pacgum placement (4 corners) + consumption logic (+Y score, triggers ghost-edible state)
+- [x] **4.5** [L] Ghost entity base class: position, corner spawn, movement through corridors
+- [x] **4.6** [L] Ghost "chase" behavior when not edible (define & implement algorithm — distance-based or similar)
+- [x] **4.7** [M] Ghost "flee" behavior when edible
+- [x] **4.8** [M] Ghost eaten logic: +Z score, respawn to corner after delay (5–10s)
+- [x] **4.9** [M] Player-ghost collision: lose life (unless edible-ghost-eaten case), respawn player at center
+- [x] **4.10** [S] Lives system: start at 3, decrement on hit, game over at 0
 - [ ] **4.11** [S] Win condition per level (all pacgums eaten) / win condition for game (all levels done)
-- [ ] **4.12** [M] Level timer: countdown, define behavior on timeout (restart level / end game / etc.)
-- [ ] **4.13** [S] Score tracking: persists across levels/lives, never decreases
+- [x] **4.12** [M] Level timer: countdown, define behavior on timeout (restart level / end game / etc.)
+- [x] **4.13** [S] Score tracking: persists across levels/lives, never decreases
 - [ ] **4.14** [M] Level progression manager: advance level, regenerate maze, carry over score/lives, at least 10 levels
-- [ ] **4.15** [S] Pause/resume state handling (game logic side, distinct from UI pause menu)
+- [x] **4.15** [S] Pause/resume state handling (game logic side, distinct from UI pause menu)
 
 ---
 
@@ -75,13 +75,13 @@ Legend: **[S]** small, **[M]** medium, **[L]** large · Dependencies in *(depend
 - [x] **6.2** [M] Maze rendering (walls, corridors) from internal maze representation
 - [x] **6.3** [S] Player sprite/rendering + animation (optional: mouth open/close)
 
-- [ ] **6.4** [S] Ghost sprite/rendering (normal vs. edible visual state)
+- [x] **6.4** [S] Ghost sprite/rendering (normal vs. edible visual state)
 - [x] **6.5** [S] Pacgum / super-pacgum rendering
 - [x] **6.6** [M] Main Menu screen: Start Game, View Highscores, Instructions, Exit
 - [x] **6.7** [M] In-game HUD: score, lives, level, remaining time (always visible)
 - [x] **6.8** [M] Pause Menu: Resume, Return to Main Menu
 - [x] **6.9** [M] Game Over screen: final score + name entry for highscore
-- [ ] **6.10** [M] Victory screen: final score + congratulatory message + name entry
+- [x] **6.10** [M] Victory screen: final score + congratulatory message + name entry
 - [x] **6.11** [S] Instructions screen (controls/rules)
 - [x] **6.12** [S] Highscore display screen/panel (top 10, names + scores)
 - [x] **6.13** [S] Input handling glue: keyboard events → menu navigation / pause toggle
@@ -90,22 +90,22 @@ Legend: **[S]** small, **[M]** medium, **[L]** large · Dependencies in *(depend
 
 ## 7. Cheat Mode
 
-- [ ] **7.1** [S] Toggle mechanism (e.g. keybind) to activate/deactivate cheat mode
+- [x] **7.1** [S] Toggle mechanism (e.g. keybind) to activate/deactivate cheat mode
 - [ ] **7.2** [S] Invincibility (no life lost on ghost contact)
-- [ ] **7.3** [S] Level skip (instantly complete current level)
+- [x] **7.3** [S] Level skip (instantly complete current level)
 - [ ] **7.4** [S] Ghost freeze (ghosts stop moving)
-- [ ] **7.5** [S] Extra lives (add lives on demand)
+- [x] **7.5** [S] Extra lives (add lives on demand)
 - [ ] **7.6** [S] Increased player speed
-- [ ] **7.7** [S] Optional: on-screen indicator that cheat mode is active (helps reviewer confirm it's working)
+- [x] **7.7** [S] Optional: on-screen indicator that cheat mode is active (helps reviewer confirm it's working)
 
 ---
 
 ## 8. Packaging & Deployment
 
-- [*] **8.1** [M] Choose platform (Steam or Itch.io), set up unlisted/private build
-- [*] **8.2** [M] Packaging script/spec (e.g., PyInstaller or platform-specific build tool) — must live at repo root
+- [x] **8.1** [M] Choose platform (Steam or Itch.io), set up unlisted/private build
+- [x] **8.2** [M] Packaging script/spec (e.g., PyInstaller or platform-specific build tool) — must live at repo root
 - [ ] **8.3** [S] In-package instructions (controls, options, configuration) bundled with the build
-- [*] **8.4** [S] Verify packaged build launches standalone (no dev environment dependencies)
+- [x] **8.4** [S] Verify packaged build launches standalone (no dev environment dependencies)
 - [ ] **8.5** [S] Document/test the "regenerate package" process, since it may be requested live during review
 
 ---
