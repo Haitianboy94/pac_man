@@ -70,4 +70,4 @@ class Highscore:
 
     def get(self) -> list[tuple[int, str]]:
         """Returns the current highscores."""
-        return list(reversed(self.scores))
+        return heapq.nlargest(10, self.scores)
