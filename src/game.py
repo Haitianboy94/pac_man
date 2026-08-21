@@ -25,8 +25,8 @@ class Game:
         self.current_level: int = 1
         self.highscore: Highscore = Highscore(config.highscore_filename)
         self.highscore.load()
-        self.pending_game_over: tuple[bool, int] | None = None
-        self.active_scene: Scene = MainMenu(screen, self)
+        self.active_scene: Scene = self._create_scene(SceneId.MAIN_MENU)
+        self.state: GameState = GameState(self.config)
 
     def loop(self) -> None:
         """
@@ -66,18 +66,18 @@ class Game:
         "Factory method which constructs new scenes"
         match scene_id:
             case SceneId.MAIN_MENU:
-                return MainMenu(self.screen, self)
+                self.state = GameState(self.config)
+                return MainMenu(self.screen, self.config, self.highscore)
             case SceneId.GAME:
                 return GameScene(
                     self.screen,
                     self.config,
                     self.highscore,
-                    GameState(self.config),
-                    self,
+                    self.state,
                 )
             case SceneId.GAME_OVER:
-                won, score = self.pending_game_over
-                return GameOverScene(self.screen, won, score, self)
+                won = self.state.pending_game_over
+                return GameOverScene(self.screen, self.state, self.highscore)
 
     def _quit(self) -> None:
         "Exits the game"

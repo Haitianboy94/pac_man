@@ -47,10 +47,11 @@ class GameUI:
         highscore_title_text.rect.x = 130
         highscore_title_text.rect.y = top_margin
         group.add(highscore_title_text)
-        if not self.highscore.scores:
+        scores = self.highscore.get()
+        if not scores:
             highscore_points: int = 0
         else:
-            highscore_points: int = self.highscore.scores[0][0]
+            highscore_points: int = scores[0][0]
         highscore_points_text: Text = Text(str(highscore_points), 'white', 1)
         highscore_points_text.rect.x = 130
         highscore_points_text.rect.y = top_margin + 10

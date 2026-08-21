@@ -8,9 +8,11 @@ class GameState:
 
     def __init__(self, config: Config):
         self.lives: int = config.lives
+        self.total_levels: int = len(config.level)
         self.current_level: int = 1
         self.points: int = 0
         self.time_remaining_ms: int = config.level_max_time * 1000
+        self.pending_game_over: bool | None = None
         self.cheats_invincibility: bool = False
         self.cheats_freeze_ghosts: bool = False
         self.cheats_super_speed: bool = False

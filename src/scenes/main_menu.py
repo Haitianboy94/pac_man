@@ -13,11 +13,16 @@ from src.ui.text import Text
 class MainMenu(Scene):
     "Main menu scene"
 
-    def __init__(self, screen: pg.Surface, game: "Game"):
-        Scene.__init__(self, game)
+    def __init__(
+            self,
+            screen: pg.Surface,
+            config: Config,
+            highscore: Highscore
+    ):
+        Scene.__init__(self)
         self.screen: pg.Surface = screen
-        self.config: Config = game.config
-        self.highscore: Highscore = game.highscore
+        self.config: Config = config
+        self.highscore: Highscore = highscore
         self.main_group: pg.sprite.Group = pg.sprite.Group()
         self.highscores_group: pg.sprite.Group = pg.sprite.Group()
         self.instructions_group: pg.sprite.Group = pg.sprite.Group()

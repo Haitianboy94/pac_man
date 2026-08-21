@@ -49,9 +49,8 @@ class GameScene(Scene):
                  config: Config,
                  highscore: Highscore,
                  state: GameState,
-                 game: "Game"
                  ):
-        Scene.__init__(self, game)
+        Scene.__init__(self)
         self.screen: pg.Surface = screen
         self.config: Config = config
         self.highscore: Highscore = highscore
@@ -202,8 +201,13 @@ class GameScene(Scene):
             self.pause_menu.group.draw(screen)
 
     def _finish_level(self) -> None:
-        self.game.pending_game_over = (True, self.state.points)
-        self.next_scene_id = SceneId.GAME_OVER
+        self.state.current_level += 1
+        if self.state.current_level > self.state.total_levels:
+            self.state.pending_game_over = True
+            self.next_scene_id = SceneId.GAME_OVER
+        else:
+            self.state.time_remaining_ms = self.config.level_max_time * 1000
+            self.next_scene_id = SceneId.GAME
 
     def _to_main_menu(self) -> None:
         self.next_scene_id = SceneId.MAIN_MENU
@@ -227,7 +231,7 @@ class GameScene(Scene):
         for ghost in self.ghosts_group:
             ghost.respawn()
         if self.state.lives <= 0:
-            self.game.pending_game_over = (False, self.state.points)
+            self.state.pending_game_over = False
             self.next_scene_id = SceneId.GAME_OVER
 
 

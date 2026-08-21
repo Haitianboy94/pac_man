@@ -18,8 +18,7 @@ class Scene(ABC):
     class to transition the scene.
     """
 
-    def __init__(self, game: "Game") -> None:
-        self.game: "Game" = game
+    def __init__(self) -> None:
         self.next_scene_id: Optional[SceneId] = None
 
     @abstractmethod

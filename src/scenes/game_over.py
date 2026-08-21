@@ -1,3 +1,5 @@
+from src.config.highscore import Highscore
+from src.game_state import GameState
 import pygame as pg
 
 from src.scenes.scene import Scene
@@ -10,23 +12,31 @@ MAX_NAME_LENGTH = 10
 class GameOverScene(Scene):
     "Scene shown when the player wins or loses the game"
 
-    def __init__(self, screen: pg.Surface, won: bool, score: int, game: "Game"):
-        Scene.__init__(self, game)
+    def __init__(
+            self,
+            screen: pg.Surface,
+            state: GameState,
+            highscore: Highscore
+    ):
+        Scene.__init__(self)
         self.screen: pg.Surface = screen
-        self.won: bool = won
-        self.score: int = score
+        if state.pending_game_over is None:
+            raise RuntimeError("Pending game over should be set")
+        self.won: bool = state.pending_game_over
+        self.score: int = state.points
         self.name: str = ""
+        self.highscore: Highscore = highscore
 
         self.sprites: pg.sprite.Group = pg.sprite.Group()
         center = int(screen.get_width() / 2)
 
-        title_text = "YOU WIN!" if won else "GAME OVER"
-        self.title = Text(title_text, "yellow" if won else "red", 3)
+        title_text = "YOU WIN!" if self.won else "GAME OVER"
+        self.title = Text(title_text, "yellow" if self.won else "red", 3)
         self.title.position = (center - 80, 80)
         self.title.rect.topleft = self.title.position
         self.sprites.add(self.title)
 
-        self.score_text = Text(f"score {score}", "white", 2)
+        self.score_text = Text(f"score {self.score}", "white", 2)
         self.score_text.position = (center - 60, 160)
         self.score_text.rect.topleft = self.score_text.position
         self.sprites.add(self.score_text)
@@ -62,8 +72,8 @@ class GameOverScene(Scene):
         name = self.name.strip()
         if len(name) == 0:
             return
-        self.game.highscore.add(name, self.score)
-        self.game.highscore.store()
+        self.highscore.add(name, self.score)
+        self.highscore.store()
         self.next_scene_id = SceneId.MAIN_MENU
 
     def update(self, dt: int) -> None:
