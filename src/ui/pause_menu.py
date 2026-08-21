@@ -12,10 +12,12 @@ class PauseMenu:
             self,
             screen: pg.Surface,
             state: GameState,
-            skip_level_fn: Callable
+            skip_level_fn: Callable,
+            to_main_menu_fn: Callable
     ) -> None:
         self.state: GameState = state
         self.skip_level_fn: Callable = skip_level_fn
+        self.to_main_menu_fn: Callable = to_main_menu_fn
         self.center_x: int = int(screen.get_width() / 2) 
         self.main_group: pg.sprite.Group = self._init_main_group()
         self.cheats_group: pg.sprite.Group = self._init_cheats_group()
@@ -40,7 +42,7 @@ class PauseMenu:
         self._add_centered(group, cheats, 185)
 
         menu_button: Button = Button(
-            "main menu", "white", "yellow", 2, self._return_to_main_menu
+            "main menu", "white", "yellow", 2, self.to_main_menu_fn
         )
         self._add_centered(group, menu_button, 205)
         return group
@@ -105,9 +107,3 @@ class PauseMenu:
     def _open_main(self) -> None:
         "Activate the main pause menu"
         self.group = self.main_group
-
-    def _return_to_main_menu(self) -> None:
-        "Return to the main menu scene"
-        self.next_scene_id = SceneId.MAIN_MENU
-
-

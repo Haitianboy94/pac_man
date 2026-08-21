@@ -78,7 +78,12 @@ class GameScene(Scene):
         self.maze: Maze = Maze(dir_grid)
         self.show_pause_menu: bool = False
 
-        self.pause_menu: PauseMenu = PauseMenu(screen, state, self._finish_level)
+        self.pause_menu: PauseMenu = PauseMenu(
+            screen,
+            state,
+            self._finish_level,
+            self._to_main_menu
+        )
         self.game_ui: GameUI = GameUI(screen, state, highscore)
 
         self.player = Player(self.maze, self.maze.center())
@@ -199,6 +204,9 @@ class GameScene(Scene):
     def _finish_level(self) -> None:
         self.game.pending_game_over = (True, self.state.points)
         self.next_scene_id = SceneId.GAME_OVER
+
+    def _to_main_menu(self) -> None:
+        self.next_scene_id = SceneId.MAIN_MENU
 
     def _handle_player_hit(self) -> None:
         if not self.death_pause_until and not self.death_anim_until:
