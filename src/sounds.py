@@ -27,6 +27,10 @@ class Sounds:
         return cls._load("sounds/death.wav")
 
     @classmethod
+    def siren(cls) -> pg.mixer.Sound:
+        return cls._load()
+
+    @classmethod
     @cache
     def _load(cls, path: str) -> pg.mixer.Sound:
         return pg.mixer.Sound(resource_path(path))

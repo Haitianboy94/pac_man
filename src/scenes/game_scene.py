@@ -1,3 +1,4 @@
+from src.timer import Timer
 from src.sounds import Sounds
 import pygame as pg
 
@@ -39,8 +40,9 @@ FALLBACK_MAZE: list[list[Dir]] = [
 class GameScene(Scene):
     DEATH_PAUSE: int = 1000
     DEATH_ANIM: int = 2000
-    START_PAUSE: int = 4000
+    START_SONG: int = 4500
     GHOST_EAT_PAUSE: int = 1000
+    EDIBLE_TIME: int = 7000
 
     """
     The game scene where pacman actually takes place.
@@ -58,7 +60,6 @@ class GameScene(Scene):
         self.config: Config = config
         self.highscore: Highscore = highscore
         self.state: GameState = state
-        self.edible_until: int | None = None
 
         seed = seed_for_level(state.current_level, config.seed)
         try:
@@ -89,10 +90,12 @@ class GameScene(Scene):
         self.game_ui: GameUI = GameUI(screen, state, highscore)
 
         self.player = Player(self.maze, self.maze.center())
-        self.start_pause_until: int | None = None
-        self.ghost_eat_pause_until: int | None = None
-        self.death_pause_until: int | None = None
-        self.death_anim_until: int | None = None
+        self.game_started: bool = False
+        self.start_song_timer: Timer = Timer(self.START_SONG, self._start_game)
+        self.ghost_eat_timer: Timer = Timer(self.GHOST_EAT_PAUSE)
+        self.death_pause_timer: Timer = Timer(self.DEATH_PAUSE, self._start_death_anim)
+        self.death_anim_timer: Timer = Timer(self.DEATH_ANIM, self._respawn_or_end)
+        self.edible_timer: Timer = Timer(self.EDIBLE_TIME, self._edible_end)
         self.corners: list[tuple[int, int]] = self.maze.corners()
         ghost_types = [GhostType.BLINKY, GhostType.PINKY, GhostType.INKY, GhostType.CLYDE]
         self.ghosts_group: pg.sprite.Group = pg.sprite.Group()
@@ -106,9 +109,11 @@ class GameScene(Scene):
         )
 
     def handle_event(self, event: pg.event.Event) -> None:
-        if self.death_pause_until or self.death_anim_until:
+        if self.death_pause_timer.is_active():
             return
-        if self.ghost_eat_pause_until:
+        if self.death_anim_timer.is_active():
+            return
+        if self.ghost_eat_timer.is_active():
             return
         direction_keys = [
             pg.K_UP,
@@ -122,8 +127,6 @@ class GameScene(Scene):
         ]
         if event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
             self.show_pause_menu = not self.show_pause_menu
-        elif event.type == pg.KEYDOWN and event.key == pg.K_k:
-            self._handle_player_hit()
         elif event.type == pg.KEYDOWN and event.key in direction_keys:
             dir = self.player.key_to_direction(event.key)
             self.player.target_direction = dir
@@ -134,26 +137,20 @@ class GameScene(Scene):
 
     def update(self, dt: int) -> None:
         self.game_ui.group.update(dt)
+        self.start_song_timer.update()
+        self.ghost_eat_timer.update()
+        self.death_pause_timer.update()
+        self.death_anim_timer.update()
+        self.edible_timer.update()
 
-        time: int = pg.time.get_ticks()
-        if self.start_pause_until is None:
+        if not self.game_started and not self.start_song_timer.is_active():
             Sounds.start().play()
-            self.start_pause_until = time + self.START_PAUSE
-        if time < self.start_pause_until:
+            self.start_song_timer.start()
+        if self.start_song_timer.is_active():
             return
-        if self.ghost_eat_pause_until:
-            if time < self.ghost_eat_pause_until:
-                return
-            self.ghost_eat_pause_until = None
-        if self.death_pause_until:
-            if time > self.death_pause_until:
-                self._start_death_anim()
-                self.death_pause_until = None
-        if self.death_anim_until:
-            if time > self.death_anim_until:
-                self._respawn_or_end()
-                self.death_anim_until = None
-                return
+        if self.ghost_eat_timer.is_active():
+            return
+
         if self.show_pause_menu:
             self.pause_menu.group.update(dt)
             return
@@ -163,7 +160,7 @@ class GameScene(Scene):
             Sounds.eat_gum().play()
             if gum.type == PacGumType.SUPER_PACGUM:
                 self.state.points += self.config.points_per_super_pacgum
-                self.edible_until = pg.time.get_ticks() + 7000
+                self.edible_timer.start()
                 for ghost in self.ghosts_group:
                     ghost.set_edible(True)
             else:
@@ -173,11 +170,6 @@ class GameScene(Scene):
             self._finish_level()
             return
 
-        edible_expired = self.edible_until and pg.time.get_ticks() > self.edible_until
-        if edible_expired:
-            self.edible_until = None
-            for ghost in self.ghosts_group:
-                ghost.set_edible(False)
 
         self._check_ghost_hit()
 
@@ -207,6 +199,11 @@ class GameScene(Scene):
         if self.show_pause_menu:
             self.pause_menu.group.draw(screen)
 
+    def _start_game(self) -> None:
+        self.game_started = True
+        pg.mixer.music.load("sounds/siren0.wav")
+        pg.mixer.music.play(loops=-1)
+
     def _finish_level(self) -> None:
         self.state.current_level += 1
         if self.state.current_level > self.state.total_levels:
@@ -219,35 +216,41 @@ class GameScene(Scene):
     def _to_main_menu(self) -> None:
         self.next_scene_id = SceneId.MAIN_MENU
 
+    def _edible_end(self) -> None:
+        for ghost in self.ghosts_group:
+            ghost.set_edible(False)
+
     def _check_ghost_hit(self) -> None:
         touched_ghosts = pg.sprite.spritecollide(self.player, self.ghosts_group, dokill=False)
         if touched_ghosts:
-            edible = self.edible_until is not None and pg.time.get_ticks() < self.edible_until
-            if edible:
+            if self.edible_timer.is_active():
                 for ghost in touched_ghosts:
                     if not ghost.is_eaten():
                         self.state.points += self.config.points_per_ghost
                         ghost.get_eaten(respawn_delay_ms=7000)
-                        self.ghost_eat_pause_until = pg.time.get_ticks() + self.GHOST_EAT_PAUSE
+                        self.ghost_eat_timer.start()
                         Sounds.eat_ghost().play()
-                    # self.player.moving = False
-                    # self.player.animations.stop()
-                    # for ghost in self.ghosts_group:
-                    #     ghost.moving = False
             else:
-                if not self.death_pause_until and not self.death_anim_until:
-                    self.death_pause_until = pg.time.get_ticks() + self.DEATH_PAUSE
-                    self.player.moving = False
-                    self.player.animations.stop()
-                    for ghost in self.ghosts_group:
-                        ghost.moving = False
-        
+                self._handle_player_hit()
+
+    def _handle_player_hit(self) -> None:
+        if self.death_pause_timer.is_active():
+            return
+        if self.death_anim_timer.is_active():
+            return
+        pg.mixer.music.stop()
+        self.death_pause_timer.start()
+        self.player.moving = False
+        self.player.animations.stop()
+        for ghost in self.ghosts_group:
+            ghost.moving = False
 
     def _start_death_anim(self) -> None:
-        self.death_anim_until = pg.time.get_ticks() + self.DEATH_ANIM
+        self.death_anim_timer.start()
         self.player.die()
 
     def _respawn_or_end(self) -> None:
+        self.game_started = False
         self.state.lives -= 1
         self.state.time_remaining_ms = self.config.level_max_time * 1000
         self.player.respawn(self.maze.center())
