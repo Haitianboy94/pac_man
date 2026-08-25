@@ -39,6 +39,7 @@ FALLBACK_MAZE: list[list[Dir]] = [
 class GameScene(Scene):
     DEATH_PAUSE: int = 1000
     DEATH_ANIM: int = 2000
+    START_PAUSE: int = 4000
     """
     The game scene where pacman actually takes place.
     Calls `MazeGenerator` to create the level.
@@ -86,6 +87,7 @@ class GameScene(Scene):
         self.game_ui: GameUI = GameUI(screen, state, highscore)
 
         self.player = Player(self.maze, self.maze.center())
+        self.start_pause_until: int | None = None
         self.death_pause_until: int | None = None
         self.death_anim_until: int | None = None
         self.corners: list[tuple[int, int]] = self.maze.corners()
@@ -129,6 +131,11 @@ class GameScene(Scene):
         self.game_ui.group.update(dt)
 
         time: int = pg.time.get_ticks()
+        if self.start_pause_until is None:
+            Sounds.start().play()
+            self.start_pause_until = time + self.START_PAUSE
+        if time < self.start_pause_until:
+            return
         if self.death_pause_until:
             if time > self.death_pause_until:
                 self._start_death_anim()

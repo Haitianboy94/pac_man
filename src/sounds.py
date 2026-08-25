@@ -6,6 +6,10 @@ class Sounds:
     gum_sound = 0
 
     @classmethod
+    def start(cls) -> pg.mixer.Sound:
+        return cls._load("sounds/start.wav")
+
+    @classmethod
     def eat_gum(cls) -> pg.mixer.Sound:
         if cls.gum_sound == 0:
             cls.gum_sound = 1
