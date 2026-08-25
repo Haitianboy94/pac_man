@@ -40,6 +40,8 @@ class GameScene(Scene):
     DEATH_PAUSE: int = 1000
     DEATH_ANIM: int = 2000
     START_PAUSE: int = 4000
+    GHOST_EAT_PAUSE: int = 1000
+
     """
     The game scene where pacman actually takes place.
     Calls `MazeGenerator` to create the level.
@@ -88,6 +90,7 @@ class GameScene(Scene):
 
         self.player = Player(self.maze, self.maze.center())
         self.start_pause_until: int | None = None
+        self.ghost_eat_pause_until: int | None = None
         self.death_pause_until: int | None = None
         self.death_anim_until: int | None = None
         self.corners: list[tuple[int, int]] = self.maze.corners()
@@ -104,6 +107,8 @@ class GameScene(Scene):
 
     def handle_event(self, event: pg.event.Event) -> None:
         if self.death_pause_until or self.death_anim_until:
+            return
+        if self.ghost_eat_pause_until:
             return
         direction_keys = [
             pg.K_UP,
@@ -136,6 +141,10 @@ class GameScene(Scene):
             self.start_pause_until = time + self.START_PAUSE
         if time < self.start_pause_until:
             return
+        if self.ghost_eat_pause_until:
+            if time < self.ghost_eat_pause_until:
+                return
+            self.ghost_eat_pause_until = None
         if self.death_pause_until:
             if time > self.death_pause_until:
                 self._start_death_anim()
@@ -170,16 +179,7 @@ class GameScene(Scene):
             for ghost in self.ghosts_group:
                 ghost.set_edible(False)
 
-        edible = self.edible_until is not None and pg.time.get_ticks() < self.edible_until
-        touched_ghosts = pg.sprite.spritecollide(self.player, self.ghosts_group, dokill=False)
-        if touched_ghosts:
-            if edible:
-                for ghost in touched_ghosts:
-                    if not ghost.is_eaten():
-                        self.state.points += self.config.points_per_ghost
-                        ghost.get_eaten(respawn_delay_ms=7000)
-            else:
-                self._handle_player_hit()
+        self._check_ghost_hit()
 
         self.player.update(dt)
         for ghost in self.ghosts_group:
@@ -219,13 +219,29 @@ class GameScene(Scene):
     def _to_main_menu(self) -> None:
         self.next_scene_id = SceneId.MAIN_MENU
 
-    def _handle_player_hit(self) -> None:
-        if not self.death_pause_until and not self.death_anim_until:
-            self.death_pause_until = pg.time.get_ticks() + self.DEATH_PAUSE
-            self.player.moving = False
-            self.player.animations.stop()
-            for ghost in self.ghosts_group:
-                ghost.moving = False
+    def _check_ghost_hit(self) -> None:
+        touched_ghosts = pg.sprite.spritecollide(self.player, self.ghosts_group, dokill=False)
+        if touched_ghosts:
+            edible = self.edible_until is not None and pg.time.get_ticks() < self.edible_until
+            if edible:
+                for ghost in touched_ghosts:
+                    if not ghost.is_eaten():
+                        self.state.points += self.config.points_per_ghost
+                        ghost.get_eaten(respawn_delay_ms=7000)
+                        self.ghost_eat_pause_until = pg.time.get_ticks() + self.GHOST_EAT_PAUSE
+                        Sounds.eat_ghost().play()
+                    # self.player.moving = False
+                    # self.player.animations.stop()
+                    # for ghost in self.ghosts_group:
+                    #     ghost.moving = False
+            else:
+                if not self.death_pause_until and not self.death_anim_until:
+                    self.death_pause_until = pg.time.get_ticks() + self.DEATH_PAUSE
+                    self.player.moving = False
+                    self.player.animations.stop()
+                    for ghost in self.ghosts_group:
+                        ghost.moving = False
+        
 
     def _start_death_anim(self) -> None:
         self.death_anim_until = pg.time.get_ticks() + self.DEATH_ANIM

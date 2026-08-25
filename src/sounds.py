@@ -18,6 +18,10 @@ class Sounds:
         return cls._load("sounds/eat_gum_1.wav")
 
     @classmethod
+    def eat_ghost(cls) -> pg.mixer.Sound:
+        return cls._load("sounds/eat_ghost.wav")
+
+    @classmethod
     def death(cls) -> pg.mixer.Sound:
         # 1.49 seconds duration
         return cls._load("sounds/death.wav")
