@@ -174,11 +174,19 @@ class GameScene(Scene):
             else:
                 self._handle_player_hit()
 
+        self.player.speed = (self.player.DEFAULT_SPEED * 2.5
+                             if self.state.cheats_super_speed
+                             else self.player.DEFAULT_SPEED)
+
         self.player.update(dt)
-        for ghost in self.ghosts_group:
-            ghost.player_cell = self.player.cell
-            ghost.player_direction = self.player.move_direction
-            ghost.update(dt)
+        if not self.state.cheats_freeze_ghosts:
+            for ghost in self.ghosts_group:
+                ghost.player_cell = self.player.cell
+                ghost.player_direction = self.player.move_direction
+                ghost.update(dt)
+        else:
+            for ghost in self.ghosts_group:
+                ghost.refresh_image()
 
         self.maze.pacgums.update(dt)
         self.state.time_remaining_ms = self.state.time_remaining_ms - dt
@@ -213,6 +221,8 @@ class GameScene(Scene):
         self.next_scene_id = SceneId.MAIN_MENU
 
     def _handle_player_hit(self) -> None:
+        if self.state.cheats_invincibility:
+            return
         if not self.death_pause_until and not self.death_anim_until:
             self.death_pause_until = pg.time.get_ticks() + self.DEATH_PAUSE
             self.player.moving = False
@@ -233,5 +243,3 @@ class GameScene(Scene):
         if self.state.lives <= 0:
             self.state.pending_game_over = False
             self.next_scene_id = SceneId.GAME_OVER
-
-

@@ -354,3 +354,7 @@ class Ghost(Entity):
         x = max(0, min(cell[0], width - 1))
         y = max(0, min(cell[1], height - 1))
         return (x, y)
+
+    def refresh_image(self) -> None:
+        "Update the displayed sprite without moving (used when frozen)"
+        self.image = self._get_animation().image
