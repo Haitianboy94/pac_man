@@ -79,7 +79,11 @@ class GameScene(Scene):
         self.show_pause_menu: bool = False
 
         self.pause_menu: PauseMenu = PauseMenu(
-            screen, state, self._finish_level, self._to_main_menu
+            screen,
+            state,
+            self._finish_level,
+            self._to_main_menu,
+            self._resume,
         )
         self.game_ui: GameUI = GameUI(screen, state, highscore)
 
@@ -144,6 +148,10 @@ class GameScene(Scene):
     def update(self, dt: int) -> None:
         """Update the object."""
         self.game_ui.group.update(dt)
+        if self.show_pause_menu:
+            self.pause_menu.group.update(dt)
+            return
+
         self.start_song_timer.update()
         self.ghost_eat_timer.update()
         self.death_pause_timer.update()
@@ -157,10 +165,6 @@ class GameScene(Scene):
             return
         if self.ghost_eat_timer.is_active():
             return
-        if self.show_pause_menu:
-            self.pause_menu.group.update(dt)
-            return
-
         eaten = pg.sprite.spritecollide(
             self.player, self.maze.pacgums, dokill=True
         )
@@ -230,6 +234,10 @@ class GameScene(Scene):
         else:
             self.state.time_remaining_ms = self.config.level_max_time * 1000
             self.next_scene_id = SceneId.GAME
+
+    def _resume(self) -> None:
+        """Close the pause menu and resume gameplay."""
+        self.show_pause_menu = False
 
     def _to_main_menu(self) -> None:
         """Perform the to main menu operation."""

@@ -1,4 +1,4 @@
-from src.config.highscore import Highscore
+from src.config.highscore import Highscore, InvalidHighscoreError
 import sys
 
 import pygame as pg
@@ -25,7 +25,11 @@ class Game:
         self.config = config
         self.current_level: int = 1
         self.highscore: Highscore = Highscore(config.highscore_filename)
-        self.highscore.load()
+        try:
+            self.highscore.load()
+        except InvalidHighscoreError:
+            # A corrupt score file must not block game startup.
+            self.highscore.scores = []
         self.active_scene: Scene = self._create_scene(SceneId.MAIN_MENU)
         self.state: GameState = GameState(self.config)
 

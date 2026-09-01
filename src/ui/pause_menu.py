@@ -15,11 +15,13 @@ class PauseMenu:
         state: GameState,
         skip_level_fn: Callable,
         to_main_menu_fn: Callable,
+        resume_fn: Callable | None = None,
     ) -> None:
         """Initialize the object."""
         self.state: GameState = state
         self.skip_level_fn: Callable = skip_level_fn
         self.to_main_menu_fn: Callable = to_main_menu_fn
+        self.resume_fn: Callable = resume_fn or self._open_main
         self.center_x: int = int(screen.get_width() / 2)
         self.main_group: pg.sprite.Group = self._init_main_group()
         self.cheats_group: pg.sprite.Group = self._init_cheats_group()
@@ -38,10 +40,15 @@ class PauseMenu:
         title: Text = Text("paused", "white", 2)
         self._add_centered(group, title, 70)
 
+        resume: Button = Button(
+            "resume", "white", "yellow", 2, self.resume_fn
+        )
+        self._add_centered(group, resume, 145)
+
         cheats: Button = Button(
             "cheats", "white", "yellow", 2, self._open_cheats
         )
-        self._add_centered(group, cheats, 185)
+        self._add_centered(group, cheats, 175)
 
         menu_button: Button = Button(
             "main menu", "white", "yellow", 2, self.to_main_menu_fn

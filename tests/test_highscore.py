@@ -138,7 +138,6 @@ def test_add_keeps_only_the_top_ten_scores_in_descending_order(
         (3, "P3"),
         (2, "P2"),
         (1, "P1"),
-        (0, "P0"),
     ]
 
 
@@ -163,5 +162,4 @@ def test_load_keeps_only_the_top_ten_scores(tmp_path: Path) -> None:
         (3, "P3"),
         (2, "P2"),
         (1, "P1"),
-        (0, "P0"),
     ]

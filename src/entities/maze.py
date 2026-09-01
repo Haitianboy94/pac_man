@@ -60,12 +60,12 @@ class Maze:
                     self.walls[row_index][col_index].add_dir(Dir.SOUTH)
 
                 if cell != Dir.ALL:
-                    super_pos = [
-                        (1, 1),
-                        (1, cols - 2),
-                        (rows - 2, 1),
-                        (rows - 2, cols - 2),
-                    ]
+                    super_pos = {
+                        (0, 0),
+                        (0, cols - 1),
+                        (rows - 1, 0),
+                        (rows - 1, cols - 1),
+                    }
                     if (row_index, col_index) in super_pos:
                         type = PacGumType.SUPER_PACGUM
                     else:

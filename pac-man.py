@@ -4,20 +4,17 @@ import sys
 from src.config.config_parser import ConfigParser, InvalidConfigError
 from src.entities.maze import Maze
 from src.game import Game
-from src.resources import resource_path
 
 sys.setrecursionlimit(10_000)
 
 os.environ["SDL_VIDEO_WINDOW_POS"] = "50,50"
 
 if __name__ == "__main__":
-    if len(sys.argv) > 2:
+    if len(sys.argv) != 2:
         print("usage: pac-man [config file]")
         sys.exit(1)
 
-    config_path = (
-        sys.argv[1] if len(sys.argv) == 2 else resource_path("config.json")
-    )
+    config_path = sys.argv[1]
 
     try:
         with open(config_path) as file:
@@ -35,20 +32,19 @@ if __name__ == "__main__":
 
     import pygame as pg
 
-    pg.init()
-
-    x, y = Maze.maze_size(config.width, config.height)
-    pg.mixer.init()
-
-    screen = pg.display.set_mode(
-        (x + config.UI_BORDER_X, y + config.UI_BORDER_Y * 2), flags=pg.SCALED
-    )
-
-    pg.display.set_caption("Pac-Man")
-
-    game = Game(screen, config)
-
     try:
+        pg.init()
+        x, y = Maze.maze_size(config.width, config.height)
+        pg.mixer.init()
+        screen = pg.display.set_mode(
+            (x + config.UI_BORDER_X, y + config.UI_BORDER_Y * 2),
+            flags=pg.SCALED,
+        )
+        pg.display.set_caption("Pac-Man")
+        game = Game(screen, config)
         game.loop()
     except KeyboardInterrupt:
         sys.exit()
+    except Exception as error:
+        print(f"Unable to start Pac-Man: {error}")
+        sys.exit(1)

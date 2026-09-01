@@ -29,7 +29,7 @@ Runs `uv sync` to install all dependencies.
 make run
 ```
 
-Runs `uv run python pac-man.py config.json`. The game takes exactly one argument: a path to a JSON configuration file (see [Configuration](#configuration)). If the file is missing, malformed, or contains invalid values, the game logs a clear message and falls back to safe defaults rather than crashing (per the project's fault-tolerance requirements).
+Runs `uv run python pac-man.py config.json`. The game takes exactly one argument: a path to a JSON configuration file (see [Configuration](#configuration)). If the file is missing or malformed, the game prints a clear error and exits without a traceback; invalid values inside valid JSON fall back to safe defaults.
 
 ### Debug
 
@@ -92,18 +92,18 @@ Removes `__pycache__`, `.mypy_cache`, and `.pytest_cache` directories throughout
 
 The game is configured via a JSON file passed as the single command-line argument. Standard JSON is extended to support `#`-prefixed comment lines, which are stripped before parsing.
 
-| Key | Purpose |
-|---|---|
-| `highscore_filename` | Path to the JSON file used to persist the Top-10 highscore table |
-| `level` | List of level numbers; its length determines the total number of levels in a full playthrough |
-| `width`, `height` | Dimensions (in cells) of each generated maze |
-| `lives` | Starting number of lives for the player |
-| `pacgum` | Base pacgum count/identifier used by the maze layout |
-| `points_per_pacgum` | Score awarded for eating a regular pacgum |
-| `points_per_super_pacgum` | Score awarded for eating a super pacgum (power pellet) |
-| `points_per_ghost` | Score awarded for eating an edible (scared) ghost |
-| `seed` | Fixed seed used to generate the very first level, so level 1 is reproducible between runs; every level after that is generated with a random seed |
-| `level_max_time` | Time limit, in seconds, for each level before it is forfeited |
+| Key | Default | Purpose |
+|---|---:|---|
+| `highscore_filename` | `highscore.json` | Path to the Top-10 highscore file |
+| `level` | `[1, ..., 10]` | Level numbers; length determines the playthrough |
+| `width`, `height` | `10`, `10` | Maze dimensions in cells |
+| `lives` | `3` | Starting lives |
+| `pacgum` | `10` | Base pacgum layout value |
+| `points_per_pacgum` | `10` | Regular pacgum score |
+| `points_per_super_pacgum` | `50` | Super pacgum score |
+| `points_per_ghost` | `100` | Edible ghost score |
+| `seed` | `42` | Fixed seed for level one |
+| `level_max_time` | `90` | Level time limit in seconds |
 
 Any missing or invalid key is clamped to a safe default, logged clearly, and the game continues — it never crashes on a malformed config file. Unknown keys are ignored.
 
@@ -253,7 +253,7 @@ Each layer only depends on the ones below it: `scenes` orchestrate `entities` an
 
 ## Project Management
 
-See the dedicated project management directory (`docs/project-management/` or equivalent) for the team's timeline, task tracking, risk analysis, and acceptance test notes. In short: work was organized around the mandatory-part checklist (maze integration → core entities → ghost AI → win/lose flow → cheats/polish), tackled roughly in dependency order, with the maze adapter and player movement built first since nearly everything else depended on them.
+See the dedicated [project-management directory](project-management/) for the team's timeline, progress tracking, technical analysis, risk analysis, team organization, blockers, and acceptance test notes. In short: work was organized around the mandatory-part checklist (maze integration → core entities → ghost AI → win/lose flow → cheats/polish), tackled roughly in dependency order, with the maze adapter and player movement built first since nearly everything else depended on them.
 
 ## Resources
 

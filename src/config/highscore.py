@@ -21,25 +21,31 @@ class Highscore:
         Ignores file contents if the format is invalid
         """
         try:
-            with open(self.filename) as file:
+            with open(self.filename, encoding="utf-8") as file:
                 contents = file.read()
-                kv: dict[str, int] = json.loads(contents)
+                kv: object = json.loads(contents)
                 if not isinstance(kv, dict):
                     raise InvalidHighscoreError("Json is not a key-value pair")
+                loaded: list[tuple[int, str]] = []
+                self.scores = loaded
                 for name, score in kv.items():
                     self.add(name, score)
         except FileNotFoundError:
             pass
-        except json.JSONDecodeError as e:
-            raise InvalidHighscoreError("Invalid json") from e
+        except (OSError, UnicodeError) as error:
+            raise InvalidHighscoreError(
+                "Unable to read highscore file"
+            ) from error
+        except json.JSONDecodeError as error:
+            raise InvalidHighscoreError("Invalid json") from error
 
     def store(self) -> None:
         """Commits the internal highscore values to the JSON file."""
         try:
             with open(self.filename, "w") as file:
-                score_dict: dict[str, int] = {
-                    name: score for score, name in self.scores
-                }
+                score_dict: dict[str, int] = {}
+                for score, name in self.scores:
+                    score_dict[name] = max(score, score_dict.get(name, 0))
                 file.write(json.dumps(score_dict))
         except Exception:
             print("Failed to write highscore")

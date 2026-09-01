@@ -100,8 +100,9 @@ class Ghost(Entity):
 
     def update(self, dt: int) -> None:
         """Update the object."""
-        if self.is_eaten():
-            if pg.time.get_ticks() >= self.respawn_at:
+        respawn_at = self.respawn_at
+        if respawn_at is not None:
+            if pg.time.get_ticks() >= respawn_at:
                 self.respawn_at = None
             else:
                 return

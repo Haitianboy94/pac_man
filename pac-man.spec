@@ -8,6 +8,8 @@ a = Analysis(
     datas=[
         ("config.json", "."),
         ("sprites", "sprites"),
+        ("sounds", "sounds"),
+        ("README.md", "."),
     ],
     hiddenimports=[],
     hookspath=[],
