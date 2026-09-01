@@ -50,7 +50,6 @@ class Button(pg.sprite.Sprite):
         """Update the object."""
         pos: tuple[int, int] = pg.mouse.get_pos()
         hovering: bool = self.rect.collidepoint(pos)
-        clicked = False
         if hovering:
             if not self.hovering:
                 self.hover()

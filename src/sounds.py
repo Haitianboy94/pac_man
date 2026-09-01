@@ -2,8 +2,10 @@ from src.resources import resource_path
 from functools import cache
 import pygame as pg
 
+
 class Sounds:
     """Represent Sounds state and behavior."""
+
     gum_sound = 0
 
     @classmethod
@@ -36,5 +38,3 @@ class Sounds:
     def _load(cls, path: str) -> pg.mixer.Sound:
         """Perform the load operation."""
         return pg.mixer.Sound(resource_path(path))
-
-

@@ -3,8 +3,10 @@ from src.graphics.animation import Animation
 from src.types import Dir
 import pygame as pg
 
+
 class PlayerAnimations:
     """Represent PlayerAnimations state and behavior."""
+
     def __init__(self) -> None:
         """Initialize the object."""
         self.playing: bool = True
@@ -14,10 +16,10 @@ class PlayerAnimations:
             Dir.EAST: Animation(GeneralSprites.player_moving_east(), 16),
             Dir.SOUTH: Animation(GeneralSprites.player_moving_south(), 16),
             Dir.WEST: Animation(GeneralSprites.player_moving_west(), 16),
-            Dir.NONE: Animation([GeneralSprites.player_moving_east()[0]], 16)
+            Dir.NONE: Animation([GeneralSprites.player_moving_east()[0]], 16),
         }
         self._death_animation = Animation(GeneralSprites.player_death(), 8)
-        self._active: Animation 
+        self._active: Animation
         self.image: pg.Surface
         self.initial()
 
@@ -46,7 +48,7 @@ class PlayerAnimations:
         """Play the object."""
         self.playing = True
 
-    def stop(self):
+    def stop(self) -> None:
         """Stop the object."""
         self.playing = False
 

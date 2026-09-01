@@ -8,6 +8,7 @@ from src.types import GhostType
 
 class GeneralSprites(Sprites):
     """Represent GeneralSprites state and behavior."""
+
     PATH = "sprites/general.png"
     SIZE = 16
 
@@ -31,7 +32,7 @@ class GeneralSprites(Sprites):
             cls.PLAYER_MOVING,
         )
         for sprite in sprites:
-            sprite.set_colorkey('black')
+            sprite.set_colorkey("black")
         return sprites
 
     @classmethod
@@ -42,7 +43,7 @@ class GeneralSprites(Sprites):
             (int(cls.SIZE / 2) + cls.SIZE * 28, 0), (16, 16), cls.PLAYER_MOVING
         )
         for sprite in sprites:
-            sprite.set_colorkey('black')
+            sprite.set_colorkey("black")
         return sprites
 
     @classmethod
@@ -55,7 +56,7 @@ class GeneralSprites(Sprites):
             cls.PLAYER_MOVING,
         )
         for sprite in sprites:
-            sprite.set_colorkey('black')
+            sprite.set_colorkey("black")
         return sprites
 
     @classmethod
@@ -68,7 +69,7 @@ class GeneralSprites(Sprites):
             cls.PLAYER_MOVING,
         )
         for sprite in sprites:
-            sprite.set_colorkey('black')
+            sprite.set_colorkey("black")
         return sprites
 
     @classmethod
@@ -76,11 +77,9 @@ class GeneralSprites(Sprites):
     def player_death(cls) -> list[pg.Surface]:
         """Handle player death."""
         frames = [(i * cls.SIZE, 0) for i in range(0, 11)]
-        sprites = cls._load_all(
-            (8 + cls.SIZE * 32, 0), (16, 16), frames
-        )
+        sprites = cls._load_all((8 + cls.SIZE * 32, 0), (16, 16), frames)
         for sprite in sprites:
-            sprite.set_colorkey('black')
+            sprite.set_colorkey("black")
         return sprites
 
     #
@@ -115,7 +114,7 @@ class GeneralSprites(Sprites):
             cls.GHOST_MOVE_EAST,
         )
         for sprite in sprites:
-            sprite.set_colorkey('black')
+            sprite.set_colorkey("black")
         return sprites
 
     @classmethod
@@ -128,7 +127,7 @@ class GeneralSprites(Sprites):
             cls.GHOST_MOVE_WEST,
         )
         for sprite in sprites:
-            sprite.set_colorkey('black')
+            sprite.set_colorkey("black")
         return sprites
 
     @classmethod
@@ -141,7 +140,7 @@ class GeneralSprites(Sprites):
             cls.GHOST_MOVE_NORTH,
         )
         for sprite in sprites:
-            sprite.set_colorkey('black')
+            sprite.set_colorkey("black")
         return sprites
 
     @classmethod
@@ -154,7 +153,7 @@ class GeneralSprites(Sprites):
             cls.GHOST_MOVE_SOUTH,
         )
         for sprite in sprites:
-            sprite.set_colorkey('black')
+            sprite.set_colorkey("black")
         return sprites
 
     @classmethod
@@ -167,7 +166,7 @@ class GeneralSprites(Sprites):
             cls.GHOST_SCARED,
         )
         for sprite in sprites:
-            sprite.set_colorkey('black')
+            sprite.set_colorkey("black")
         return sprites
 
     #

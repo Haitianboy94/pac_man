@@ -1,7 +1,5 @@
-from src.resources import resource_path
 from src.config.config import Config
 from src.config.highscore import Highscore
-from enum import Enum
 import pygame as pg
 
 from src.scenes.scene import Scene
@@ -14,10 +12,7 @@ class MainMenu(Scene):
     "Main menu scene"
 
     def __init__(
-            self,
-            screen: pg.Surface,
-            config: Config,
-            highscore: Highscore
+        self, screen: pg.Surface, config: Config, highscore: Highscore
     ):
         """Initialize the object."""
         Scene.__init__(self)
@@ -53,7 +48,6 @@ class MainMenu(Scene):
         "Starts the game"
         self.next_scene_id = SceneId.GAME
 
-
     def _init_main(self) -> None:
         "Sets up all ui elements for the main menu"
         center: int = int(self.screen.get_width() / 2)
@@ -66,11 +60,7 @@ class MainMenu(Scene):
         self.main_group.add(title)
 
         start_game_button: Button = Button(
-            "Start game",
-            text_color,
-            hover_color,
-            2,
-            self._start
+            "Start game", text_color, hover_color, 2, self._start
         )
         start_game_button.rect.centerx = center
         start_game_button.rect.y = 80
@@ -81,7 +71,7 @@ class MainMenu(Scene):
             text_color,
             hover_color,
             2,
-            lambda: setattr(self, 'active_group', self.highscores_group)
+            lambda: setattr(self, "active_group", self.highscores_group),
         )
         highscores_button.rect.centerx = center
         highscores_button.rect.y = 100
@@ -92,7 +82,7 @@ class MainMenu(Scene):
             text_color,
             hover_color,
             2,
-            lambda: setattr(self, 'active_group', self.instructions_group)
+            lambda: setattr(self, "active_group", self.instructions_group),
         )
         instructions_button.rect.centerx = center
         instructions_button.rect.y = 120
@@ -118,16 +108,16 @@ class MainMenu(Scene):
         self.highscores_group.add(title)
 
         y = 74
-        for score, name in self.highscore.get():
-            name: Text = Text(name, "white")
-            name.rect.x = center - 76
-            name.rect.y = y
-            self.highscores_group.add(name)
+        for score_value, name_value in self.highscore.get():
+            name_text: Text = Text(name_value, "white")
+            name_text.rect.x = center - 76
+            name_text.rect.y = y
+            self.highscores_group.add(name_text)
 
-            score: Text = Text(str(score), "white")
-            score.rect.x = center + 30
-            score.rect.y = y
-            self.highscores_group.add(score)
+            score_text: Text = Text(str(score_value), "white")
+            score_text.rect.x = center + 30
+            score_text.rect.y = y
+            self.highscores_group.add(score_text)
             y += 12
 
         back_button: Button = Button(
@@ -135,7 +125,7 @@ class MainMenu(Scene):
             "white",
             "yellow",
             2,
-            lambda: setattr(self, 'active_group', self.main_group)
+            lambda: setattr(self, "active_group", self.main_group),
         )
         y += 32
         back_button.rect.centerx = center
@@ -191,7 +181,7 @@ class MainMenu(Scene):
             "white",
             "yellow",
             2,
-            lambda: setattr(self, 'active_group', self.main_group)
+            lambda: setattr(self, "active_group", self.main_group),
         )
         back_button.rect.centerx = center
         back_button.rect.y = 258

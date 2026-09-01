@@ -8,6 +8,7 @@ from src.types import Dir
 
 class MazeWall(pg.sprite.Sprite):
     """Represent MazeWall state and behavior."""
+
     def __init__(self, dir: Dir, position: Sequence[int]) -> None:
         """Initialize the object."""
         pg.sprite.Sprite.__init__(self)

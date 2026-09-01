@@ -32,7 +32,7 @@ class Dir(enum.IntFlag):
             return (-1, 0)
         return (0, 0)
 
-    def opposite(self) -> 'Dir':
+    def opposite(self) -> "Dir":
         """
         Returns the opposite direction.
         Only supports cardinal directions.
@@ -46,7 +46,6 @@ class Dir(enum.IntFlag):
         if self == Dir.WEST:
             return Dir.EAST
         return Dir.NONE
-
 
     def __str__(self) -> str:
         """Return the object as a string."""

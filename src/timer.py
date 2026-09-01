@@ -1,8 +1,10 @@
 from typing import Callable
 import pygame as pg
 
+
 class Timer:
     """Represent Timer state and behavior."""
+
     def __init__(self, duration: int, on_end: Callable | None = None):
         """Initialize the object."""
         self.duration: int = duration

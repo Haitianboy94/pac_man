@@ -10,6 +10,7 @@ import random
 
 class Ghost(Entity):
     """The ghost entity."""
+
     SIZE = 16
     FPS = 4
     CELL_DISTANCE = Maze.CELL_SIZE + Maze.WALL_SIZE
@@ -70,12 +71,8 @@ class Ghost(Entity):
         cell_x, cell_y = Maze.cell_position((self.cell_x, self.cell_y))
         offset = int((Maze.CELL_SIZE - self.SIZE) / 2)
         dx, dy = self.direction.delta()
-        pos_x = round(
-            cell_x + offset + (dx * self.move_progress)
-        )
-        pos_y = round(
-            cell_y + offset + (dy * self.move_progress)
-        )
+        pos_x = round(cell_x + offset + (dx * self.move_progress))
+        pos_y = round(cell_y + offset + (dy * self.move_progress))
         self.rect.topleft = (pos_x, pos_y)
 
     def set_edible(self, edible: bool) -> None:
@@ -98,9 +95,7 @@ class Ghost(Entity):
         self.cell_x, self.cell_y = self.start_cell
         self.move_progress = 0.0
         self._sync_rect_to_cell()
-        self.respawn_at = (
-            pg.time.get_ticks() + respawn_delay_ms
-        )
+        self.respawn_at = pg.time.get_ticks() + respawn_delay_ms
         self.set_edible(False)
 
     def update(self, dt: int) -> None:
@@ -139,9 +134,7 @@ class Ghost(Entity):
                     self.direction,
                 ):
                     break
-            distance_to_next_cell = (
-                self.CELL_DISTANCE - self.move_progress
-            )
+            distance_to_next_cell = self.CELL_DISTANCE - self.move_progress
             distance = min(
                 remaining,
                 distance_to_next_cell,
@@ -222,15 +215,11 @@ class Ghost(Entity):
                 direction,
             )
 
-            distance = (
-                (candidate[0] - target_cell[0]) ** 2
-                + (candidate[1] - target_cell[1]) ** 2
-            )
+            distance = (candidate[0] - target_cell[0]) ** 2 + (
+                candidate[1] - target_cell[1]
+            ) ** 2
 
-            if (
-                best_distance is None
-                or distance < best_distance
-            ):
+            if best_distance is None or distance < best_distance:
                 best_direction = direction
                 best_distance = distance
 
@@ -265,7 +254,9 @@ class Ghost(Entity):
         if start == target_cell:
             return None
         visited = {start}
-        queue = deque([(start, None)])
+        queue: deque[tuple[tuple[int, int], Dir | None]] = deque(
+            [(start, None)]
+        )
         while queue:
             cell, first_direction = queue.popleft()
             for direction in (
@@ -293,9 +284,7 @@ class Ghost(Entity):
                 if next_cell == target_cell:
                     return next_first_direction
                 visited.add(next_cell)
-                queue.append(
-                    (next_cell, next_first_direction)
-                )
+                queue.append((next_cell, next_first_direction))
         return None
 
     def _get_target_cell(self) -> tuple[int, int]:
@@ -328,10 +317,9 @@ class Ghost(Entity):
             )
             return self._clamp_to_grid(target)
         elif self.type == GhostType.CLYDE:
-            dist = (
-                (self.cell_x - self.player_cell[0]) ** 2
-                + (self.cell_y - self.player_cell[1]) ** 2
-            )
+            dist = (self.cell_x - self.player_cell[0]) ** 2 + (
+                self.cell_y - self.player_cell[1]
+            ) ** 2
             if dist < 64:
                 width = len(self.maze.grid[0])
                 height = len(self.maze.grid)

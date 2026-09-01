@@ -78,23 +78,28 @@ class Maze:
                         self.pacgums.add(
                             Pacgum(
                                 PacGumType.PACGUM,
-                                [x + cell_center, y + cell_center + self.OFFSET]
+                                [
+                                    x + cell_center,
+                                    y + cell_center + self.OFFSET,
+                                ],
                             )
                         )
                     if not cell & Dir.EAST:
                         self.pacgums.add(
                             Pacgum(
                                 PacGumType.PACGUM,
-                                [x + cell_center + self.OFFSET, y + cell_center]
+                                [
+                                    x + cell_center + self.OFFSET,
+                                    y + cell_center,
+                                ],
                             )
                         )
-
 
                 x = x + self.CELL_SIZE + self.WALL_SIZE
             x = position[0]
             y = y + self.CELL_SIZE + self.WALL_SIZE
-        for row in self.walls:
-            for wall in row:
+        for wall_row in self.walls:
+            for wall in wall_row:
                 wall.set_sprite()
                 self.cells.add(wall)
 
@@ -103,8 +108,8 @@ class Maze:
         self.cells.draw(surface)
         horizontal = GeneralSprites.maze_horizontal_connector()
         vertical = GeneralSprites.maze_vertical_connector()
-        for row in self.walls:
-            for wall in row:
+        for wall_row in self.walls:
+            for wall in wall_row:
                 x, y = wall.position
                 if wall.dir & Dir.EAST:
                     rect = pg.Rect(
@@ -123,8 +128,8 @@ class Maze:
         for row_index, row in enumerate(self.grid):
             for col_index, cell in enumerate(row):
                 if cell == Dir.ALL:
-                    x, y = self.cell_position((col_index, row_index)) 
-                    pg.draw.rect(surface, "#2121FF", pg.Rect((x, y), (16,16)))
+                    x, y = self.cell_position((col_index, row_index))
+                    pg.draw.rect(surface, "#2121FF", pg.Rect((x, y), (16, 16)))
 
     def move_cell(
         self, cell: tuple[int, int], direction: Dir
@@ -147,7 +152,7 @@ class Maze:
         return not (self.grid[y][x] & direction)
 
     def center(self) -> tuple[int, int]:
-        "Returns the approximate center cell of the maze grid, adjusted if sealed"
+        "Returns the maze center cell, adjusted if the center is sealed"
         width = len(self.grid[0])
         height = len(self.grid)
         cx, cy = width // 2, height // 2
@@ -159,7 +164,11 @@ class Maze:
             for dx in range(-radius, radius + 1):
                 for dy in range(-radius, radius + 1):
                     x, y = cx + dx, cy + dy
-                    if 0 <= x < width and 0 <= y < height and self._is_open(x, y):
+                    if (
+                        0 <= x < width
+                        and 0 <= y < height
+                        and self._is_open(x, y)
+                    ):
                         return (x, y)
         return (cx, cy)
 

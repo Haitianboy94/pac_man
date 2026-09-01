@@ -13,10 +13,7 @@ class GameOverScene(Scene):
     "Scene shown when the player wins or loses the game"
 
     def __init__(
-            self,
-            screen: pg.Surface,
-            state: GameState,
-            highscore: Highscore
+        self, screen: pg.Surface, state: GameState, highscore: Highscore
     ):
         """Initialize the object."""
         Scene.__init__(self)
@@ -48,7 +45,10 @@ class GameOverScene(Scene):
         self.sprites.add(self.prompt)
 
         self.name_text = Text(" ", "white", 2)
-        self.name_text.position = (self.prompt.rect.left, self.prompt.rect.bottom + 20)
+        self.name_text.position = (
+            self.prompt.rect.left,
+            self.prompt.rect.bottom + 20,
+        )
         self.name_text.rect.topleft = self.name_text.position
         self.sprites.add(self.name_text)
 

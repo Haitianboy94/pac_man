@@ -3,6 +3,7 @@ import pygame as pg
 
 class Animation:
     """Represent Animation state and behavior."""
+
     def __init__(self, frames: list[pg.Surface], fps: int) -> None:
         """Initialize the object."""
         if len(frames) < 1:

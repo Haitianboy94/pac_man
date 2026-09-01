@@ -1,26 +1,26 @@
-from pytest import skip
 from typing import Callable
 from src.game_state import GameState
-from src.scenes.scene_id import SceneId
 from src.ui.button import Button
 from src.ui.text import Text
 from src.ui.panel import Panel
 import pygame as pg
 
+
 class PauseMenu:
     """Represent PauseMenu state and behavior."""
+
     def __init__(
-            self,
-            screen: pg.Surface,
-            state: GameState,
-            skip_level_fn: Callable,
-            to_main_menu_fn: Callable
+        self,
+        screen: pg.Surface,
+        state: GameState,
+        skip_level_fn: Callable,
+        to_main_menu_fn: Callable,
     ) -> None:
         """Initialize the object."""
         self.state: GameState = state
         self.skip_level_fn: Callable = skip_level_fn
         self.to_main_menu_fn: Callable = to_main_menu_fn
-        self.center_x: int = int(screen.get_width() / 2) 
+        self.center_x: int = int(screen.get_width() / 2)
         self.main_group: pg.sprite.Group = self._init_main_group()
         self.cheats_group: pg.sprite.Group = self._init_cheats_group()
         self.group: pg.sprite.Group = self.main_group
@@ -63,7 +63,11 @@ class PauseMenu:
         self._add_centered(group, title, 70)
 
         invincibility: Button = Button(
-            "invincibility", "white", "yellow", 2, self.state.toggle_invincibility
+            "invincibility",
+            "white",
+            "yellow",
+            2,
+            self.state.toggle_invincibility,
         )
         self._add_centered(group, invincibility, 100)
 
@@ -73,7 +77,11 @@ class PauseMenu:
         self._add_centered(group, skip_level, 120)
 
         ghost_freeze: Button = Button(
-            "ghost freeze", "white", "yellow", 2, self.state.toggle_freeze_ghosts
+            "ghost freeze",
+            "white",
+            "yellow",
+            2,
+            self.state.toggle_freeze_ghosts,
         )
         self._add_centered(group, ghost_freeze, 140)
 
@@ -94,7 +102,9 @@ class PauseMenu:
 
         return group
 
-    def _add_centered(self, group: pg.sprite.Group, sprite: pg.sprite.Sprite, y: int):
+    def _add_centered(
+        self, group: pg.sprite.Group, sprite: pg.sprite.Sprite, y: int
+    ) -> None:
         "Add a sprite to a group with centered x position and a specified y"
         if not hasattr(sprite, "rect") or not isinstance(sprite.rect, pg.Rect):
             raise ValueError("Sprite must have rect attribute")

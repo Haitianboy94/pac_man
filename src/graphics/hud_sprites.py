@@ -5,6 +5,7 @@ from src.graphics.sprites import Sprites
 
 class HudSprites(Sprites):
     """Represent HudSprites state and behavior."""
+
     PATH = "sprites/hud_assets.png"
 
     @classmethod

@@ -5,6 +5,7 @@ from src.graphics.sprites import Sprites
 
 class TextSprites(Sprites):
     """Represent TextSprites state and behavior."""
+
     PATH = "sprites/text.png"
     HEIGHT = 7
     WIDTHS = {

@@ -3,8 +3,6 @@ from src.sounds import Sounds
 import pygame as pg
 from src.entities.entity import Entity
 from src.entities.maze import Maze
-from src.graphics.animation import Animation
-from src.graphics.general_sprites import GeneralSprites
 from src.types import Dir
 
 
@@ -70,7 +68,10 @@ class Player(Entity):
         self.animations.update(dt)
         self.image = self.animations.image
 
-        if self.move_direction is Dir.NONE and self.target_direction is Dir.NONE:
+        if (
+            self.move_direction is Dir.NONE
+            and self.target_direction is Dir.NONE
+        ):
             return
 
         if self.move_direction is Dir.NONE:
@@ -89,7 +90,10 @@ class Player(Entity):
         progress: float = self.speed * dt / 1000
         self.move_progress += progress
 
-        while self.move_progress >= self.CELL_DISTANCE and self.move_direction is not Dir.NONE:
+        while (
+            self.move_progress >= self.CELL_DISTANCE
+            and self.move_direction is not Dir.NONE
+        ):
             dx, dy = self.move_direction.delta()
             self.move_progress -= self.CELL_DISTANCE
             self.cell = (self.cell[0] + dx, self.cell[1] + dy)
@@ -99,7 +103,6 @@ class Player(Entity):
                 break
 
         self._sync_rect_to_cell()
-
 
     def _sync_rect_to_cell(self) -> None:
         """
@@ -111,7 +114,7 @@ class Player(Entity):
         pos_x: int = round(cell_x + (dx * self.move_progress))
         pos_y: int = round(cell_y + (dy * self.move_progress))
         self.rect.topleft = (pos_x, pos_y)
-    
+
     def _cell_movement(self) -> None:
         "Handle movement option from a cell in the maze"
         can_continue: bool = self.maze.can_move(self.cell, self.move_direction)

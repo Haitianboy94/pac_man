@@ -6,6 +6,7 @@ from src.ui.text import Text
 
 class GameClock(Text):
     """Represent GameClock state and behavior."""
+
     def __init__(self, state: GameState):
         """Initialize the object."""
         pg.sprite.Sprite.__init__(self)
@@ -15,7 +16,7 @@ class GameClock(Text):
         self.time: int = int(state.time_remaining_ms / 1000)
         self._update_time()
 
-    def update(self, dt) -> None:
+    def update(self, dt: int) -> None:
         """Update the object."""
         if self.time > 0:
             self._update_time()

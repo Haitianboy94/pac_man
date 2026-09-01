@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 import pygame as pg
 
 if TYPE_CHECKING:
-    from src.game import Game
+    pass
 
 
 class Scene(ABC):

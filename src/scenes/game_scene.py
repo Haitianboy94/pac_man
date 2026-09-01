@@ -8,20 +8,13 @@ from src.entities.ghost import Ghost
 from src.entities.maze import Maze
 from src.entities.player import Player
 from src.game_state import GameState
-from src.graphics.general_sprites import GeneralSprites
-from src.graphics.hud_sprites import HudSprites
 from src.maze_generator import MazeGenerationError, load_maze, seed_for_level
 from src.scenes.scene import Scene
 from src.scenes.scene_id import SceneId
 from src.types import Dir, GhostType, PacGumType
 from src.ui.button import Button
-from src.ui.game_clock import GameClock
 from src.ui.game_ui import GameUI
-from src.ui.lives_counter import LivesCounter
-from src.ui.panel import Panel
 from src.ui.pause_menu import PauseMenu
-from src.ui.points_counter import PointsCounter
-from src.ui.text import Text
 
 FALLBACK_MAZE: list[list[Dir]] = [
     [
@@ -39,6 +32,7 @@ FALLBACK_MAZE: list[list[Dir]] = [
 
 class GameScene(Scene):
     """Represent GameScene state and behavior."""
+
     DEATH_PAUSE: int = 1000
     DEATH_ANIM: int = 2000
     START_SONG: int = 4500
@@ -50,12 +44,13 @@ class GameScene(Scene):
     Calls `MazeGenerator` to create the level.
     """
 
-    def __init__(self,
-                 screen: pg.Surface,
-                 config: Config,
-                 highscore: Highscore,
-                 state: GameState,
-                 ):
+    def __init__(
+        self,
+        screen: pg.Surface,
+        config: Config,
+        highscore: Highscore,
+        state: GameState,
+    ):
         """Initialize the object."""
         Scene.__init__(self)
         self.screen: pg.Surface = screen
@@ -84,10 +79,7 @@ class GameScene(Scene):
         self.show_pause_menu: bool = False
 
         self.pause_menu: PauseMenu = PauseMenu(
-            screen,
-            state,
-            self._finish_level,
-            self._to_main_menu
+            screen, state, self._finish_level, self._to_main_menu
         )
         self.game_ui: GameUI = GameUI(screen, state, highscore)
 
@@ -95,11 +87,20 @@ class GameScene(Scene):
         self.game_started: bool = False
         self.start_song_timer: Timer = Timer(self.START_SONG, self._start_game)
         self.ghost_eat_timer: Timer = Timer(self.GHOST_EAT_PAUSE)
-        self.death_pause_timer: Timer = Timer(self.DEATH_PAUSE, self._start_death_anim)
-        self.death_anim_timer: Timer = Timer(self.DEATH_ANIM, self._respawn_or_end)
+        self.death_pause_timer: Timer = Timer(
+            self.DEATH_PAUSE, self._start_death_anim
+        )
+        self.death_anim_timer: Timer = Timer(
+            self.DEATH_ANIM, self._respawn_or_end
+        )
         self.edible_timer: Timer = Timer(self.EDIBLE_TIME, self._edible_end)
         self.corners: list[tuple[int, int]] = self.maze.corners()
-        ghost_types = [GhostType.BLINKY, GhostType.PINKY, GhostType.INKY, GhostType.CLYDE]
+        ghost_types = [
+            GhostType.BLINKY,
+            GhostType.PINKY,
+            GhostType.INKY,
+            GhostType.CLYDE,
+        ]
         self.ghosts_group: pg.sprite.Group = pg.sprite.Group()
         for ghost_type, corner in zip(ghost_types, self.corners):
             self.ghosts_group.add(Ghost(ghost_type, self.maze, corner))
@@ -160,7 +161,9 @@ class GameScene(Scene):
             self.pause_menu.group.update(dt)
             return
 
-        eaten = pg.sprite.spritecollide(self.player, self.maze.pacgums, dokill=True)
+        eaten = pg.sprite.spritecollide(
+            self.player, self.maze.pacgums, dokill=True
+        )
         for gum in eaten:
             Sounds.eat_gum().play()
             if gum.type == PacGumType.SUPER_PACGUM:
@@ -177,9 +180,11 @@ class GameScene(Scene):
 
         self._check_ghost_hit()
 
-        self.player.speed = (self.player.DEFAULT_SPEED * 2.5
-                             if self.state.cheats_super_speed
-                             else self.player.DEFAULT_SPEED)
+        self.player.speed = (
+            self.player.DEFAULT_SPEED * 2.5
+            if self.state.cheats_super_speed
+            else self.player.DEFAULT_SPEED
+        )
 
         self.player.update(dt)
         if not self.state.cheats_freeze_ghosts:
@@ -237,7 +242,9 @@ class GameScene(Scene):
 
     def _check_ghost_hit(self) -> None:
         """Perform the check ghost hit operation."""
-        touched_ghosts = pg.sprite.spritecollide(self.player, self.ghosts_group, dokill=False)
+        touched_ghosts = pg.sprite.spritecollide(
+            self.player, self.ghosts_group, dokill=False
+        )
         if touched_ghosts:
             if self.edible_timer.is_active():
                 for ghost in touched_ghosts:

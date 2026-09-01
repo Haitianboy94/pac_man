@@ -7,6 +7,7 @@ from src.resources import resource_path
 
 class Sprites:
     """Represent Sprites state and behavior."""
+
     PATH: str
 
     @classmethod
@@ -30,7 +31,6 @@ class Sprites:
         size: tuple[int, int],
         delta_coords: list[tuple[int, int]],
     ) -> list[pg.Surface]:
-
         """Perform the load all operation."""
         return [
             cls._load((offset[0] + dx, offset[1] + dy), size)

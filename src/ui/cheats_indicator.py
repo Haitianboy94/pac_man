@@ -1,10 +1,11 @@
 from src.graphics.text_sprites import TextSprites
-from src.graphics.hud_sprites import HudSprites
 from src.game_state import GameState
 import pygame as pg
 
+
 class CheatsIndicator(pg.sprite.Sprite):
     "UI element which displays the active cheats"
+
     def __init__(self, state: GameState):
         """Initialize the object."""
         pg.sprite.Sprite.__init__(self)
@@ -17,7 +18,7 @@ class CheatsIndicator(pg.sprite.Sprite):
         self.super_speed: bool = False
         self._render()
 
-    def update(self, dt: int):
+    def update(self, dt: int) -> None:
         """Update the object."""
         change: bool = False
         if self.invincibility != self.state.cheats_invincibility:
@@ -44,4 +45,3 @@ class CheatsIndicator(pg.sprite.Sprite):
 
         text = TextSprites.render(" ".join(active))
         self.image = text
-
