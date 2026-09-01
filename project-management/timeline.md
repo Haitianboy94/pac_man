@@ -6,7 +6,7 @@
 | Core | Maze adapter, player, ghosts, scoring | Complete |
 | UI | Menus, HUD, pause and end screens | Complete |
 | Delivery | Configuration, highscores, packaged build | Complete |
-| QA | Automated checks and manual playtest checklist | In progress |
+| QA | Automated checks and manual playtest checklist | Complete |
 
 Work was sequenced by dependency: the maze adapter and shared state preceded
 entities, then scenes and delivery tooling.
