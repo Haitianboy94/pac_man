@@ -22,6 +22,7 @@ class Player(Entity):
         maze: Maze,
         start_cell: tuple[int, int],
     ) -> None:
+        """Initialize the object."""
         Entity.__init__(self)
         self.maze: Maze = maze
         self.cell: tuple[int, int] = start_cell
@@ -50,10 +51,12 @@ class Player(Entity):
         return mapping[key]
 
     def die(self) -> None:
+        """Die the object."""
         self.animations.die()
         Sounds.death().play()
 
     def respawn(self, cell: tuple[int, int]) -> None:
+        """Respawn the object."""
         self.cell = cell
         self.move_direction = Dir.NONE
         self.target_direction = Dir.NONE
@@ -63,6 +66,7 @@ class Player(Entity):
         self.animations.initial()
 
     def update(self, dt: int) -> None:
+        """Update the object."""
         self.animations.update(dt)
         self.image = self.animations.image
 

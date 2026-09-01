@@ -20,6 +20,7 @@ class Game:
     """
 
     def __init__(self, screen: pg.Surface, config: Config):
+        """Initialize the object."""
         self.screen = screen
         self.config = config
         self.current_level: int = 1

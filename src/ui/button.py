@@ -19,6 +19,7 @@ class Button(pg.sprite.Sprite):
         scale: int,
         onclick: Callable,
     ) -> None:
+        """Initialize the object."""
         pg.sprite.Sprite.__init__(self)
         self.onclick: Callable = onclick
         self.text: pg.Surface = TextSprites.render(text, color, scale)
@@ -30,19 +31,23 @@ class Button(pg.sprite.Sprite):
         self.hovering: bool = False
 
     def hover(self) -> None:
+        """Hover the object."""
         self.hovering = True
         self.image = self.hover_text
 
     def unhover(self) -> None:
+        """Unhover the object."""
         self.hovering = False
         self.image = self.text
 
     def handle_event(self, event: pg.event.Event) -> None:
+        """Handle handle event."""
         if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
             if self.hovering:
                 self.onclick()
 
     def update(self, events: list[pg.event.Event]) -> None:
+        """Update the object."""
         pos: tuple[int, int] = pg.mouse.get_pos()
         hovering: bool = self.rect.collidepoint(pos)
         clicked = False

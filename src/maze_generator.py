@@ -10,6 +10,7 @@ class MazeGenerationError(Exception):
 
 
 def load_maze(width, height, perfect, entry, exit_, seed, max_retries=3):
+    """Load the requested load maze."""
     last_error = None
     for attempt in range(max_retries):
         try:
@@ -45,6 +46,7 @@ def load_maze(width, height, perfect, entry, exit_, seed, max_retries=3):
 
 
 def seed_for_level(level: int, base_seed: int) -> int:
+    """Seed the requested seed for level."""
     if level == 1:
         return base_seed
     return 0

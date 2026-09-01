@@ -10,6 +10,7 @@ class Entity(ABC, pg.sprite.Sprite):
     """
 
     def __init__(self) -> None:
+        """Initialize the object."""
         pg.sprite.Sprite.__init__(self)
         self.image: pg.Surface
         self.rect: pg.Rect

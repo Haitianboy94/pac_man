@@ -6,6 +6,7 @@ import pygame as pg
 class CheatsIndicator(pg.sprite.Sprite):
     "UI element which displays the active cheats"
     def __init__(self, state: GameState):
+        """Initialize the object."""
         pg.sprite.Sprite.__init__(self)
         self.state: GameState = state
         self.lives: int = state.lives
@@ -17,6 +18,7 @@ class CheatsIndicator(pg.sprite.Sprite):
         self._render()
 
     def update(self, dt: int):
+        """Update the object."""
         change: bool = False
         if self.invincibility != self.state.cheats_invincibility:
             self.invincibility = self.state.cheats_invincibility
@@ -31,6 +33,7 @@ class CheatsIndicator(pg.sprite.Sprite):
             self._render()
 
     def _render(self) -> None:
+        """Perform the render operation."""
         active: list[str] = []
         if self.invincibility:
             active.append("godmode")

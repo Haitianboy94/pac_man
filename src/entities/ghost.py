@@ -21,6 +21,7 @@ class Ghost(Entity):
         maze: Maze,
         start_cell: tuple[int, int],
     ) -> None:
+        """Initialize the object."""
         Entity.__init__(self)
 
         self.maze: Maze = maze
@@ -78,18 +79,22 @@ class Ghost(Entity):
         self.rect.topleft = (pos_x, pos_y)
 
     def set_edible(self, edible: bool) -> None:
+        """Set the edible."""
         self.edible = edible
 
     def is_eaten(self) -> bool:
+        """Return whether the object eaten."""
         return self.respawn_at is not None
 
     def respawn(self) -> None:
+        """Respawn the object."""
         self.cell_x, self.cell_y = self.start_cell
         self.move_progress = 0.0
         self._sync_rect_to_cell()
         self.moving = True
 
     def get_eaten(self, respawn_delay_ms: int) -> None:
+        """Return the eaten."""
         self.cell_x, self.cell_y = self.start_cell
         self.move_progress = 0.0
         self._sync_rect_to_cell()
@@ -99,6 +104,7 @@ class Ghost(Entity):
         self.set_edible(False)
 
     def update(self, dt: int) -> None:
+        """Update the object."""
         if self.is_eaten():
             if pg.time.get_ticks() >= self.respawn_at:
                 self.respawn_at = None

@@ -49,6 +49,7 @@ class Dir(enum.IntFlag):
 
 
     def __str__(self) -> str:
+        """Return the object as a string."""
         if self is Dir.NONE:
             return "Dir(None)"
         if self is self.ALL:

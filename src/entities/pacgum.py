@@ -15,6 +15,7 @@ class Pacgum(pg.sprite.Sprite):
         type: PacGumType,
         position: Sequence[int],
     ):
+        """Initialize the object."""
         pg.sprite.Sprite.__init__(self)
         self.type: PacGumType = type
         self.position: Sequence[int] = position
@@ -31,11 +32,13 @@ class Pacgum(pg.sprite.Sprite):
         self._make_gum()
 
     def update(self, dt: int) -> None:
+        """Update the object."""
         if self.type == PacGumType.SUPER_PACGUM:
             self.animation.update_frame(dt)
             self.image = self.animation.image
 
     def _make_gum(self) -> None:
+        """Perform the make gum operation."""
         if self.type == PacGumType.SUPER_PACGUM:
             sprite = GeneralSprites.super_pacgum()
         else:

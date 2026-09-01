@@ -19,6 +19,7 @@ class MainMenu(Scene):
             config: Config,
             highscore: Highscore
     ):
+        """Initialize the object."""
         Scene.__init__(self)
         self.screen: pg.Surface = screen
         self.config: Config = config
@@ -32,6 +33,7 @@ class MainMenu(Scene):
         self._init_instructions()
 
     def handle_event(self, event: pg.event.Event) -> None:
+        """Handle handle event."""
         if event.type == pg.KEYDOWN and event.key == pg.K_RETURN:
             self._start()
         if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
@@ -40,9 +42,11 @@ class MainMenu(Scene):
                     sprite.handle_event(event)
 
     def update(self, dt: int) -> None:
+        """Update the object."""
         self.active_group.update(dt)
 
     def draw(self, screen: pg.Surface) -> None:
+        """Draw the object."""
         self.active_group.draw(screen)
 
     def _start(self) -> None:
@@ -106,6 +110,7 @@ class MainMenu(Scene):
         self.main_group.add(exit_button)
 
     def _init_highscores(self) -> None:
+        """Perform the init highscores operation."""
         center: int = int(self.screen.get_width() / 2)
         title: Text = Text("highscores", "yellow", 2)
         title.rect.centerx = center
@@ -147,6 +152,7 @@ class MainMenu(Scene):
             color: str = "white",
             scale: int = 1,
         ) -> None:
+            """Add the requested add centered."""
             text = Text(label, color, scale)
             text.rect.centerx = center
             text.rect.y = y

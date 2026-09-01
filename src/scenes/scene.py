@@ -19,16 +19,20 @@ class Scene(ABC):
     """
 
     def __init__(self) -> None:
+        """Initialize the object."""
         self.next_scene_id: Optional[SceneId] = None
 
     @abstractmethod
     def handle_event(self, event: pg.event.Event) -> None:
+        """Handle handle event."""
         pass
 
     @abstractmethod
     def update(self, dt: int) -> None:
+        """Update the object."""
         pass
 
     @abstractmethod
     def draw(self, screen: pg.Surface) -> None:
+        """Draw the object."""
         pass

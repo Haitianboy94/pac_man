@@ -18,6 +18,7 @@ class GameOverScene(Scene):
             state: GameState,
             highscore: Highscore
     ):
+        """Initialize the object."""
         Scene.__init__(self)
         self.screen: pg.Surface = screen
         if state.pending_game_over is None:
@@ -52,6 +53,7 @@ class GameOverScene(Scene):
         self.sprites.add(self.name_text)
 
     def handle_event(self, event: pg.event.Event) -> None:
+        """Handle handle event."""
         if event.type != pg.KEYDOWN:
             return
         if event.key == pg.K_RETURN:
@@ -66,9 +68,11 @@ class GameOverScene(Scene):
                 self._update_name_display()
 
     def _update_name_display(self) -> None:
+        """Perform the update name display operation."""
         self.name_text.set_text(self.name if self.name else " ")
 
     def _submit(self) -> None:
+        """Perform the submit operation."""
         name = self.name.strip()
         if len(name) == 0:
             return
@@ -77,8 +81,10 @@ class GameOverScene(Scene):
         self.next_scene_id = SceneId.MAIN_MENU
 
     def update(self, dt: int) -> None:
+        """Update the object."""
         self.sprites.update(dt)
 
     def draw(self, screen: pg.Surface) -> None:
+        """Draw the object."""
         screen.fill("black")
         self.sprites.draw(screen)

@@ -7,7 +7,9 @@ from src.types import Dir
 
 
 class MazeWall(pg.sprite.Sprite):
+    """Represent MazeWall state and behavior."""
     def __init__(self, dir: Dir, position: Sequence[int]) -> None:
+        """Initialize the object."""
         pg.sprite.Sprite.__init__(self)
         self.dir: Dir = dir
         self.position: Sequence[int] = position
@@ -15,6 +17,7 @@ class MazeWall(pg.sprite.Sprite):
         self.image = pg.Surface((0, 0))
 
     def set_sprite(self) -> None:
+        """Set the sprite."""
         if self.dir == Dir.ALL:
             self.image = GeneralSprites.maze_all()
         elif self.dir == Dir.NORTH | Dir.EAST | Dir.SOUTH:
@@ -49,4 +52,5 @@ class MazeWall(pg.sprite.Sprite):
             self.image = pg.Surface((0, 0))
 
     def add_dir(self, dir: Dir) -> None:
+        """Add the requested add dir."""
         self.dir |= dir

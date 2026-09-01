@@ -7,6 +7,7 @@ class Text(pg.sprite.Sprite):
     "A text node for the UI"
 
     def __init__(self, text: str, color: str = "white", scale: int = 1):
+        """Initialize the object."""
         pg.sprite.Sprite.__init__(self)
 
         self.color: str = color
@@ -15,6 +16,7 @@ class Text(pg.sprite.Sprite):
         self.set_text(text)
 
     def set_text(self, text: str) -> None:
+        """Set the text."""
         self.image: pg.Surface = TextSprites.render(
             text, self.color, self.scale
         )

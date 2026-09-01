@@ -8,12 +8,14 @@ from src.ui.lives_counter import LivesCounter
 import pygame as pg
 
 class GameUI:
+    """Represent GameUI state and behavior."""
     def __init__(
             self,
             screen: pg.Surface,
             state: GameState,
             highscore: Highscore
     ) -> None:
+        """Initialize the object."""
         self.screen: pg.Surface = screen
         self.state: GameState = state
         self.highscore: Highscore = highscore

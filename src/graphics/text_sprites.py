@@ -4,6 +4,7 @@ from src.graphics.sprites import Sprites
 
 
 class TextSprites(Sprites):
+    """Represent TextSprites state and behavior."""
     PATH = "sprites/text.png"
     HEIGHT = 7
     WIDTHS = {
@@ -61,6 +62,7 @@ class TextSprites(Sprites):
         cls, string: str, color: str = "white", scale: int = 1
     ) -> pg.Surface:
         # Todo: can crash if unknown character is given, such as in '-1'
+        """Render the object."""
         string = string.lower()
         width = 0
         try:
@@ -80,6 +82,7 @@ class TextSprites(Sprites):
 
     @classmethod
     def _char(cls, in_char: str, color: str) -> pg.Surface:
+        """Perform the char operation."""
         char = in_char.lower()
         if char not in cls.WIDTHS:
             raise ValueError(f"Character {char} not found in widths")

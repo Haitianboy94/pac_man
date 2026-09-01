@@ -22,6 +22,7 @@ class Maze:
         grid: list[list[Dir]],
         position: tuple[int, int] = (0, 0),
     ):
+        """Initialize the object."""
         self.grid: list[list[Dir]] = grid
         self.cells: pg.sprite.Group = pg.sprite.Group()
         self.pacgums: pg.sprite.Group = pg.sprite.Group()
@@ -98,6 +99,7 @@ class Maze:
                 self.cells.add(wall)
 
     def draw(self, surface: pg.Surface) -> None:
+        """Draw the object."""
         self.cells.draw(surface)
         horizontal = GeneralSprites.maze_horizontal_connector()
         vertical = GeneralSprites.maze_vertical_connector()
@@ -166,6 +168,7 @@ class Maze:
         return self.grid[y][x] != Dir.NORTH | Dir.EAST | Dir.SOUTH | Dir.WEST
 
     def corners(self) -> list[tuple[int, int]]:
+        """Handle corners."""
         width = len(self.grid[0])
         height = len(self.grid)
         candidates = [
@@ -190,6 +193,7 @@ class Maze:
 
     @staticmethod
     def maze_size(width: int, height: int) -> tuple[int, int]:
+        """Handle maze size."""
         cell = Maze.CELL_SIZE
         wall = Maze.WALL_SIZE
         return (

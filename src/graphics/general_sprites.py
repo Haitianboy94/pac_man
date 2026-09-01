@@ -7,6 +7,7 @@ from src.types import GhostType
 
 
 class GeneralSprites(Sprites):
+    """Represent GeneralSprites state and behavior."""
     PATH = "sprites/general.png"
     SIZE = 16
 
@@ -23,6 +24,7 @@ class GeneralSprites(Sprites):
     @classmethod
     @cache
     def player_moving_north(cls) -> list[pg.Surface]:
+        """Handle player moving north."""
         sprites = cls._load_all(
             (int(cls.SIZE / 2) + cls.SIZE * 28, 32),
             (16, 16),
@@ -35,6 +37,7 @@ class GeneralSprites(Sprites):
     @classmethod
     @cache
     def player_moving_east(cls) -> list[pg.Surface]:
+        """Handle player moving east."""
         sprites = cls._load_all(
             (int(cls.SIZE / 2) + cls.SIZE * 28, 0), (16, 16), cls.PLAYER_MOVING
         )
@@ -45,6 +48,7 @@ class GeneralSprites(Sprites):
     @classmethod
     @cache
     def player_moving_west(cls) -> list[pg.Surface]:
+        """Handle player moving west."""
         sprites = cls._load_all(
             (int(cls.SIZE / 2) + cls.SIZE * 28, 16),
             (16, 16),
@@ -57,6 +61,7 @@ class GeneralSprites(Sprites):
     @classmethod
     @cache
     def player_moving_south(cls) -> list[pg.Surface]:
+        """Handle player moving south."""
         sprites = cls._load_all(
             (int(cls.SIZE / 2) + cls.SIZE * 28, 48),
             (16, 16),
@@ -69,6 +74,7 @@ class GeneralSprites(Sprites):
     @classmethod
     @cache
     def player_death(cls) -> list[pg.Surface]:
+        """Handle player death."""
         frames = [(i * cls.SIZE, 0) for i in range(0, 11)]
         sprites = cls._load_all(
             (8 + cls.SIZE * 32, 0), (16, 16), frames
@@ -102,6 +108,7 @@ class GeneralSprites(Sprites):
     @classmethod
     @cache
     def ghost_moving_east(cls, type: GhostType) -> list[pg.Surface]:
+        """Handle ghost moving east."""
         sprites = cls._load_all(
             cls.GHOST_OFFSETS[type],
             (16, 16),
@@ -114,6 +121,7 @@ class GeneralSprites(Sprites):
     @classmethod
     @cache
     def ghost_moving_west(cls, type: GhostType) -> list[pg.Surface]:
+        """Handle ghost moving west."""
         sprites = cls._load_all(
             cls.GHOST_OFFSETS[type],
             (16, 16),
@@ -126,6 +134,7 @@ class GeneralSprites(Sprites):
     @classmethod
     @cache
     def ghost_moving_north(cls, type: GhostType) -> list[pg.Surface]:
+        """Handle ghost moving north."""
         sprites = cls._load_all(
             cls.GHOST_OFFSETS[type],
             (16, 16),
@@ -138,6 +147,7 @@ class GeneralSprites(Sprites):
     @classmethod
     @cache
     def ghost_moving_south(cls, type: GhostType) -> list[pg.Surface]:
+        """Handle ghost moving south."""
         sprites = cls._load_all(
             cls.GHOST_OFFSETS[type],
             (16, 16),
@@ -150,6 +160,7 @@ class GeneralSprites(Sprites):
     @classmethod
     @cache
     def ghost_scared(cls) -> list[pg.Surface]:
+        """Handle ghost scared."""
         sprites = cls._load_all(
             cls.GHOST_SCARED_OFFSET,
             (16, 16),
@@ -177,11 +188,13 @@ class GeneralSprites(Sprites):
 
     @classmethod
     def maze_color(cls) -> pg.Color:
+        """Handle maze color."""
         return pg.Color(33, 33, 255, 255)
 
     @classmethod
     @cache
     def maze_all(cls) -> pg.Surface:
+        """Handle maze all."""
         sprite = pg.Surface((16, 16))
         sprite.blit(
             cls.maze_t_south_west_north(), (0, 0), pg.Rect(0, 0, 8, 16)
@@ -193,70 +206,85 @@ class GeneralSprites(Sprites):
 
     @classmethod
     def maze_t_east_south_west(cls) -> pg.Surface:
+        """Handle maze t east south west."""
         return cls._load(cls.MAZE_T_BOTTOM, (16, 16))
 
     @classmethod
     def maze_t_north_east_south(cls) -> pg.Surface:
+        """Handle maze t north east south."""
         return cls._load(cls.MAZE_T_RIGHT, (16, 16))
 
     @classmethod
     def maze_t_south_west_north(cls) -> pg.Surface:
+        """Handle maze t south west north."""
         return cls._load(cls.MAZE_T_LEFT, (16, 16))
 
     @classmethod
     def maze_t_west_north_east(cls) -> pg.Surface:
+        """Handle maze t west north east."""
         return cls._load(cls.MAZE_T_TOP, (16, 16))
 
     @classmethod
     @cache
     def maze_corner_north_east(cls) -> pg.Surface:
+        """Handle maze corner north east."""
         sprite = cls.maze_corner_south_west()
         return pg.transform.flip(sprite, flip_x=True, flip_y=True)
 
     @classmethod
     @cache
     def maze_corner_north_west(cls) -> pg.Surface:
+        """Handle maze corner north west."""
         sprite = cls.maze_corner_south_west()
         return pg.transform.flip(sprite, flip_x=False, flip_y=True)
 
     @classmethod
     @cache
     def maze_corner_south_east(cls) -> pg.Surface:
+        """Handle maze corner south east."""
         sprite = cls.maze_corner_south_west()
         return pg.transform.flip(sprite, flip_x=True, flip_y=False)
 
     @classmethod
     def maze_corner_south_west(cls) -> pg.Surface:
+        """Handle maze corner south west."""
         return cls._load(cls.MAZE_CORNER_SOUTH_WEST, (16, 16))
 
     @classmethod
     def maze_horizontal(cls) -> pg.Surface:
+        """Handle maze horizontal."""
         return cls._load(cls.MAZE_HORIZONTAL, (16, 16))
 
     @classmethod
     def maze_vertical(cls) -> pg.Surface:
+        """Handle maze vertical."""
         return cls._load(cls.MAZE_VERTICAL, (16, 16))
 
     @classmethod
     def maze_end_north(cls) -> pg.Surface:
+        """Handle maze end north."""
         return cls._load(cls.MAZE_END_NORTH, (16, 16))
 
     @classmethod
     def maze_end_east(cls) -> pg.Surface:
+        """Handle maze end east."""
         return cls._load(cls.MAZE_END_EAST, (16, 16))
 
     @classmethod
     def maze_end_south(cls) -> pg.Surface:
+        """Handle maze end south."""
         return cls._load(cls.MAZE_END_SOUTH, (16, 16))
 
     @classmethod
     def maze_end_west(cls) -> pg.Surface:
+        """Handle maze end west."""
         return cls._load(cls.MAZE_END_WEST, (16, 16))
 
     # 8x8
     @classmethod
     @cache
     def maze_horizontal_connector(cls) -> pg.Surface:
+        """Handle maze horizontal connector."""
         sprite = pg.Surface((8, 8))
         sprite.blit(cls.maze_horizontal(), pg.Rect(0, -4, 8, 8))
         return sprite
@@ -264,14 +292,17 @@ class GeneralSprites(Sprites):
     @classmethod
     @cache
     def maze_vertical_connector(cls) -> pg.Surface:
+        """Handle maze vertical connector."""
         sprite = pg.Surface((8, 8))
         sprite.blit(cls.maze_vertical(), pg.Rect(-4, 0, 8, 8))
         return sprite
 
     @classmethod
     def pacgum(cls) -> pg.Surface:
+        """Handle pacgum."""
         return cls._load((8, 8), (8, 8))
 
     @classmethod
     def super_pacgum(cls) -> pg.Surface:
+        """Handle super pacgum."""
         return cls._load((8, 24), (8, 8))

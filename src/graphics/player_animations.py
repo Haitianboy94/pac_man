@@ -4,7 +4,9 @@ from src.types import Dir
 import pygame as pg
 
 class PlayerAnimations:
+    """Represent PlayerAnimations state and behavior."""
     def __init__(self) -> None:
+        """Initialize the object."""
         self.playing: bool = True
         self.loop: bool = True
         self._move_animations: dict[Dir, Animation] = {
@@ -20,29 +22,36 @@ class PlayerAnimations:
         self.initial()
 
     def initial(self) -> None:
+        """Handle initial."""
         self._active = self._move_animations[Dir.NONE]
         self.image = self._active.image
 
     def start_moving(self, dir: Dir) -> None:
+        """Start the object."""
         self._active = self._move_animations[dir]
         self.loop = True
         self.play()
 
     def stop_moving(self) -> None:
+        """Stop the object."""
         self.stop()
 
     def die(self) -> None:
+        """Die the object."""
         self._active = self._death_animation
         self.loop = False
         self.play()
 
     def play(self) -> None:
+        """Play the object."""
         self.playing = True
 
     def stop(self):
+        """Stop the object."""
         self.playing = False
 
     def update(self, dt: int) -> None:
+        """Update the object."""
         if self.playing:
             self._active.update_frame(dt)
             self.image = self._active.image

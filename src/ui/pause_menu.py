@@ -8,6 +8,7 @@ from src.ui.panel import Panel
 import pygame as pg
 
 class PauseMenu:
+    """Represent PauseMenu state and behavior."""
     def __init__(
             self,
             screen: pg.Surface,
@@ -15,6 +16,7 @@ class PauseMenu:
             skip_level_fn: Callable,
             to_main_menu_fn: Callable
     ) -> None:
+        """Initialize the object."""
         self.state: GameState = state
         self.skip_level_fn: Callable = skip_level_fn
         self.to_main_menu_fn: Callable = to_main_menu_fn

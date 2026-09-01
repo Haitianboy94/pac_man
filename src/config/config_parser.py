@@ -47,6 +47,7 @@ class ConfigParser:
         return config
 
     def _load_kv(self) -> None:
+        """Perform the load kv operation."""
         uncommented = "\n".join(
             line
             for line in self.contents.splitlines()

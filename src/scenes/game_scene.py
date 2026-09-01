@@ -38,6 +38,7 @@ FALLBACK_MAZE: list[list[Dir]] = [
 
 
 class GameScene(Scene):
+    """Represent GameScene state and behavior."""
     DEATH_PAUSE: int = 1000
     DEATH_ANIM: int = 2000
     START_SONG: int = 4500
@@ -55,6 +56,7 @@ class GameScene(Scene):
                  highscore: Highscore,
                  state: GameState,
                  ):
+        """Initialize the object."""
         Scene.__init__(self)
         self.screen: pg.Surface = screen
         self.config: Config = config
@@ -109,6 +111,7 @@ class GameScene(Scene):
         )
 
     def handle_event(self, event: pg.event.Event) -> None:
+        """Handle handle event."""
         if self.death_pause_timer.is_active():
             return
         if self.death_anim_timer.is_active():
@@ -138,6 +141,7 @@ class GameScene(Scene):
                     sprite.handle_event(event)
 
     def update(self, dt: int) -> None:
+        """Update the object."""
         self.game_ui.group.update(dt)
         self.start_song_timer.update()
         self.ghost_eat_timer.update()
@@ -193,6 +197,7 @@ class GameScene(Scene):
             self._handle_player_hit()
 
     def draw(self, screen: pg.Surface) -> None:
+        """Draw the object."""
         self.game_screen.fill("black")
         self.maze.draw(self.game_screen)
         self.maze.pacgums.draw(self.game_screen)
@@ -208,9 +213,11 @@ class GameScene(Scene):
             self.pause_menu.group.draw(screen)
 
     def _start_game(self) -> None:
+        """Perform the start game operation."""
         self.game_started = True
 
     def _finish_level(self) -> None:
+        """Perform the finish level operation."""
         self.state.current_level += 1
         if self.state.current_level > self.state.total_levels:
             self.state.pending_game_over = True
@@ -220,13 +227,16 @@ class GameScene(Scene):
             self.next_scene_id = SceneId.GAME
 
     def _to_main_menu(self) -> None:
+        """Perform the to main menu operation."""
         self.next_scene_id = SceneId.MAIN_MENU
 
     def _edible_end(self) -> None:
+        """Perform the edible end operation."""
         for ghost in self.ghosts_group:
             ghost.set_edible(False)
 
     def _check_ghost_hit(self) -> None:
+        """Perform the check ghost hit operation."""
         touched_ghosts = pg.sprite.spritecollide(self.player, self.ghosts_group, dokill=False)
         if touched_ghosts:
             if self.edible_timer.is_active():
@@ -240,6 +250,7 @@ class GameScene(Scene):
                 self._handle_player_hit()
 
     def _handle_player_hit(self) -> None:
+        """Perform the handle player hit operation."""
         if self.state.cheats_invincibility:
             return
         if self.death_pause_timer.is_active():
@@ -253,10 +264,12 @@ class GameScene(Scene):
             ghost.moving = False
 
     def _start_death_anim(self) -> None:
+        """Perform the start death anim operation."""
         self.death_anim_timer.start()
         self.player.die()
 
     def _respawn_or_end(self) -> None:
+        """Perform the respawn or end operation."""
         self.game_started = False
         self.state.lives -= 1
         self.state.time_remaining_ms = self.config.level_max_time * 1000

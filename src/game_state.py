@@ -7,6 +7,7 @@ class GameState:
     """
 
     def __init__(self, config: Config):
+        """Initialize the object."""
         self.lives: int = config.lives
         self.total_levels: int = len(config.level)
         self.current_level: int = 1

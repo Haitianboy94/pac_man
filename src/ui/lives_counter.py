@@ -6,6 +6,7 @@ import pygame as pg
 class LivesCounter(pg.sprite.Sprite):
     "UI element which displays the players remaining lives"
     def __init__(self, state: GameState):
+        """Initialize the object."""
         pg.sprite.Sprite.__init__(self)
         self.state: GameState = state
         self.lives: int = state.lives
@@ -15,11 +16,13 @@ class LivesCounter(pg.sprite.Sprite):
         self._render()
 
     def update(self, dt: int):
+        """Update the object."""
         if self.lives != self.state.lives:
             self.lives = self.state.lives
             self._render()
 
     def _render(self):
+        """Perform the render operation."""
         if self.lives < 0:
             return
         width, height = self.sprite.get_size()
